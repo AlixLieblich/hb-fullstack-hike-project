@@ -5,7 +5,7 @@ from flask_sqlalchemy import SQLAlchemy
 db = SQLAlchemy()
 
 
-def connect_to_db(flask_app, db_uri='postgresql:///ratings', echo=True):
+def connect_to_db(flask_app, db_uri='postgresql:///hike_data', echo=False):
     flask_app.config['SQLALCHEMY_DATABASE_URI'] = db_uri
     flask_app.config['SQLALCHEMY_ECHO'] = echo
     flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
@@ -31,7 +31,7 @@ class User(db.Model):
     # user_lname = db.Column(db.String)
     email = db.Column(db.String, nullable=False, unique=True)
 
-    # ratings = a list of Rating objects
+    # hikes = a list of Hike objects
 
     goals = db.relationship('Goal', backref='users')
 
@@ -47,7 +47,7 @@ class Trail(db.Model):
     trail_id = db.Column(db.Integer, 
                           autoincrement=True, 
                           primary_key=True)
-    trail_name = db.Column(db.Integer, nullable=False)
+    trail_name = db.Column(db.String, nullable=False)
     trail_status = db.Column(db.Integer)
     trail_conditions = db.Column(db.Integer)
     # points_of_interest = db.Column(db.Integer)
@@ -63,7 +63,7 @@ class Trail(db.Model):
     longitude = db.Column(db.Integer)
     
 
-    # ratings = a list of Rating objects
+    # hikes = a list of Hike objects
 
     def __repr__(self):
         return f'<Trail trail_id={self.trail_id} name={self.trail_name}>'
@@ -78,15 +78,16 @@ class Rating(db.Model):
     score = db.Column(db.Integer)
     challenge_rating = db.Column(db.Integer)
     distance_rating = db.Column(db.Integer)
-    asccent_rating = db.Column(db.Integer)
+    ascent_rating = db.Column(db.Integer)
     descent_rating = db.Column(db.Integer)
     comment = db.Column(db.String)
 
+    # hikes = a list of Hike objects
 
     
 
     def __repr__(self):
-        return f'<Rating rating_id={self.rating_id} rating={self.rating}>'
+        return f'<Rating rating_id={self.rating_id} score={self.score}>'
 
 class Goal(db.Model):
     """A Goal."""
@@ -102,7 +103,7 @@ class Goal(db.Model):
     difficulty_hike_goal = db.Column(db.Integer) 
     
 
-    # ratings = a list of Rating objects
+    # hikes = a list of Hike objects
 
     def __repr__(self):
         return f'<Goal goal_id={self.goal_id} name={self.trail_name}>'
@@ -116,10 +117,10 @@ class Hike(db.Model):
                             autoincrement=True, 
                             primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    hike_name = db.Column(db.String) 
     trail_id = db.Column(db.Integer, db.ForeignKey('trails.trail_id'))
     hike_completed_on = db.Column(db.DateTime)
     hike_total_time = db.Column(db.Integer)
+    status_completion = db.Column(db.Boolean)
 
     user = db.relationship('User', backref='hikes')
     ratings = db.relationship('Rating', backref='hikes') 

@@ -1,11 +1,11 @@
-"""CRUD opertions."""
+"""CRUD operations."""
 
 from model import db, User, Hike, Rating, Goal, Trail, connect_to_db
 
-def create_user(email, password):
+def create_user(username, password, email):
     """Create and return a new user."""
 
-    user = User(email=email, password=password)
+    user = User(username=username, password=password, email=email)
 
     db.session.add(user)
     db.session.commit()
@@ -17,10 +17,10 @@ def get_all_users():
 
     return db.session.query(User).all()
 
-def get_user_by_id(user_id):
+def get_user_by_id(user_id): #hiking_object.user_id
     """Return a user object given a user id."""
 
-    return User.query.get(user_id)
+    return User.query.get(user_id)  # using info from other tables to get info from other tables -> #hiking_object.user_id
 
 def get_user_by_email(email):
     """Return a user object given an email, else None."""
@@ -49,7 +49,7 @@ def create_trail(trail_name, trail_status, trail_conditions, difficulty, trail_t
     db.session.add(trail)
     db.session.commit()
 
-    return movie
+    return trail
 
 def get_all_trails():
     """Display all trails."""
@@ -61,15 +61,14 @@ def get_trail_by_id(trail_id):
 
     return Trail.query.get(trail_id)
 
-def create_rating(score, user, hike):
-    """Create and return a new rating (score)."""
+def create_rating(score, hike_id, challenge_rating, distance_rating, ascent_rating, descent_rating, comment):
+    """Create and return a new rating."""
 
     rating = Rating(score=score,
-                    user=user,
-                    hike=hike,
+                    hike_id=hike_id,
                     challenge_rating=challenge_rating,
                     distance_rating=distance_rating,
-                    asccent_rating=asccent_rating,
+                    ascent_rating=ascent_rating,
                     descent_rating=descent_rating,
                     comment=comment) #not sure if user and hike are right
     
@@ -90,6 +89,20 @@ def create_goal(num_miles_total, num_hikes_total, user):
     db.session.commit()
 
     return goal
+
+def create_hike(user_id, trail_id, hike_completed_on, hike_total_time, status_completion):
+    """Create and return a new hike."""
+
+    hike = Hike(user_id=user_id,
+                trail_id=trail_id,
+                hike_completed_on=hike_completed_on,
+                hike_total_time=hike_total_time,
+                status_completion=status_completion)
+    
+    db.session.add(hike)
+    db.session.commit()
+
+    return hike
 
 
 if __name__ == '__main__':

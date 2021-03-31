@@ -19,14 +19,13 @@ def homepage():
 
     return render_template('homepage.html')
 
-# @app.route('/movies')
-# def movie_list():
-#     """View movie list."""
+@app.route('/find-a-hike-form')
+def movie_list():
+    """View hike form."""
     
-#     all_movies = crud.get_all_movies()
+    
 
-#     return render_template('movie.html',
-#                             all_movies=all_movies)
+    return render_template('find-a-hike-form.html')
 
 # @app.route('/movies/<movie_id>')
 # def movie_detail(movie_id):
