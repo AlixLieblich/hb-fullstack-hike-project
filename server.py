@@ -19,78 +19,63 @@ def homepage():
 
     return render_template('homepage.html')
 
+@app.route('/new_user', methods=['POST'])
+def create_new_user():
+    """Create a new user."""
+
+    user_name = request.form.get('username')
+    user_email = request.form.get('email')
+    user_password = request.form.get('password')
+
+    user_existence = crud.get_user_by_email(user_email)
+    
+    if user_existence:
+        flash('You can\'t create an account with that email. Try again.')
+    else:
+        crud.create_user(user_name, user_email, user_password)
+        flash('Your account was successfully created. WelCoMe tO thE ComMunItYYY, you can now log in!')
+
+    return redirect('/')
+
 @app.route('/find-a-hike-form')
-def movie_list():
+def display_hike_form():
     """View hike form."""
     
     
 
     return render_template('find-a-hike-form.html')
 
-# @app.route('/movies/<movie_id>')
-# def movie_detail(movie_id):
-#     """Show individual movie details."""
-
-#     movie_details = crud.get_movie_by_id(movie_id)
-
-#     return render_template('movie_details.html',
-#                             movie=movie_details)
-
-
-# @app.route('/new_user', methods=['POST'])
-# def create_new_user():
-#     """Create a new user."""
-
-#     user_email = request.form.get('email')
-#     user_password = request.form.get('password')
-
-#     user_existence = crud.get_user_by_email(user_email)
+@app.route('/view-hikes')
+def hike_list():
+    """View hike form."""
     
-#     if user_existence:
-#         flash('You can\'t create an account with that email. Try again.')
-#     else:
-#         crud.create_user(user_email, user_password)
-#         flash('Your account was successfully created. WelCoMe tO thE ComMunItYYY, you can now log in!')
-
-#     return redirect('/')
-
-# @app.route('/login', methods=['POST'])
-# def login():
-#     """ """
-
-#     user_email = request.form.get('email')
-#     user_password = request.form.get('password')
-
-#     check_user = crud.get_user_by_email(user_email)
-#     if check_user.password == user_password:
-
-#         session['user_id'] = check_user.user_id
-#         print(session['user_id'])
-#         flash('Login Successful. 😄')   
-#     else: 
-#         flash('Email or password incorrect.') 
-#     return redirect('/')
     
-# @app.route('/users')
-# def user_list():
-#     """View user list."""
-    
-#     all_users = crud.get_all_users()
 
-#     return render_template('users.html',
-#                             all_users=all_users)
+    return render_template('view-hikes.html')
 
+@app.route('/show-form')
+def show_madlib():
+    """Show user their form filled out."""
 
-# @app.route('/users/<user_id>')
-# def user_details(user_id):
-#     """Show individual user details."""
+    trail_type = request.args.get("trail_type")   
+    physical_rating = request.args.get("physical_rating")
+    difficulty = request.args.get("difficulty")
 
-#     user_details = crud.get_user_by_id(user_id)
+    return render_template("show-form.html",
+                           trail_type=trail_type,
+                           physical_rating=physical_rating,
+                           difficulty=difficulty,
+                            )
 
-#     return render_template('user_details.html',
-#                             user=user_details)
+@app.route('/hikes.json')
+def hike():
+    """Return a trail for this trail_type."""
+
+    trail_type = request.args.get('trail_type')
+    trail_type_info = WEATHER.get(trail_type, DEFAULT_WEATHER)
+    return jsonify(trail_type_info)
 
 
 if __name__ == '__main__':
     connect_to_db(app)
-    app.run(host='0.0.0.0', debug=True, port=5001)
+    app.run(host='0.0.0.0', debug=True, port=5000)

@@ -48,20 +48,15 @@ class Trail(db.Model):
                           autoincrement=True, 
                           primary_key=True)
     trail_name = db.Column(db.String, nullable=False)
-    trail_status = db.Column(db.Integer)
-    trail_conditions = db.Column(db.Integer)
-    # points_of_interest = db.Column(db.Integer)
-    difficulty = db.Column(db.Integer, nullable=False)
-    trail_type = db.Column(db.Integer)
-    physical_rating = db.Column(db.Integer)
-    total_ascent = db.Column(db.Integer)
-    total_descent = db.Column(db.Integer)
-    distance_in_miles = db.Column(db.Integer, nullable=False)
-    trail_description = db.Column(db.Integer)
-    location = db.Column(db.String, nullable=False)
-    latitude = db.Column(db.Integer)
-    longitude = db.Column(db.Integer)
-    
+    name = db.Column(db.String)
+    area_name = db.Column(db.String)
+    # city_name = db.Column(db.String) 
+    state_name = db.Column(db.String)
+    geoloc = db.Column(db.String)
+    # popularity = db.Column(db.Int)
+    length = db.Column(db.Int)
+    elevation_gain = db.Column(db.Int)
+        
 
     # hikes = a list of Hike objects
 
