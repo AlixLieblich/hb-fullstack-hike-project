@@ -1,6 +1,7 @@
 """CRUD operations."""
 
 from model import db, User, Hike, Rating, Goal, Trail, connect_to_db
+from sqlalchemy import and_
 
 def create_user(username, password, email):
     """Create and return a new user."""
@@ -27,24 +28,25 @@ def get_user_by_email(email):
 
     return User.query.filter(User.email == email).first()
 
-def create_trail(trail_name, trail_status, trail_conditions, difficulty, trail_type, 
-                physical_rating, total_ascent, total_descent, distance_in_miles, 
-                trail_description, location, longitude, latitude):
+def create_trail(name,area_name,city_name,state_name,country_name,_geoloc,popularity,length,elevation_gain,difficulty_rating,route_type,visitor_usage,avg_rating,num_reviews,features,activities,units
+):
     """Create and return a new trail."""
 
-    trail = Trail(trail_name=trail_name,
-                  trail_status=trail_status, 
-                  trail_conditions=trail_conditions, 
-                  difficulty=difficulty,
-                  trail_type=trail_type,
-                  physical_rating=physical_rating,
-                  total_ascent=total_ascent,
-                  total_descent=total_descent,
-                  distance_in_miles=distance_in_miles,
-                  trail_description=trail_description,
-                  location=location,
-                  longitude=longitude,
-                  latitude=latitude)
+    trail = Trail(name=name,
+                  area_name=area_name,
+                  city_name=city_name,
+                  state_name=state_name,
+                  country_name=country_name,
+                  _geoloc=_geoloc,
+                  popularity=popularity, 
+                  length=length,
+                  elevation_gain=elevation_gain,
+                  difficulty_rating=difficulty_rating,
+                  route_type=route_type,
+                  visitor_usage=visitor_usage,
+                  features=features,
+                  activities=activities,
+                  units=units)
     
     db.session.add(trail)
     db.session.commit()
@@ -104,6 +106,12 @@ def create_hike(user_id, trail_id, hike_completed_on, hike_total_time, status_co
 
     return hike
 
+def query_trail(route_type, park, state, difficulty):
+    """Take in form responses and query for a resultant hike."""
+
+    trail = Trail.query.filter(and_(Trail.route_type==route_type, Trail.area_name==park, Trail.state_name==state, Trail.difficulty_rating==difficulty)) 
+    
+    return trail
 
 if __name__ == '__main__':
     from server import app

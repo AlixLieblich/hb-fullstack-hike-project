@@ -9,6 +9,10 @@ import crud
 import model
 import server
 
+import csv
+from crud import create_trail
+from model import db
+
 #dbcreate hike_data
 os.system('dropdb hike_data')
 os.system('createdb hike_data')
@@ -16,50 +20,19 @@ os.system('createdb hike_data')
 model.connect_to_db(server.app)
 model.db.create_all()
 
-with open('data/trails.json') as f:
-    trails = json.loads(f.read())
-    # print('***********************************')
-    # print('TRAILS', trails)
+# read csv and write to trails_in_db
+with open('nationalpark.csv', newline='') as csvfile:
+    reader = csv.DictReader(csvfile)
+    trails_in_db = []
+    for row in reader:
+        # print(row['trail_id'])
+        trail_object = create_trail(row['name'],row['area_name'],row['city_name'],row['state_name'],row['country_name'],row['_geoloc'],row['popularity'],row['length'],row['elevation_gain'],row['difficulty_rating'],row['route_type'],row['visitor_usage'],row['avg_rating'],row['num_reviews'],row['features'],row['activities'],row['units'])
+        trails_in_db.append(trail_object)
 
-trails_in_db = []
-for trail in trails:
-    # print("----------------------------------")
-    # print('TRAIL', trail)
-    trail_name = trail['trail_name']
-    trail_status = trail['trail_status']
-    trail_conditions = trail['trail_conditions']
-    difficulty = trail['difficulty']
-    trail_type = trail['trail_type']
-    physical_rating = trail['physical_rating']
-    total_ascent =trail['total_ascent']
-    total_descent= trail['total_descent']
-    distance_in_miles = trail['distance_in_miles']
-    trail_description = trail['trail_description']
-    location= trail['location']
-    longitude = trail['longitude']
-    latitude = trail['latitude'] 
-    
-    # trail_name, trail_status, trail_conditions, difficulty, trail_type, 
-    # physical_rating, total_ascent, total_descent, distance_in_miles, 
-    # trail_description, location, longitude, latitude = (trail['trail_name'],
-    #                                                     trail['trail_status'],
-    #                                                     trail['trail_conditions'],
-    #                                                     trail['difficulty'],
-    #                                                     trail['trail_type'],
-    #                                                     trail['physical_rating'],
-    #                                                     trail['total_ascent'],
-    #                                                     trail['total_descent'],
-    #                                                     trail['distance_in_miles'],
-    #                                                     trail['trail_description'],
-    #                                                     trail['location'],
-    #                                                     trail['longitude'],
-    #                                                     trail['latitude'])
+#fake comments list
+comments = ['wow!', 'too  muddy', 'perfect hike!']
 
-    trail_object = crud.create_trail(trail_name, trail_status, trail_conditions, difficulty, trail_type, 
-                physical_rating, total_ascent, total_descent, distance_in_miles, 
-                trail_description, location, longitude, latitude)
-    trails_in_db.append(trail_object)
-comments = ['wow!', 'too  muddy']
+#create fake 10 fake users
 for n in range(10):
     username = 'Test'
     email = f'user{n}@test.com'
@@ -97,6 +70,5 @@ for n in range(10):
                         ascent_rating = randint(1,5), 
                         descent_rating = randint(1,5), 
                         comment = choice(comments))
-    print(rating)
 
 

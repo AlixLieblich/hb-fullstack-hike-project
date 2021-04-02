@@ -57,15 +57,20 @@ def hike_list():
 def show_madlib():
     """Show user their form filled out."""
 
-    trail_type = request.args.get("trail_type")   
-    physical_rating = request.args.get("physical_rating")
+    route_type = request.args.get("route_type")   
+    park = request.args.get("park")   
+    state = request.args.get("state")
     difficulty = request.args.get("difficulty")
 
+    server_trail = crud.query_trail(route_type, park, state, difficulty).all()
+
     return render_template("show-form.html",
-                           trail_type=trail_type,
-                           physical_rating=physical_rating,
+                           route_type=route_type,
+                           park=park,
+                           state=state,
                            difficulty=difficulty,
-                            )
+                           server_trail=server_trail)
+                            #trail.all() is a list of sqlAlchemy objects
 
 @app.route('/hikes.json')
 def hike():

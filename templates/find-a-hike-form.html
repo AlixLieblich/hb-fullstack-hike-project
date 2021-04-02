@@ -8,89 +8,28 @@
         <title>Form</title>
     </head>
     <body>
-        <h1>
-            Find a hike form.
-        </h1>
         <h2>
-            What difficulty are you looking for?
+            Find a hike form.
         </h2>
-        <!-- these are from the api, need to understand which are for skiing... perhaps separate forms for different sports -->
+        <p>Please fill out at as many parameters as possible to narrow down the search, but at least one to return trails.</p>
     <form action="/show-form">
-        <p>
-            1 - Access Road/Trail
-            7 - Secondary Access Road/Trail
-            2 - Easiest / White Circle
-            3 - Easy / Green Circle
-            4 - Intermediate / Blue Square
-            5 - Very Difficult / Black Diamond
-            6 - Extremely Difficult / Dbl Black Diamond
-            8 - Extremely dangerous, pros only!
-            12 - Chairlifts & gondolas 
-        </p>
-        <label for="difficulty-select">Choose a difficulty:</label>
+<h4>(1/4) One a scale from 1-5 (one being easiest, and 5 being hardest), what difficulty are you looking for?</h4>
+    <label for="difficulty-select">Choose a difficulty:</label>
         <select name="difficulty" id="difficulty-select"> 
           <option value="">--Please choose an option--</option>
-          <option value="access">1 - Access Road/Trail</option>
-          <option value="secondary_access">7 - Secondary Access Road/Trail</option>
+          <option value="1">1 </option>
+          <option value="2">2</option>
+          <option value="3">3</option>
+          <option value="4">4</option>
+          <option value="5">5</option>
         </select> 
-        <h2>
-            What trail type are you looking for?
-        </h2>
-        <!-- these are from the api, need to understand which are for skiing... perhaps separate forms for different sports -->
-        <p>
-            1 - Singletrack
-            2 - Machine Groomed
-            3 - Doubletrack
-            3 - Doubletrack
-            6 - Dirt/Gravel Road
-            17 - Asphalt/Tarmac Road
-            7 - Paved Path
-            8 - Gravel Path
-            9 - Rail Trail
-            10 - Wilderness Trail
-            11 - Hike-a-Bike
-            12 - Primitive
-            13 - Winter/Fatbike Only
-            14 - Sandy
-            5 - Other
-        </p>
-        <label for="trail_type-select">Choose a trail type:</label>
-        <select name="trail_type" id="trail_type-select"> 
-          <option value="">--Please choose an option--</option>
-          <option value="singletrack">1 - Singletrack</option>
-          <option value="machine_groomed">2 - Machine Groomed</option>
-          <option value="doubletrack">3 - Doubletrack</option>
-          <option value="dirt/gravel_road">6 - Dirt/Gravel Road</option>
-          <option value="asphalt/tarmach">17 - Asphalt/Tarmac Road</option>
-          <option value="paved_path">7 - Paved Path</option>
-          <option value="gravel_path">8 - Gravel Path</option>
-          <option value="rail_trail">9 - Rail Trail</option>
-          <option value="wilderness_trail">10 - Wilderness Trail</option>
-          <option value="Hike-a-Bike">11 - Hike-a-Bike</option>
-          <option value="primitive">12 - Primitive</option>
-          <option value="winter/fatbike_only">13 - Winter/Fatbike Only</option>
-          <option value="sandy">14 - Sandy</option>
-          <option value="other">5 - Other</option>
-        </select> 
+<h4>(2/4) Is there a specific National Park you are looking to hike in?</h4>
+        <p><label>State Park (Optional): <input type="text" name="park"></label></p>
 
-        <h2>
-            What trail physical rating are you looking for?
-        </h2>
-        <!-- these are from the api, need to understand which are for skiing... perhaps separate forms for different sports -->
-        <p>
-            1 - Easy
-            2 - Moderate
-            3 - Hard
-            4 - Extreme
-        </p>
-        <label for="physical_rating-select">Choose a physical rating:</label>
-        <select name="physical_rating" id="physical_rating-select"> 
-          <option value="">--Please choose an option--</option>
-          <option value="easy">1 - Easy</option>
-          <option value="moderate">2 - Moderate</option>
-          <option value="hard">3 - Hard</option>
-          <option value="extreme">4 - Extreme</option>
-        </select> 
+<h4>(3/4) Is there a specific State you are looking to hike in?</h4>
+        <p><label>State (Optional): <input type="text" name="state"></label></p>
+<h4>(4/4) What route type are you looking for? Out and back, or Point to point?</h4>
+        <p><label>Route Type (Optional): <input type="text" name="route_type"></label></p>
         
         <p><input type="submit"></p>
     </form>

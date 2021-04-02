@@ -47,21 +47,28 @@ class Trail(db.Model):
     trail_id = db.Column(db.Integer, 
                           autoincrement=True, 
                           primary_key=True)
-    trail_name = db.Column(db.String, nullable=False)
+    # trail_id = db.Column(db.Integer)
     name = db.Column(db.String)
     area_name = db.Column(db.String)
-    # city_name = db.Column(db.String) 
+    city_name = db.Column(db.String) 
     state_name = db.Column(db.String)
-    geoloc = db.Column(db.String)
-    # popularity = db.Column(db.Int)
-    length = db.Column(db.Int)
-    elevation_gain = db.Column(db.Int)
+    country_name = db.Column(db.String)
+    _geoloc = db.Column(db.String)
+    popularity = db.Column(db.String)
+    length = db.Column(db.String)
+    elevation_gain = db.Column(db.String)
+    difficulty_rating = db.Column(db.Integer)
+    route_type = db.Column(db.String)
+    visitor_usage = db.Column(db.String)
+    features = db.Column(db.String)
+    activities = db.Column(db.String)
+    units = db.Column(db.String)
         
 
     # hikes = a list of Hike objects
 
     def __repr__(self):
-        return f'<Trail trail_id={self.trail_id} name={self.trail_name}>'
+        return f'<Trail trail_id={self.trail_id} name={self.name}>'
 
 class Rating(db.Model):
     """A rating."""
