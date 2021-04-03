@@ -56,7 +56,7 @@ def create_trail(name,area_name,city_name,state_name,country_name,_geoloc,popula
 def get_all_trails():
     """Display all trails."""
 
-    return db.session.query(Trails).all()
+    return db.session.query(Trail).all()
 
 def get_trail_by_id(trail_id):
     """Return a trail object given a trail id."""
@@ -109,8 +109,9 @@ def create_hike(user_id, trail_id, hike_completed_on, hike_total_time, status_co
 def query_trail(route_type, park, state, difficulty):
     """Take in form responses and query for a resultant hike."""
 
-    trail = Trail.query.filter(and_(Trail.route_type==route_type, Trail.area_name==park, Trail.state_name==state, Trail.difficulty_rating==difficulty)) 
-    
+    # trail = Trail.query.filter(and_(Trail.route_type==route_type, Trail.area_name==park, Trail.state_name==state, Trail.difficulty_rating==difficulty)) 
+    trail = db.session.query(Trail.state_name, Trail.route_type, Trail.name, Trail.area_name).filter(and_(Trail.difficulty_rating==1, Trail.route_type=='out and back', Trail.state_name=='Alaska'))
+
     return trail
 
 if __name__ == '__main__':

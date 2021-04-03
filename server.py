@@ -37,21 +37,31 @@ def create_new_user():
 
     return redirect('/')
 
+@app.route('/trails')
+def trails_list():
+    """View trail list."""
+    
+    all_trails = crud.get_all_trails()
+
+    return render_template('trails.html',
+                            all_trails=all_trails)
+
+@app.route('/trails/<trail_id>')
+def trail_detail(trail_id):
+    """Show individual movie details."""
+
+    trail_details = crud.get_trail_by_id(trail_id)
+
+    return render_template('trail_details.html',
+                            trail=trail_details)
+
 @app.route('/find-a-hike-form')
 def display_hike_form():
     """View hike form."""
     
-    
-
     return render_template('find-a-hike-form.html')
 
-@app.route('/view-hikes')
-def hike_list():
-    """View hike form."""
-    
-    
 
-    return render_template('view-hikes.html')
 
 @app.route('/show-form')
 def show_madlib():
@@ -63,6 +73,11 @@ def show_madlib():
     difficulty = request.args.get("difficulty")
 
     server_trail = crud.query_trail(route_type, park, state, difficulty).all()
+
+    if server_trail == []:
+        server_trail='Sorry, no hikes matched your specifications, please try again with less parameters.'
+    
+
 
     return render_template("show-form.html",
                            route_type=route_type,
