@@ -46,14 +46,40 @@ def trails_list():
     return render_template('trails.html',
                             all_trails=all_trails)
 
+@app.route('/parks')
+def parks_list():
+    """View National Park list."""
+    
+    all_trails = crud.get_all_trails()
+    all_parks = crud.get_all_parks()
+
+    return render_template('parks.html',
+                            all_parks=all_parks,
+                            all_trails=all_trails)
+
+@app.route('/parks/<area_name>')
+def park_detail(area_name):
+    """Show individual park details."""
+
+    park_trails = crud.get_parks_trails_by_name()
+    # trail_details = crud.get_trail_by_id(trail_id)
+
+    return render_template('park_details.html',
+                            # trail=trail_details,
+                            park_trails=park_trails,
+                            area_name=area_name)
+
 @app.route('/trails/<trail_id>')
 def trail_detail(trail_id):
-    """Show individual movie details."""
+    """Show individual trail details."""
 
     trail_details = crud.get_trail_by_id(trail_id)
+    ratings = crud.get_all_ratings()
+    print(ratings)
 
     return render_template('trail_details.html',
-                            trail=trail_details)
+                            trail=trail_details,
+                            ratings=ratings)
 
 @app.route('/find-a-hike-form')
 def display_hike_form():
@@ -98,4 +124,4 @@ def hike():
 
 if __name__ == '__main__':
     connect_to_db(app)
-    app.run(host='0.0.0.0', debug=True, port=5000)
+    app.run(host='0.0.0.0', debug=True, port=5001)
