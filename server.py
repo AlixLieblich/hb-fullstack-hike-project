@@ -1,8 +1,11 @@
-"""Server for movie ratings app."""
+"""Server for National Park trail app."""
 
 from flask import (Flask, render_template, request, flash, session, redirect)
+import flask_login
+from flask_login import current_user
 
 from model import connect_to_db
+import model
 
 import crud
 
@@ -12,6 +15,48 @@ app = Flask(__name__)
 app.secret_key = "dev" #TODO replace with secrets.sh key
 app.jinja_env.undefined = StrictUndefined
 
+####
+# lets my app and flask-login work togther
+login_manager = flask_login.LoginManager()
+
+login_manager.init_app(app)
+
+@app.route('/login')
+def show_login():
+    """Display login page."""
+
+    if current_user.is_authenticated:
+        return redirect('/homepage')
+    else:
+        return render_template('login.html')
+
+@app.route('/login', methods=['POST'])
+def login():
+    """Log user into account."""
+# cant get user by username, only user id just like trail id vs trail state name?
+    user = crud.get_user_by_username(request.form['username'])
+    password = request.form['password']
+
+    if user == None:
+        flash("We could not find an account with that username, please try again or create an account.")
+        return redirect('/')
+
+    elif password != user.password:
+        flash('Incorrect password. Please try again.')
+        return redirect('/login')
+
+    else:
+        flash(f'Logged in as {user.user_fname}!')
+        lofin_user(user)
+        return redirect('/homepage')
+
+@app.route('/logout')
+def logout():
+    flask_login.logout_user()
+    return 'Logged out'
+
+####
+
 
 @app.route('/')
 def homepage():
@@ -19,12 +64,15 @@ def homepage():
 
     return render_template('homepage.html')
 
+
 @app.route('/new_user', methods=['POST'])
 def create_new_user():
     """Create a new user."""
 
-    user_name = request.form.get('username')
+    user_fname = request.form.get('user_fname')
+    user_lname = request.form.get('user_lname')
     user_email = request.form.get('email')
+    user_name = request.form.get('username')
     user_password = request.form.get('password')
 
     user_existence = crud.get_user_by_email(user_email)
@@ -34,6 +82,38 @@ def create_new_user():
     else:
         crud.create_user(user_name, user_email, user_password)
         flash('Your account was successfully created. WelCoMe tO thE ComMunItYYY, you can now log in!')
+
+    return redirect('/')
+
+@app.route('/create-account')
+def display_create_account_form():
+    """View create account form."""
+    
+    return render_template('create-account.html')
+
+@app.route('/user_profile')
+def view_user_profile(user_id):
+    """View user profile."""
+
+    user = crud.get_user_by_id(user_id)
+    # need to return user info to be used in user_profile
+    # when you click on 'My Profile,' does user-id come from session?
+
+    return render_template('user_profile.html',
+                            user=user)
+
+@app.route('/new_rating', methods=['POST'])
+def create_new_rating():
+    """Create a new rating."""
+
+    score = request.form.get('score')
+    challenge_rating = request.form.get('challenge_rating')
+    distance_rating = request.form.get('distance_rating')
+    ascent_rating = request.form.get('ascent_rating')
+    descent_rating = request.form.get('descent_rating')
+    comment = request.form.get('comment')
+
+    crud.create_rating(score, challenge_rating, distance_rating, ascent_rating, descent_rating, comment)
 
     return redirect('/')
 
@@ -90,7 +170,7 @@ def display_hike_form():
 
 
 @app.route('/show-form')
-def show_madlib():
+def show_form_response():
     """Show user their form filled out."""
 
     route_type = request.args.get("route_type")   
@@ -102,7 +182,6 @@ def show_madlib():
 
     if server_trail == []:
         server_trail='Sorry, no hikes matched your specifications, please try again with less parameters.'
-    
 
 
     return render_template("show-form.html",
@@ -111,16 +190,15 @@ def show_madlib():
                            state=state,
                            difficulty=difficulty,
                            server_trail=server_trail)
-                            #trail.all() is a list of sqlAlchemy objects
 
-@app.route('/hikes.json')
-def hike():
-    """Return a trail for this trail_type."""
+# @app.route('/hikes.json')
+# def hike():
+#     """Return a trail for this trail_type."""
 
-    trail_type = request.args.get('trail_type')
-    trail_type_info = WEATHER.get(trail_type, DEFAULT_WEATHER)
-    return jsonify(trail_type_info)
-
+#     trail_type = request.args.get('trail_type')
+#     trail_type_info = WEATHER.get(trail_type, DEFAULT_WEATHER)
+#     return jsonify(trail_type_info)
+ 
 
 if __name__ == '__main__':
     connect_to_db(app)

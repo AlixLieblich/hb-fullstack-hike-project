@@ -27,8 +27,8 @@ class User(db.Model):
     username = db.Column(db.String, nullable=False)
     password = db.Column(db.String, nullable=False)
     # created_on = db.Column(db.DateTime)
-    # user_fname = db.Column(db.String)
-    # user_lname = db.Column(db.String)
+    user_fname = db.Column(db.String)
+    user_lname = db.Column(db.String)
     email = db.Column(db.String, nullable=False, unique=True)
 
     # hikes = a list of Hike objects

@@ -18,10 +18,20 @@ def get_all_users():
 
     return db.session.query(User).all()
 
-def get_user_by_id(user_id): #hiking_object.user_id
+def greeting():
+    """Display greeting header. Gives visual knowledge of wheter user is logged in or not."""
+
+    # if session is empty:
+    #   greeting_message = "Hello! Feel free to find a hike, or <a Login> here for user functionality"
+    # else:
+    #   greeting_message = "Hello f'user.fname'!"
+
+    return db.session.query(User).all()
+
+def get_user_by_username(user_name): #hiking_object.user_id
     """Return a user object given a user id."""
 
-    return User.query.get(user_id)  # using info from other tables to get info from other tables -> #hiking_object.user_id
+    return User.query.get(user_name)  # using info from other tables to get info from other tables -> #hiking_object.user_id
 
 def get_user_by_email(email):
     """Return a user object given an email, else None."""
@@ -94,8 +104,8 @@ def create_rating(score, hike_id, challenge_rating, distance_rating, ascent_rati
                     distance_rating=distance_rating,
                     ascent_rating=ascent_rating,
                     descent_rating=descent_rating,
-                    comment=comment) #not sure if user and hike are right
-    
+                    comment=comment) 
+
     db.session.add(rating)
     db.session.commit()
 
@@ -114,10 +124,11 @@ def create_goal(num_miles_total, num_hikes_total, user):
 
     return goal
 
-def create_rating(num_miles_total, num_hikes_total, user):
+def create_rating(hike_id, score, challenge_rating, distance_rating, ascent_rating, descent_rating, comment):
     """Create and return a new rating (score)."""
 
-    rating = Rating(score=score,
+    rating = Rating(hike_id=hike_id,
+                    score=score,
                     challenge_rating=challenge_rating,
                     distance_rating=distance_rating,
                     ascent_rating=ascent_rating,

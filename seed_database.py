@@ -43,10 +43,10 @@ for n in range(10):
 
     #create 1 hike associated with user above
     hike_object = crud.create_hike(user_object.user_id, 
-                                    choice(trails_in_db).trail_id,
-                                    date.today(), # date.today is hike date completed on,
-                                    1,  #1 is time to complete
-                                    True)  #true is booll for hike completed
+                                   choice(trails_in_db).trail_id,
+                                   date.today(),   # date.today is hike date completed on,
+                                   1,              # 1 is time to complete
+                                   True)           # true is booll for hike completed
 
     # #create 10 raatings associated with user above
     # for i in range(10):
