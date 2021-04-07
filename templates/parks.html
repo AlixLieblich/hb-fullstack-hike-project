@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}National Parks List{% endblock %}
+
+{% block body %}
+  <h1>Welcome to the National Parks list!</h1>
+
+  <ul>
+    <!-- {% for trail in all_trails %}
+        <li><a href="/parks/{{ trail.trail_id }}">{{ trail.area_name }}</a></li>
+    {% endfor %} -->
+    {% for park in all_parks %}
+    <li><a href="/parks/{{ park.area_name }}">{{ park.area_name }}</a></li>
+{% endfor %}
+  </ul>
+{% endblock %}

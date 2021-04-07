@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block title %}Create Account{% endblock %}
+
+{% block body %}
+  <h4>Please fill out the following fields to create your account.</h4>
+
+  <form action="/new_user" method="POST">
+    <p>First Name: <input type="text" name="user_fname"></p>
+    <p>Last Name: <input type="text" name="user_lname"></p>
+    <p>Email: <input type="text" name="email"></p>
+    <p>Username: <input type="text" name="username"></p>
+    <p>Password: <input type="password" name="password"></p>
+    <p><input type="submit"></p>
+</form>
+{% endblock %}

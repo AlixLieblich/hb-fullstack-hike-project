@@ -1,0 +1,32 @@
+
+{% extends 'base.html' %}
+{% block title %} {{ user.user_id }} {% endblock %}
+
+{% block body %}
+<h3>{{ user.user_fname }}</h3>
+
+<h4>{{ user.user_fname }}'s Trail Goals</h4>
+<p>Goals</p>
+<table>
+  <tr>
+    <th>Total Miles</th>
+    <th>Total Number of Hikes</th>
+    <th>Maximun Hike Difficulty</th>
+
+  </tr>
+  <tr>
+    <td>John</td>
+    <td>Doe</td>
+    <td>Doe</td>
+
+  </tr>
+  <tr>
+    <td>Jane</td>
+    <td>Doe</td>
+    <td>Doe</td>
+
+  </tr>
+</table>
+
+
+{% endblock %}

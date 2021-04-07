@@ -1,0 +1,116 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ trail.name }} - Details{% endblock %}
+
+{% block body %}
+<h1>{{ trail.name }}</h1>
+
+<h3>{{ trail.name }}</h3>
+
+<p>{{ trail.name }} Details</p>
+<table>
+  <colgroup span="4"></colgroup>
+  <tr>
+    <th>Trail Name</th>
+    <th>National Park</th>
+    <th>State</th>
+    <th>Trail Length</th>
+    <th>Trail Elevation Gain</th>
+    <th>Difficulty Rating</th>
+    <th>Route Type</th>
+    <th>Trail Features</th>
+    <th>Trail Activities</th>
+  </tr>
+  <tr>
+    <td>{{ trail.name }}</td>
+    <td>{{ trail.area_name }}</td>
+    <td>{{ trail.state_name }}</td>
+    <td>{{ trail.length }}</td>
+    <td>{{ trail.elevation_gain }}</td>
+    <td>{{ trail.difficulty_rating }}</td>
+    <td>{{ trail.route_type }}</td>
+    <td>{{ trail.features }}</td>
+    <td>{{ trail.activities }}</td>
+
+  </tr>
+
+</table>
+<h5>Have you done completed this hike? Take a moment to rate!</h5>
+<form method="post" action="/new_rating">
+    <p>(1/6) One a scale from 1-5 (one being easiest, and 5 being hardest), what score would you give this trail?</p>
+        <label for="socre-select">Choose a difficulty:</label>
+            <select name="score" id="score-select"> 
+              <option value="">--Please choose an option--</option>
+              <option value="1">1 </option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select> 
+    <p>(2/6) One a scale from 1-5 (one being easiest, and 5 being hardest), what challenge rating would you give this trail?</p>
+            <label for="challenge_rating-select">Choose a challenge rating:</label>
+            <select name="challenge_rating" id="challenge_rating-select"> 
+              <option value="">--Please choose an option--</option>
+              <option value="1">1 </option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select> 
+    <p>(3/6) One a scale from 1-5 (one being easiest, and 5 being hardest), what distance rating would you give this trail?</p>
+            <label for="distance_rating-select">Choose a distance rating:</label>
+            <select name="distance_rating" id="distance_rating-select"> 
+              <option value="">--Please choose an option--</option>
+              <option value="1">1 </option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select> 
+    <p>(4/6) One a scale from 1-5 (one being easiest, and 5 being hardest), what ascent rating would you give this trail?</p>
+            <label for="ascent_rating-select">Choose a ascent rating:</label>
+            <select name="ascent_rating" id="ascent_rating-select"> 
+              <option value="">--Please choose an option--</option>
+              <option value="1">1 </option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select> 
+    <p>(5/6) One a scale from 1-5 (one being easiest, and 5 being hardest), what descent rating would you give this trail?</p>
+            <label for="descent_rating-select">Choose a descent rating:</label>
+            <select name="descent_rating" id="descent_rating-select"> 
+              <option value="">--Please choose an option--</option>
+              <option value="1">1 </option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select> 
+    <p>(6/6) Comments?</p>
+        <p><label>Comments: <input type="text" name="comment"></label></p>
+        <p><input type="submit"></p>
+
+</form>
+        <table>
+    <colgroup span="4"></colgroup>
+    <tr>
+      <th>User</th>
+      <th>User Rating</th>
+      <th>User Comment</th>
+    </tr>
+    <tr>
+      <td>Feature coming</td>
+      <td>Feature coming</td>
+      <td>Feature coming</td>
+
+  
+    </tr>
+  
+  </table>
+  <p>{{ ratings }}</p>
+  <p>{{ trail }}</p>
+
+
+
+{% endblock %}

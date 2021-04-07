@@ -1,0 +1,12 @@
+{% extends 'base.html' %}
+{% block title %}Trails List{% endblock %}
+
+{% block body %}
+  <h1>Welcome to the trails list!</h1>
+
+  <ul>
+    {% for trail in all_trails %}
+        <li><a href="/trails/{{ trail.trail_id }}">{{ trail.name }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}

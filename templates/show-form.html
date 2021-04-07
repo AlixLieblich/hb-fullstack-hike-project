@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+
+{% block body %}
+<head>
+    <link rel="stylesheet"
+    href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.css"/>
+    <title>Your Form Results</title>
+</head>
+<body>
+
+    <h1>Here is what you requested:</h1>
+    <!-- <img src="/static/img/home2.jpg"> -->
+
+    <!-- <button action="/find-a-hike-form">
+    Find the perfect hike here
+
+    </button> -->
+    <p>A {{ difficulty }} difficulty rated {{ route_type }} hike with in {{ state }} at {{ park }}.</p>
+    <p>{{ server_trail }} </p>
+
+
+</body>
+
+
+{% endblock %}
