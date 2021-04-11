@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ state_name }} - Details{% endblock %}
+
+{% block body %}
+<h1>{{ state_name }}</h1>
+
+<h3>{{ state_name }}</h3>
+
+<p>{{ state_name }} Details</p>
+<table>
+  <colgroup span="4"></colgroup>
+  <tr>
+    <th>Trail Name</th>
+    <th>National Park</th>
+    <th>State</th>
+    <th>Trail Length</th>
+    <th>Trail Elevation Gain</th>
+    <th>Difficulty Rating</th>
+    <th>Route Type</th>
+    <th>Trail Features</th>
+    <th>Trail Activities</th>
+  </tr>
+  <tr>
+
+
+  </tr>
+
+</table>
+<ul>
+    {% for trail in park_trails %}
+        <li><a href="/trails/{{ trail.trail_id }}">{{ trail.name }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}

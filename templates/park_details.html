@@ -3,12 +3,9 @@
 {% block title %}{{ area_name }} - Details{% endblock %}
 
 {% block body %}
-<h1>{{ area_name }}</h1>
+<h1>{{ area_name }} Available Trails</h1>
 
-<h3>{{ area_name }}</h3>
-
-<p>{{ area_name }} Details</p>
-<table>
+<!-- <table>
   <colgroup span="4"></colgroup>
   <tr>
     <th>Trail Name</th>
@@ -26,10 +23,20 @@
 
   </tr>
 
-</table>
+</table> -->
 <ul>
+  <p>NOTE TO SELF could make this a table instead of a list</p>
     {% for trail in park_trails %}
-        <li><a href="/trails/{{ trail.trail_id }}">{{ trail.name }}</a></li>
+        <li><a href="/trails/{{ trail.trail_id }}">{{ trail.name }}</a></li>   
+        <ul>
+        <li>Trail Difficulty: {{ trail.difficulty_rating }}</li>
+        <li>Trail Length: {{ trail.length }}</li>
+        <li>Trail Route Type: {{ trail.route_type }}</li>
+        <li>Trail Features: {{ trail.features }}</li>
+
+
+
+      </ul>
     {% endfor %}
   </ul>
 {% endblock %}

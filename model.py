@@ -35,6 +35,25 @@ class User(db.Model):
 
     goals = db.relationship('Goal', backref='users')
 
+        # Flask Login Methods
+    def is_authenticated(self):
+        """If user is authenticated, return true."""
+
+        return True
+
+    def is_active(self):  
+        """If user is active, return true."""
+
+        return True           
+
+    def is_anonymous(self):
+        """If user is anonymous, return true."""
+        return False          
+
+    def get_id(self):
+        """Return ID that uniquely identifies user."""
+
+        return(self.user_id) # this doesnt work, 'AttributeError: 'str' object has no attribute 'user_id'' when click on My Account .... idk, it works one line below sooo i guess profile pages are on hold
 
     def __repr__(self):
         return f'<User user_id={self.user_id} email={self.email}>'

@@ -5,8 +5,8 @@
   <h1>Welcome to the states list!</h1>
 
   <ul>
-    {% for trail in all_trails %}
-        <li><a href="/trails/{{ trail.state_name }}">{{ trail.state_name }}</a></li>
+    {% for state in all_states %}
+        <li><a href="/states/{{ state.state_name }}">{{ state.state_name }}</a></li>
     {% endfor %}
   </ul>
 {% endblock %}

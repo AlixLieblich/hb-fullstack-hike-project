@@ -3,6 +3,7 @@
 from model import db, User, Hike, Rating, Goal, Trail, connect_to_db
 from sqlalchemy import and_
 
+# USER FUNCTIONS
 def create_user(username, password, email):
     """Create and return a new user."""
 
@@ -20,6 +21,7 @@ def get_all_users():
 
 def greeting():
     """Display greeting header. Gives visual knowledge of wheter user is logged in or not."""
+# under construction
 
     # if session is empty:
     #   greeting_message = "Hello! Feel free to find a hike, or <a Login> here for user functionality"
@@ -28,16 +30,30 @@ def greeting():
 
     return db.session.query(User).all()
 
-def get_user_by_username(user_name): #hiking_object.user_id
+def get_user_by_username(username): #hiking_object.user_id
     """Return a user object given a user id."""
 
-    return User.query.get(user_name)  # using info from other tables to get info from other tables -> #hiking_object.user_id
+    return User.query.filter_by(username=username).first() # using info from other tables to get info from other tables -> #hiking_object.user_id
 
 def get_user_by_email(email):
     """Return a user object given an email, else None."""
 
     return User.query.filter(User.email == email).first()
 
+def create_goal(num_miles_total, num_hikes_total, user):
+    """Create and return a new goal."""
+
+    goal = Goal(num_miles_total=num_miles_total,
+                num_hikes_total=num_hikes_total,
+                difficulty_hike_goal=difficulty_hike_goal,
+                user=user) #not sure if user is right
+    
+    db.session.add(goal)
+    db.session.commit()
+
+    return goal
+
+# TRAIL FUNCTIONS
 def create_trail(name,area_name,city_name,state_name,country_name,_geoloc,popularity,length,elevation_gain,difficulty_rating,route_type,visitor_usage,avg_rating,num_reviews,features,activities,units
 ):
     """Create and return a new trail."""
@@ -68,6 +84,12 @@ def get_all_trails():
 
     return db.session.query(Trail).all()
 
+def get_trail_by_id(trail_id):
+    """Return a trail object given a trail id."""
+
+    return Trail.query.get(trail_id)
+
+# PARK FUNCTIONS
 def get_all_parks():
     """Display all National Parks."""
 
@@ -78,7 +100,7 @@ def get_all_parks():
 def get_park_by_name(area_name):
     """Return a park object given an area_name."""
 
-    return Trail.query.get(area_name)
+    return Trail.query.filter_by(area_name=area_name).all()
 
 # there is an error on this helper function "TypeError: get_parks_trails_by_name() missing 1 required positional argument: 'area_name'"; which
 # makes some sence bc its a twin function the def get_trail_by_id below which means that area_name is not translated but trail_id is, and since
@@ -86,15 +108,29 @@ def get_park_by_name(area_name):
 def get_parks_trails_by_name(area_name):
     """Return a list of trails given an area_name."""
 
-    park_trails = db.session.query(Trail.name).filter(Trail.area_name=='area_name').all()
-    print(park_trails)
+    park_trails = db.session.query(Trail).filter(Trail.area_name==area_name).all()
     return park_trails
 
-def get_trail_by_id(trail_id):
-    """Return a trail object given a trail id."""
+# STATE FUNCTIONS
+def get_all_states():
+    """Display all States."""
 
-    return Trail.query.get(trail_id)
+    all_states = db.session.query(Trail.state_name).all()
+    all_states = set(all_states)
+    return all_states
 
+def get_park_states_by_name(state_name):
+    """Return a set of state name variables given an state_name."""
+
+    state_parks = db.session.query(Trail.area_name).filter(Trail.state_name==state_name).all()
+    # state_parks = Trail.query.filter_by(state_name=state_name).all()
+    state_parks = set(state_parks)
+    print("****************************")
+    print(state_parks)
+
+    return state_parks
+
+# RATING FUNCTIONS
 def create_rating(score, hike_id, challenge_rating, distance_rating, ascent_rating, descent_rating, comment):
     """Create and return a new rating."""
 
@@ -111,18 +147,6 @@ def create_rating(score, hike_id, challenge_rating, distance_rating, ascent_rati
 
     return rating
 
-def create_goal(num_miles_total, num_hikes_total, user):
-    """Create and return a new rating (score)."""
-
-    goal = Goal(num_miles_total=num_miles_total,
-                num_hikes_total=num_hikes_total,
-                difficulty_hike_goal=difficulty_hike_goal,
-                user=user) #not sure if user is right
-    
-    db.session.add(goal)
-    db.session.commit()
-
-    return goal
 
 def create_rating(hike_id, score, challenge_rating, distance_rating, ascent_rating, descent_rating, comment):
     """Create and return a new rating (score)."""
@@ -145,6 +169,7 @@ def get_all_ratings():
 
     return db.session.query(Rating).all()
 
+# HIKE FUNCTIONS
 def create_hike(user_id, trail_id, hike_completed_on, hike_total_time, status_completion):
     """Create and return a new hike."""
 
@@ -159,6 +184,7 @@ def create_hike(user_id, trail_id, hike_completed_on, hike_total_time, status_co
 
     return hike
 
+# FIND A TRAIL FUNCTION
 def query_trail(route_type, park, state, difficulty):
     """Take in form responses and query for a resultant hike."""
 

@@ -1,13 +1,11 @@
 {% extends 'base.html' %}
 
-{% block title %}{{ trail.name }} - Details{% endblock %}
+{% block title %}{{ trail_details.name }} - Details{% endblock %}
 
 {% block body %}
-<h1>{{ trail.name }}</h1>
+<h1>{{ trail_details.name }}</h1>
 
-<h3>{{ trail.name }}</h3>
-
-<p>{{ trail.name }} Details</p>
+<p>{{ trail_details.name }} Details</p>
 <table>
   <colgroup span="4"></colgroup>
   <tr>
@@ -22,15 +20,15 @@
     <th>Trail Activities</th>
   </tr>
   <tr>
-    <td>{{ trail.name }}</td>
-    <td>{{ trail.area_name }}</td>
-    <td>{{ trail.state_name }}</td>
-    <td>{{ trail.length }}</td>
-    <td>{{ trail.elevation_gain }}</td>
-    <td>{{ trail.difficulty_rating }}</td>
-    <td>{{ trail.route_type }}</td>
-    <td>{{ trail.features }}</td>
-    <td>{{ trail.activities }}</td>
+    <td>{{ trail_details.name }}</td>
+    <td>{{ trail_details.area_name }}</td>
+    <td>{{ trail_details.state_name }}</td>
+    <td>{{ trail_details.length }}</td>
+    <td>{{ trail_details.elevation_gain }}</td>
+    <td>{{ trail_details.difficulty_rating }}</td>
+    <td>{{ trail_details.route_type }}</td>
+    <td>{{ trail_details.features }}</td>
+    <td>{{ trail_details.activities }}</td>
 
   </tr>
 
@@ -109,7 +107,7 @@
   
   </table>
   <p>{{ ratings }}</p>
-  <p>{{ trail }}</p>
+  <!-- for loop!!! -->
 
 
 

@@ -1,0 +1,33 @@
+{% extends 'base.html' %}
+
+{% block title %}{{ state_name }} - Details{% endblock %}
+
+{% block body %}
+<h1>{{ state_name }} Available National Parks</h1>
+
+<!-- <table>
+  <colgroup span="4"></colgroup>
+  <tr>
+    <th>Trail Name</th>
+    <th>National Park</th>
+    <th>State</th>
+    <th>Trail Length</th>
+    <th>Trail Elevation Gain</th>
+    <th>Difficulty Rating</th>
+    <th>Route Type</th>
+    <th>Trail Features</th>
+    <th>Trail Activities</th>
+  </tr>
+  <tr>
+
+
+  </tr>
+
+</table> -->
+<ul>
+    <p>NOTE TO SELF could make this a table instead of a list</p>
+      {% for area_name in state_parks_details %}
+          <li><a href="/parks/{{ area_name.area_name }}">{{ area_name[0] }}</a></li>   
+
+      {% endfor %}
+    </ul>{% endblock %}
