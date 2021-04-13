@@ -46,7 +46,7 @@ def login():
     if user == None:
         flash("We could not find an account with that username, please try again or create an account.")
         return redirect('/')
-
+#why does this flash on homepage and not login page?
     elif password != user.password:
         flash('Incorrect password. Please try again.')
         return redirect('login.html')
@@ -107,13 +107,22 @@ def display_create_account_form():
 def view_user_profile():
     """View user profile."""
 
-    user_id = model.User.get_id('user_id')
+#check if user in session
+#get id from session
+#use id to populate profile looking at
+
+    user_id = current_user.user_id
+    user_object = crud.get_user_by_id(user_id)
+
+
+    # user_id = model.User.get_id('user_id')
     # user = crud.get_user_by_id(user_id)
     # need to return user info to be used in user_profile
     # when you click on 'My Profile,' does user-id come from session?
 
     return render_template('user_profile.html',
-                            user_id=user_id)
+                            user_id=user_id,
+                            user_object=user_object)
 
 # RATING ROUTES
 @app.route('/new_rating', methods=['POST'])
@@ -150,6 +159,9 @@ def trail_detail(trail_id):
     trail_details = crud.get_trail_by_id(trail_id)
     ratings = crud.get_all_ratings()
     print(ratings)
+    # for rating in ratings:
+    #     total_score = sum(score)
+    #     av_total_score = total_score / num_scores
     # for rating in ratings:
         #total_score = score + score ...
         #av_total_score = total_score / num_scores
@@ -233,4 +245,4 @@ def show_form_response():
  
 if __name__ == '__main__':
     connect_to_db(app)
-    app.run(host='0.0.0.0', debug=True, port=5000)
+    app.run(host='0.0.0.0', debug=True, port=5001)

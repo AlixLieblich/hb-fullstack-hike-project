@@ -4,10 +4,10 @@ from model import db, User, Hike, Rating, Goal, Trail, connect_to_db
 from sqlalchemy import and_
 
 # USER FUNCTIONS
-def create_user(username, password, email):
+def create_user(username, password, user_fname, user_lname, email): 
     """Create and return a new user."""
 
-    user = User(username=username, password=password, email=email)
+    user = User(username=username, password=password, user_fname=user_fname, user_lname=user_lname, email=email)
 
     db.session.add(user)
     db.session.commit()
@@ -39,6 +39,11 @@ def get_user_by_email(email):
     """Return a user object given an email, else None."""
 
     return User.query.filter(User.email == email).first()
+
+def get_user_by_id(user_id):
+    """Return a user object given a user_id, else None."""
+
+    return User.query.filter(User.user_id == user_id).first()
 
 def create_goal(num_miles_total, num_hikes_total, user):
     """Create and return a new goal."""

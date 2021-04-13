@@ -1,11 +1,11 @@
 
 {% extends 'base.html' %}
-{% block title %} {{ user.user_id }} {% endblock %}
+{% block title %} {{ user_id }} {% endblock %}
 
 {% block body %}
-<h3>{{ user.user_fname }}</h3>
+<h3>{{ user_object.user_fname }}</h3>
 
-<h4>{{ user.user_fname }}'s Trail Goals</h4>
+<h4>{{ user_object.user_fname }}'s Trail Goals</h4>
 <p>Goals</p>
 <table>
   <tr>
