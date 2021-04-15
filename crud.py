@@ -4,10 +4,10 @@ from model import db, User, Hike, Rating, Goal, Trail, connect_to_db
 from sqlalchemy import and_
 
 # USER FUNCTIONS
-def create_user(username, password, user_fname, user_lname, email): 
+def create_user(username, password, user_fname, user_lname, profile_picture, email): #TODO: add fname and lname
     """Create and return a new user."""
 
-    user = User(username=username, password=password, user_fname=user_fname, user_lname=user_lname, email=email)
+    user = User(username=username, password=password, user_fname=user_fname, user_lname=user_lname, profile_picture=profile_picture, email=email)
 
     db.session.add(user)
     db.session.commit()
@@ -45,6 +45,33 @@ def get_user_by_id(user_id):
 
     return User.query.filter(User.user_id == user_id).first()
 
+#profile changes
+def update_user_profile_info(user_id, first_name, last_name, insta_handle, bio):
+    """Update basic user profile information."""
+
+    db.session.query(User.user_id == user_id).update({"user_fname": user_fname, "user_lname": user_lname})
+    
+    db.session.commit()
+
+def set_user_profile_picture(user_id, file_name):
+    user = User.query.get(user_id)
+    user.profile_picture = file_name
+    db.session.commit()
+
+def update_password(user_id, old_password, new_password):
+    """Update user password."""
+
+    user_password = (User.query.filter(User.user_id == user_id).filter(User.password == old_password).first())
+
+    if not user_password:
+        return False
+
+    db.session.query(User.user_id == user_id).update({"password": new_password,})
+
+    db.session.commit()
+    return True
+
+#goalz
 def create_goal(num_miles_total, num_hikes_total, user):
     """Create and return a new goal."""
 

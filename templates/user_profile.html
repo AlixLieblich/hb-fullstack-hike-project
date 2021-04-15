@@ -3,10 +3,20 @@
 {% block title %} {{ user_id }} {% endblock %}
 
 {% block body %}
-<h3>{{ user_object.user_fname }}</h3>
+<h3>Welcome {{ user_object.user_fname }}!</h3>
+<br />
+{%if user_object.profile_picture%}
+<img src="/static/img/profile_pictures/{{user_object.profile_picture}}" />
+{%else%}
+<img src="/static/img/profile_pictures/default.png" />
+{%endif%}
 
 <h4>{{ user_object.user_fname }}'s Trail Goals</h4>
 <p>Goals</p>
+<a href="/profile_edit">Edit your Profile</a>
+<!-- if else if user has profile picutre, display it; else display default image -->
+<!-- fake users have assigned images  -->
+<!-- prfile picture is a part of model User -->
 <table>
   <tr>
     <th>Total Miles</th>

@@ -6,6 +6,10 @@ from flask_login import LoginManager, login_user, logout_user, login_required, c
 
 from model import connect_to_db
 import model
+import os
+import image_helper
+
+import json 
 
 import crud
 
@@ -14,6 +18,11 @@ from jinja2 import StrictUndefined
 app = Flask(__name__)
 app.secret_key = "dev" #TODO replace with secrets.sh key
 app.jinja_env.undefined = StrictUndefined
+
+# API_KEY = os.environ['WEATHERMAP_KEY']
+UPLOAD_FOLDER_PROFILE_PICTURE = "./static/img/profile_pictures/"
+
+#Flask login routes
 
 ####
 # Flask Login configurations
@@ -86,6 +95,7 @@ def create_new_user():
     user_email = request.form.get('email')
     user_name = request.form.get('username')
     user_password = request.form.get('password')
+    profile_picture = request.form.get('profile_picture')
 
     user_existence = crud.get_user_by_email(user_email)
     
@@ -111,6 +121,9 @@ def view_user_profile():
 #get id from session
 #use id to populate profile looking at
 
+    if not current_user.is_authenticated:
+        return redirect('/') #may need to redirect to login page?
+
     user_id = current_user.user_id
     user_object = crud.get_user_by_id(user_id)
 
@@ -123,6 +136,91 @@ def view_user_profile():
     return render_template('user_profile.html',
                             user_id=user_id,
                             user_object=user_object)
+
+@app.route("/profile_edit")
+def show_edit_profile_page():
+    """Display to user the Edit Profile Page."""
+
+    if not current_user.is_authenticated:
+        return redirect('/')
+    
+    user_id = current_user.user_id
+    user_object = crud.get_user_by_id(user_id)
+
+    return render_template('profile_edit.html',
+                            user_id=user_id,
+                            user_object=user_object)
+
+@app.route('/profile_edit', methods = ["POST"])
+def edit_user_profile():
+    """Edit user profile with user form responses."""
+
+    if not current_user.is_authenticated:
+        return redirect('/')
+
+    user_id = current_user.user_id
+    user_object = crud.get_user_by_id(user_id)
+    form_id = request.form.get("form_id")
+
+    #basic form
+    if form_id == "basic_profile_information":
+        user_fname = request.form.get("fname")
+        user_lname = request.form.get("lname")
+        email = request.form.get("email")
+        crud.update_user_profile_info(user_id, user_fname, user_lname, email)
+
+        return redirect("profile_edit")
+
+    #profile pic
+    elif form_id == "profile_picture":
+        if "file1" not in request.files:
+            flash("We couldn't find your profile picture!")
+            return redirect("/user_profile")
+
+        f = request.files["file1"]
+
+        result = image_helper.resize_image_square_crop(f.stream, (400, 400))
+        (success, msg, resized_image) = result
+        if success is False:
+            flash(msg)
+            return redirect("/profile_edit")
+        else:
+            file_name = str(user_id) + ".jpg"
+            path = os.path.join(UPLOAD_FOLDER_PROFILE_PICTURE, file_name)
+            resized_image.save(path)
+
+            crud.set_user_profile_picture(user_id, file_name) 
+        
+        return redirect("/profile_edit")
+
+    #password
+    elif form_id == "password_change":
+        old_password = request.form.get("old_password")
+        new_password = request.form.get("new_password")
+
+        if (crud.update_password(user_id, old_password, new_password) is False): 
+            flash("Old password is incorrect")
+        else:
+            flash("Password Updated")
+        return redirect("/profile/edit")
+
+    else:
+        flash("Unhandled form submission")
+        return redirect("/profile_edit")
+
+    return render_template('profile_edit.html',
+                            user_id=user_id,
+                            user_object=user_object)
+
+# edit profile route
+# check if user is logged in
+# get form id from html and store in a var to use
+#   if form_id == "basic_info":
+#       update that stuff # use a crud function to to query for user and use .update in the query to update and commit to session
+#   if form_id =="profile picture":
+#       if picture not in request.files, flash "not found" redirect
+# edit photo using from PIL import Image in image_helper.py
+# returns html template with three forms: basic info, profile picutre, profile password each with own submit button
 
 # RATING ROUTES
 @app.route('/new_rating', methods=['POST'])
@@ -166,11 +264,23 @@ def trail_detail(trail_id):
         #total_score = score + score ...
         #av_total_score = total_score / num_scores
 
+    # make api call here to get json from Weather Map API
+    # give json info to template as variable
+    trail_object = crud.get_trail_by_id(trail_id)
+
+    geo = json.loads(trail_object._geoloc.replace("\'", "\""))
+
+    latitude = geo["lat"]
+    longitude = geo["lng"]
+
     return render_template('trail_details.html',
                             trail_details=trail_details,
-                            ratings=ratings
+                            ratings=ratings,
+                            latitude=latitude,
+                            longitude=longitude
                             #av_total_score=av_total_score
                             )
+
 # PARK LIST ROUTES
 @app.route('/parks')
 def parks_list():
@@ -242,6 +352,8 @@ def show_form_response():
                            state=state,
                            difficulty=difficulty,
                            server_trail=server_trail)
+
+
  
 if __name__ == '__main__':
     connect_to_db(app)

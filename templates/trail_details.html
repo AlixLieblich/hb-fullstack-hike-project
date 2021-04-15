@@ -6,6 +6,9 @@
 <h1>{{ trail_details.name }}</h1>
 
 <p>{{ trail_details.name }} Details</p>
+<div id="current-weather" data-lat="{{ latitude }}" data-lon="{{longitude}}" ></div>
+<div id="test"></div>
+<!-- ultimately hide the element until the js get on the weather api comes back; then populate and show infor when comes back -->
 <table>
   <colgroup span="4"></colgroup>
   <tr>
@@ -108,7 +111,7 @@
   </table>
   <p>{{ ratings }}</p>
   <!-- for loop!!! -->
-
+  <script src="/static/functionality.js"></script>
 
 
 {% endblock %}

@@ -1,0 +1,35 @@
+
+{% extends 'base.html' %}
+{% block title %} {{ user_id }} {% endblock %}
+
+{% block body %}
+<h3>{{ user_object.user_fname }}'s Edit Profile Page</h3>
+
+<!-- basic form -->
+<form action="/profile_edit" method="POST">
+    <input type="hidden" name="form_id" value="basic_profile_information" />
+    <p> First name: <input type="text" name="first_name" value="{{user_object.user_fname}}"></p>
+    <p> Last name: <input type="text" name="last_name" value="{{user_object.user_lname}}"></p>
+    <p> Email: <input type="text" name="email" value="{{user_object.email}}"></p>
+    <input type="submit" name="Save" />
+</form>
+<br />
+
+<!-- profile pic form -->
+<h4>Edit your Profile Picture</h4>
+<form action="/profile_edit" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="form_id" value="profile_picture" />
+    <input type='file' name="file1">
+    <input type="submit" name="Save" />
+</form>
+<br />
+
+<!-- change password form -->
+<h4>Edit your Password</h4>
+<form action="/profile_edit" method="POST">
+    <input type="hidden" name="form_id" value="password_change" />
+    <p> Old Password: <input type="text" name="old_password"></p>
+    <p> New Password: <input type="text" name="new_password"></p>
+    <input type="submit" name="Save" />
+</form>
+{% endblock %}

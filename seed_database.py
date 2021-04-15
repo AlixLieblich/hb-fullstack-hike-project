@@ -32,16 +32,19 @@ with open('nationalpark.csv', newline='') as csvfile:
 #fake comments list
 comments = ['wow!', 'too  muddy', 'perfect hike!']
 
+files=os.listdir("static/img/profile_pictures")
+
 #create fake 10 fake users
 for n in range(10):
     username = f'Test{n}'
     password = 'test'
     user_fname = f'Balloonicorn{n}' #running seed does not generate these f and l names
     user_lname = f'Hackbright{n}'
+    profile_picture = choice(files)
     email = f'user{n}@test.com'
 
     #create user
-    user_object = crud.create_user(username, password, user_fname, user_lname, email)
+    user_object = crud.create_user(username, password, user_fname, user_lname, profile_picture, email)
 
     #create 1 hike associated with user above
     hike_object = crud.create_hike(user_object.user_id, 
