@@ -2,7 +2,7 @@
 
 // Display current weather data on trail detail pages
 console.log("howdy");
-$('#test').html("is this connected to html?");
+$('#test').html("from js, hello love");
 
 // const lat = $('#current-weather').data("lat");
 // const lon = $('#current-weather').data("lon");
@@ -13,9 +13,15 @@ $.ajax({
     data: {lat:  $('#current-weather').data("lat"), lon:$('#current-weather').data("lon")} 
 }).done((res) =>{
         // let results = res['results'];
+        let tempValue = res['main']['temp'];
+        let nameValue = res['name']
+
         console.log(res);
         console.log(res.visibility);
-        $('#current-weather').html(res.weather.main);
+        console.log(tempValue)
+        console.log(nameValue)
+
+        $('#current-weather').html(tempValue);
     
     });
 

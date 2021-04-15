@@ -122,10 +122,22 @@ def view_user_profile():
 #use id to populate profile looking at
 
     if not current_user.is_authenticated:
-        return redirect('/') #may need to redirect to login page?
+        flash('Please log in to view your account.')
+        return redirect('/login') #may need to redirect to login page?
 
     user_id = current_user.user_id
     user_object = crud.get_user_by_id(user_id)
+
+    user_goals = crud.get_goals_by_user_id(user_id)
+
+
+    # goal_miles = user_goals[goal_miles]
+    # goal_number_hikes = user_goals[goal_number_hikes]
+    # goal_hike_difficulty = user_goals[goal_hike_difficulty]
+    # print("-----------------------------------------")
+    # print(user_goals)
+    # print(user_goals[goal_miles])
+    # print(user_goals.goal_hike_difficulty)
 
 
     # user_id = model.User.get_id('user_id')
@@ -135,7 +147,8 @@ def view_user_profile():
 
     return render_template('user_profile.html',
                             user_id=user_id,
-                            user_object=user_object)
+                            user_object=user_object,
+                            user_goals=user_goals)
 
 @app.route("/profile_edit")
 def show_edit_profile_page():
@@ -146,10 +159,12 @@ def show_edit_profile_page():
     
     user_id = current_user.user_id
     user_object = crud.get_user_by_id(user_id)
+    user_goals = crud.get_goals_by_user_id(user_id)
 
     return render_template('profile_edit.html',
                             user_id=user_id,
-                            user_object=user_object)
+                            user_object=user_object,
+                            user_goals=user_goals)
 
 @app.route('/profile_edit', methods = ["POST"])
 def edit_user_profile():
@@ -170,6 +185,26 @@ def edit_user_profile():
         crud.update_user_profile_info(user_id, user_fname, user_lname, email)
 
         return redirect("profile_edit")
+
+    #goals form
+    # user_id = current_user.user_id
+    # user_object = crud.get_user_by_id(user_id)
+    if form_id == "basic_profile_information":
+
+        goal_miles = request.form.get('goal_miles')
+        goal_number_hikes = request.form.get('goal_number_hikes')
+        goal_hike_difficulty = request.form.get('goal_hike_difficulty')
+
+        crud.update_user_hiking_goals(user_id, goal_miles, goal_number_hikes, goal_hike_difficulty, user_id)
+
+        return redirect("profile_edit")
+
+        # return render_template('/user_profile.html',
+        #             goal_miles=goal_miles,
+        #             goal_number_hikes=goal_number_hikes,
+                    # goal_hike_difficulty=goal_hike_difficulty,
+                    # user_id=user_id,
+                    # user_object=user_object)
 
     #profile pic
     elif form_id == "profile_picture":
@@ -221,6 +256,28 @@ def edit_user_profile():
 #       if picture not in request.files, flash "not found" redirect
 # edit photo using from PIL import Image in image_helper.py
 # returns html template with three forms: basic info, profile picutre, profile password each with own submit button
+
+# # USER GOAL ROUTES
+# @app.route('/new_goal', methods=['POST'])
+# def create_new_goal():
+#     """Create a new goal."""
+
+#     user_id = current_user.user_id
+#     user_object = crud.get_user_by_id(user_id)
+
+#     goal_miles = request.form.get('goal_miles')
+#     goal_number_hikes = request.form.get('goal_number_hikes')
+#     goal_hike_difficulty = request.form.get('goal_hike_difficulty')
+
+#     crud.create_goal(goal_miles, goal_number_hikes, goal_hike_difficulty, user_id)
+
+#     flash('Goals succesfully created.')
+#     return render_template('/user_profile.html',
+#                     goal_miles=goal_miles,
+#                     goal_number_hikes=goal_number_hikes,
+#                     goal_hike_difficulty=goal_hike_difficulty,
+#                     user_id=user_id,
+#                     user_object=user_object)
 
 # RATING ROUTES
 @app.route('/new_rating', methods=['POST'])

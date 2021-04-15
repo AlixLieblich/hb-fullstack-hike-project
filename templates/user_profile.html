@@ -25,18 +25,25 @@
 
   </tr>
   <tr>
-    <td>John</td>
-    <td>Doe</td>
-    <td>Doe</td>
+    <td>{{ user_goals.goal_miles }}</td>
+    <td>{{ user_goals.goal_number_hikes }}</td>
+    <td>{{ user_goals.goal_hike_difficulty }}</td>
 
   </tr>
-  <tr>
-    <td>Jane</td>
-    <td>Doe</td>
-    <td>Doe</td>
 
-  </tr>
 </table>
-
+<h4>Want to edit or set your Hiking Goals?</h4>
+<!-- <form method="post" action="/new_goal">
+  <p>What is your total mileage hiking goal? (Please enter a numeral).</p>
+  <p><label>Total Miles <input type="text" name="goal_miles"></label></p>
+  <p><input type="submit"></p>
+  <p>What is your total number of hikes to complete goal? (Please enter a numeral).</p>
+  <p><label>Total Number of hikes: <input type="text" name="goal_number_hikes"></label></p>
+  <p><input type="submit"></p>
+  <p>What is your maxium hike difficulty goal? (Please enter a numeral).</p>
+  <p><label>Maximum hike difficulty: <input type="text" name="goal_hike_difficulty"></label></p>
+  <p><input type="submit"></p>
+</form> -->
+<a href="/profile_edit">Edit your hiking goals here</a>
 
 {% endblock %}

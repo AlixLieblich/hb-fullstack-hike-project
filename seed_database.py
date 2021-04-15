@@ -53,6 +53,14 @@ for n in range(10):
                                    1,              # 1 is time to complete
                                    True)           # true is booll for hike completed
 
+    # Create User Goals
+    goal_miles = randint(1,20)
+    goal_number_hikes = randint(1,20)
+    goal_hike_difficulty = randint(1,10)
+
+    goal_object = crud.create_goal(goal_miles, goal_number_hikes, goal_hike_difficulty, user_object.user_id)
+
+
     # #create 10 raatings associated with user above
     # for i in range(10):
     #     random_trail = choice(trails_in_db)

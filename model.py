@@ -120,15 +120,15 @@ class Goal(db.Model):
                           autoincrement=True, 
                           primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    num_miles_total = db.Column(db.Integer) #total miles want to complete; subtract miles when complete hikes
-    num_hikes_total = db.Column(db.Integer)
-    difficulty_hike_goal = db.Column(db.Integer) 
+    goal_miles = db.Column(db.Integer) #total miles want to complete; subtract miles when complete hikes
+    goal_number_hikes = db.Column(db.Integer)
+    goal_hike_difficulty = db.Column(db.Integer) 
     
 
     # hikes = a list of Hike objects
 
     def __repr__(self):
-        return f'<Goal goal_id={self.goal_id} name={self.trail_name}>'
+        return f'<Goal goal_id={self.goal_id} user_id={self.user_id}>'
 
 class Hike(db.Model):
     """A Hike."""

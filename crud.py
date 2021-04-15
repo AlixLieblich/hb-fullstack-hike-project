@@ -45,11 +45,23 @@ def get_user_by_id(user_id):
 
     return User.query.filter(User.user_id == user_id).first()
 
+def get_goals_by_user_id(user_id):
+    """Return user goals given a user_id."""
+
+    return Goal.query.filter(Goal.user_id == user_id).first()
+
 #profile changes
-def update_user_profile_info(user_id, first_name, last_name, insta_handle, bio):
+def update_user_profile_info(user_id, user_fname, user_lname, email):
     """Update basic user profile information."""
 
-    db.session.query(User.user_id == user_id).update({"user_fname": user_fname, "user_lname": user_lname})
+    db.session.query(User.user_id == user_id).update({"user_fname": user_fname, "user_lname": user_lname, "email": email})
+    
+    db.session.commit()
+
+def update_user_hiking_goals(user_id, goal_miles, goal_number_hikes, goal_hike_difficulty):
+    """Update users hiking goals."""
+
+    db.session.query(User.user_id == user_id).update({"goal_miles": goal_miles, "goal_number_hikes": goal_number_hikes, "goal_hike_difficulty": goal_hike_difficulty})
     
     db.session.commit()
 
@@ -72,13 +84,13 @@ def update_password(user_id, old_password, new_password):
     return True
 
 #goalz
-def create_goal(num_miles_total, num_hikes_total, user):
+def create_goal(goal_miles, goal_number_hikes, goal_hike_difficulty, user_id):
     """Create and return a new goal."""
 
-    goal = Goal(num_miles_total=num_miles_total,
-                num_hikes_total=num_hikes_total,
-                difficulty_hike_goal=difficulty_hike_goal,
-                user=user) #not sure if user is right
+    goal = Goal(goal_miles=goal_miles,
+                goal_number_hikes=goal_number_hikes,
+                goal_hike_difficulty=goal_hike_difficulty,
+                user_id=user_id) #not sure if user is right
     
     db.session.add(goal)
     db.session.commit()

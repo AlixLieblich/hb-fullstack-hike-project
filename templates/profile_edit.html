@@ -15,6 +15,18 @@
 </form>
 <br />
 
+<!-- goals form -->
+<h4>Edit your Hiking Goals</h4>
+<p>Please note that the current items filled into the form are your current goals.</p>
+<form action="/profile_edit" method="POST">
+    <input type="hidden" name="form_id" value="hiking_goals" />
+    <p> What is your total mileage hiking goal? (Please enter a numeral). <input type="text" name="goal_miles" value="{{user_goals.goal_miles}}"></p>
+    <p> What is your total number of hikes to complete goal? (Please enter a numeral). <input type="goal_number_hikes" name="last_name" value="{{user_goals.goal_number_hikes}}"></p>
+    <p> What is your maxium hike difficulty goal? (Please enter a numeral). <input type="text" name="goal_hike_difficulty" value="{{user_goals.goal_hike_difficulty}}"></p>
+    <input type="submit" name="Save" />
+</form>
+<br />
+
 <!-- profile pic form -->
 <h4>Edit your Profile Picture</h4>
 <form action="/profile_edit" method="POST" enctype="multipart/form-data">
