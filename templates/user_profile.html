@@ -10,18 +10,17 @@
 {%else%}
 <img src="/static/img/profile_pictures/default.png" />
 {%endif%}
-
+<a href="/profile_edit">Edit your profile here</a>
 <h4>{{ user_object.user_fname }}'s Trail Goals</h4>
-<p>Goals</p>
-<a href="/profile_edit">Edit your Profile</a>
+<h4>Your Hiking Goals</h4>
 <!-- if else if user has profile picutre, display it; else display default image -->
 <!-- fake users have assigned images  -->
 <!-- prfile picture is a part of model User -->
 <table>
   <tr>
-    <th>Total Miles</th>
-    <th>Total Number of Hikes</th>
-    <th>Maximun Hike Difficulty</th>
+    <th>Total Miles   |</th>
+    <th>Total Number of Hikes   |</th>
+    <th>Maximun Hike Difficulty   |</th>
 
   </tr>
   <tr>
@@ -30,20 +29,89 @@
     <td>{{ user_goals.goal_hike_difficulty }}</td>
 
   </tr>
-
 </table>
-<h4>Want to edit or set your Hiking Goals?</h4>
-<!-- <form method="post" action="/new_goal">
-  <p>What is your total mileage hiking goal? (Please enter a numeral).</p>
-  <p><label>Total Miles <input type="text" name="goal_miles"></label></p>
-  <p><input type="submit"></p>
-  <p>What is your total number of hikes to complete goal? (Please enter a numeral).</p>
-  <p><label>Total Number of hikes: <input type="text" name="goal_number_hikes"></label></p>
-  <p><input type="submit"></p>
-  <p>What is your maxium hike difficulty goal? (Please enter a numeral).</p>
-  <p><label>Maximum hike difficulty: <input type="text" name="goal_hike_difficulty"></label></p>
-  <p><input type="submit"></p>
-</form> -->
-<a href="/profile_edit">Edit your hiking goals here</a>
+<!--  -->
+<h4>Your Trail Ratings</h4>
+<table>
+  <tr>
+    <th>Trail Name  |</th>
+    <th>Trail's Park   |</th>
+    <th>Score   |</th>
+    <th>Challenge Rating   |</th>
+    <th>Distance Rating   |</th>
+    <th>Ascent Rating   |</th>
+    <th>Descent Rating   |</th>
+    <th>Comment   |</th>
+
+  </tr>
+  <tr>
+    <td>Trail Name</td>
+    <td>Trail Park</td>
+    <td>{{ user_ratings.score }}</td>
+    <td>{{ user_ratings.challenge_rating }}</td>
+    <td>{{ user_ratings.distance_rating }}</td>
+    <td>{{ user_ratings.ascent_rating }}</td>
+    <td>{{ user_ratings.descent_rating }}</td>
+    <td>{{ user_ratings.comment }}</td>
+
+  </tr>
+</table>
+<!--  -->
+<h4>Your Friends</h4>
+<table>
+  <tr>
+    <th>Friend</th>
+    <th>| Friend Username   </th>
+
+  </tr>
+  <tr>
+    {% for friend in friends_info %}
+    <td>{{ friends_info[0].user_fname }} {{friends_info[0].user_lname }}</td>
+    <td><a href="/users/{{ friends_info[0].user_id }}">{{ friends_info[0].username }}</a></td>
+  </table>
+  {% endfor %} 
+
+<!--  -->
+    <h4>Your Wishlist</h4>
+
+     <table>
+      <tr>
+        <th>Wish Trail Name |</th>
+        <th>Trail's Park   |</th>
+        <th>Trail Difficulty Rating   |</th>
+        <th>Trail Route Type   |</th>
+    
+      </tr>
+      <tr>
+        {% for wish in wish_list_trail_info %}
+        <td>{{ wish_list_trail_info[0].name }}</td>
+        <td>{{ wish_list_trail_info[0].area_name }}</td>
+        <td>{{ wish_list_trail_info[0].difficulty_rating }}</td>
+        <td>{{ wish_list_trail_info[0].route_type }}</td>
+
+      </tr>
+</table>
+{% endfor %} 
+
+<!--  -->
+    <h4>Your Completed Hike Log</h4>
+
+     <table>
+      <tr>
+        <th>Trail ID |</th>
+        <th>Date Hike Completed   |</th>
+        <th>Hike Total Time   |</th>
+    
+      </tr>
+      <tr>
+        {% for hike in log_hike_info %}
+        <td>{{ log_hike_info[0].trail_id }}</td>
+        <td>{{ log_hike_info[0].hike_completed_on }}</td>
+        <td>{{ log_hike_info[0].hike_total_time }}</td>
+
+      </tr>
+    </table> 
+    {% endfor %} 
+ <!--  -->
 
 {% endblock %}

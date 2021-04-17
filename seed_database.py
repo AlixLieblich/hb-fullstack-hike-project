@@ -34,6 +34,7 @@ comments = ['wow!', 'too  muddy', 'perfect hike!']
 
 files=os.listdir("static/img/profile_pictures")
 
+user_list = []
 #create fake 10 fake users
 for n in range(10):
     username = f'Test{n}'
@@ -45,6 +46,7 @@ for n in range(10):
 
     #create user
     user_object = crud.create_user(username, password, user_fname, user_lname, profile_picture, email)
+    user_list.append(user_object)
 
     #create 1 hike associated with user above
     hike_object = crud.create_hike(user_object.user_id, 
@@ -60,6 +62,14 @@ for n in range(10):
 
     goal_object = crud.create_goal(goal_miles, goal_number_hikes, goal_hike_difficulty, user_object.user_id)
 
+    # # Create 1 friend per user
+    # friend_object = crud.create_friend(user_object.user_id, randint(0,9))
+
+    # 1 trail for user wishlist
+    wishlist_item = crud.create_wishlist_item(choice(trails_in_db).trail_id, user_object.user_id)
+
+    # 1 trail for Hike Log
+    hike_log_item = crud.create_hike_log_item(hike_object.hike_id, user_object.user_id)
 
     # #create 10 raatings associated with user above
     # for i in range(10):
@@ -83,5 +93,17 @@ for n in range(10):
                         ascent_rating = randint(1,5), 
                         descent_rating = randint(1,5), 
                         comment = choice(comments))
+
+for users in user_list:
+    # Create 1 friend per user
+    friend_object = crud.create_friend(users.user_id, randint(1,10))
+    wishlist_item = crud.create_wishlist_item(choice(trails_in_db).trail_id, users.user_id)
+    hike_log_item = crud.create_hike_log_item(hike_object.hike_id, users.user_id)
+
+for users in user_list:
+    # Create 1 friend per user
+    friend_object = crud.create_friend(users.user_id, randint(1,10))
+    wishlist_item = crud.create_wishlist_item(choice(trails_in_db).trail_id, users.user_id)
+    hike_log_item = crud.create_hike_log_item(hike_object.hike_id, users.user_id)
 
 

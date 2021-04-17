@@ -1,6 +1,6 @@
 """CRUD operations."""
 
-from model import db, User, Hike, Rating, Goal, Trail, connect_to_db
+from model import db, User, Hike, Rating, Goal, Trail, connect_to_db, User_Friend, Wishlist, Hike_Log
 from sqlalchemy import and_
 
 # USER FUNCTIONS
@@ -50,38 +50,136 @@ def get_goals_by_user_id(user_id):
 
     return Goal.query.filter(Goal.user_id == user_id).first()
 
-#profile changes
+# Profile Edit Functions
 def update_user_profile_info(user_id, user_fname, user_lname, email):
     """Update basic user profile information."""
+    
+    user=User.query.filter(User.user_id == user_id).first()
 
-    db.session.query(User.user_id == user_id).update({"user_fname": user_fname, "user_lname": user_lname, "email": email})
+    if email != None:
+        user.update_email(email)
+    if user_fname != None:
+        user.update_first_name(user_fname)
+    if user_lname != None:
+        user.update_last_name
     
     db.session.commit()
 
 def update_user_hiking_goals(user_id, goal_miles, goal_number_hikes, goal_hike_difficulty):
     """Update users hiking goals."""
 
-    db.session.query(User.user_id == user_id).update({"goal_miles": goal_miles, "goal_number_hikes": goal_number_hikes, "goal_hike_difficulty": goal_hike_difficulty})
-    
+    user_goals = Goal.query.filter(Goal.user_id == user_id).first()
+
+    if goal_miles != None:
+        user_goals.update_goal_miles(goal_miles)
+    if goal_number_hikes != None:
+        user_goals.update_goal_number_hikes(goal_number_hikes)
+    if goal_hike_difficulty != None:
+        user_goals.update_goal_hike_difficulty(goal_hike_difficulty)
+
     db.session.commit()
 
 def set_user_profile_picture(user_id, file_name):
+    """Update user profile picture."""
+
     user = User.query.get(user_id)
+    
     user.profile_picture = file_name
     db.session.commit()
 
 def update_password(user_id, old_password, new_password):
     """Update user password."""
 
-    user_password = (User.query.filter(User.user_id == user_id).filter(User.password == old_password).first())
+    # user_password = (User.query.filter(User.user_id == user_id).filter(User.password == old_password).first())
+    user_password = User.query.filter(User.user_id == user_id).first()
 
     if not user_password:
-        return False
+        # flash('That is not your correct password.')
+        # return False
+        return redirect('/profile_edit')
 
-    db.session.query(User.user_id == user_id).update({"password": new_password,})
+    # db.session.query(User.user_id == user_id).update({"password": new_password,})
+    if user_password:
+        user_password.update_password(new_password)
 
     db.session.commit()
+    # flash('Successful password change.')
     return True
+
+# Friend functions
+def create_friend(user_id, friend_user_id):
+    """Create and return a new friend."""
+
+    friend = User_Friend(user_id=user_id, friend_user_id=friend_user_id)
+
+    db.session.add(friend)
+    db.session.commit()
+
+    return friend
+
+def get_user_friends(user_id):
+    """Given a user_id, return an object of that user's friends."""
+
+    friends = db.session.query(User_Friend).filter(User_Friend.user_id==user_id).all() 
+
+    return friends
+
+def get_friend_user_object(friend_user_id):
+    """Given a friend user ID, return that user object."""
+
+    # friends_info = []
+    # for friend in friends:
+    user_id = friend_user_id
+    friend = User.query.filter(User.user_id == user_id).first()
+    # friends_info.append(friend)
+
+    return friend
+
+# Wishlist functions
+def create_wishlist_item(trail_id, user_id):
+    """Create and return a new wishlist item."""
+
+    wishlist_item = Wishlist(trail_id=trail_id, user_id=user_id)
+
+    db.session.add(wishlist_item)
+    db.session.commit()
+
+    return wishlist_item
+
+def get_user_wishes(user_id):
+    """Given a user_id, return an object of that user's wishlist trails."""
+
+    return db.session.query(Wishlist).filter(Wishlist.user_id==user_id).all()
+
+def get_wish_trail_object(trail_id):
+    """Given a tail ID, return the object for that trail."""
+
+    # return db.session.query(Trail).filter(Trail.trail_id==100).all()
+    # trail_id = wish_trail_id
+    trail = Trail.query.filter(Trail.trail_id == trail_id).first()
+    return trail
+
+# Hike Log functions
+def create_hike_log_item(user_id, hike_id):
+    """Create and return a new completed hike item for hike log."""
+
+    completed_hike_item = Hike_Log(user_id=user_id, hike_id=hike_id)
+
+    db.session.add(completed_hike_item)
+    db.session.commit()
+
+    return completed_hike_item
+
+def get_user_hike_log(user_id):
+    """Given a user_id, return an object of that user's wishlist trails."""
+
+    return db.session.query(Hike_Log).filter(Hike_Log.user_id==user_id).all()
+
+def get_log_trail_object(hike_id):
+    """Given a hike ID, return the object for that trail."""
+
+    hike = Hike.query.filter(Hike.hike_id == hike_id).first()
+    return hike
 
 #goalz
 def create_goal(goal_miles, goal_number_hikes, goal_hike_difficulty, user_id):
@@ -90,7 +188,7 @@ def create_goal(goal_miles, goal_number_hikes, goal_hike_difficulty, user_id):
     goal = Goal(goal_miles=goal_miles,
                 goal_number_hikes=goal_number_hikes,
                 goal_hike_difficulty=goal_hike_difficulty,
-                user_id=user_id) #not sure if user is right
+                user_id=user_id) 
     
     db.session.add(goal)
     db.session.commit()
@@ -212,6 +310,15 @@ def get_all_ratings():
     """Display all ratings."""
 
     return db.session.query(Rating).all()
+
+def get_user_ratings(user_id):
+    """Given a user_id, return all ratings made by that user."""
+
+    hikes = Hike.query.get(user_id)
+    ratings = hikes.ratings
+    # ratings = Hike.query.filter(Hike.user_id == user_id).on
+
+    return ratings
 
 # HIKE FUNCTIONS
 def create_hike(user_id, trail_id, hike_completed_on, hike_total_time, status_completion):

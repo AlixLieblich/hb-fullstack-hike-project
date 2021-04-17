@@ -117,45 +117,82 @@ def display_create_account_form():
 def view_user_profile():
     """View user profile."""
 
-#check if user in session
-#get id from session
-#use id to populate profile looking at
-
     if not current_user.is_authenticated:
         flash('Please log in to view your account.')
-        return redirect('/login') #may need to redirect to login page?
+        return redirect('/login')
 
     user_id = current_user.user_id
     user_object = crud.get_user_by_id(user_id)
-
+    user_friends = crud.get_user_friends(user_id) #object returned is a list, so we index into that list using [0] and then the info stored there is useful and accessbile for user_profile.html
+    user_wishlist = crud.get_user_wishes(user_id) #if want return whole list, dont use [0]
+    user_hike_log = crud.get_user_hike_log(user_id)
+    user_ratings = crud.get_user_ratings(user_id)[0]
     user_goals = crud.get_goals_by_user_id(user_id)
 
+    friends_info =[]
+    for friend in user_friends:
+        friend = crud.get_friend_user_object(user_friends[0].friend_user_id)
+        friends_info.append(friend)
 
-    # goal_miles = user_goals[goal_miles]
-    # goal_number_hikes = user_goals[goal_number_hikes]
-    # goal_hike_difficulty = user_goals[goal_hike_difficulty]
-    # print("-----------------------------------------")
-    # print(user_goals)
-    # print(user_goals[goal_miles])
-    # print(user_goals.goal_hike_difficulty)
+    wish_list_trail_info = []
+    for trail in user_wishlist:
+        trail = crud.get_wish_trail_object(user_wishlist[0].trail_id)
+        wish_list_trail_info.append(trail)
 
-
-    # user_id = model.User.get_id('user_id')
-    # user = crud.get_user_by_id(user_id)
-    # need to return user info to be used in user_profile
-    # when you click on 'My Profile,' does user-id come from session?
+    log_hike_info = []
+    for hike in user_hike_log:
+        hike = crud.get_log_trail_object(user_hike_log[0].hike_id)
+        log_hike_info.append(hike)
 
     return render_template('user_profile.html',
                             user_id=user_id,
                             user_object=user_object,
-                            user_goals=user_goals)
+                            user_goals=user_goals,
+                            user_friends=user_friends,
+                            user_wishlist=user_wishlist,
+                            user_hike_log=user_hike_log,
+                            user_ratings=user_ratings,
+                            friends_info=friends_info,
+                            wish_list_trail_info=wish_list_trail_info,
+                            log_hike_info=log_hike_info)
+
+@app.route('/users')
+def users_list():
+    """View users list."""
+    
+    all_users = crud.get_all_users()
+
+    return render_template('users.html',
+                            all_users=all_users)
+
+@app.route('/users/<user_id>')
+def view_user_profiles(user_id):
+    """View other user's profiles."""
+
+    # user_id = current_user.user_id #click on user, get user id
+    user_object = crud.get_user_by_id(user_id)
+    user_goals = crud.get_goals_by_user_id(user_id)
+    user_wishlist = crud.get_user_wishes(user_id)
+
+    wish_list_trail_info = []
+    for trail in user_wishlist:
+        trail = crud.get_wish_trail_object(user_wishlist[0].trail_id)
+        wish_list_trail_info.append(trail)
+
+    return render_template('view_users.html',
+                            user_id=user_id,
+                            user_object=user_object,
+                            user_goals=user_goals,
+                            wish_list_trail_info=wish_list_trail_info,
+                            user_wishlist=user_wishlist)
+######################################################################################                           
 
 @app.route("/profile_edit")
 def show_edit_profile_page():
     """Display to user the Edit Profile Page."""
 
     if not current_user.is_authenticated:
-        return redirect('/')
+        return redirect('/login')
     
     user_id = current_user.user_id
     user_object = crud.get_user_by_id(user_id)
@@ -175,36 +212,27 @@ def edit_user_profile():
 
     user_id = current_user.user_id
     user_object = crud.get_user_by_id(user_id)
+   
     form_id = request.form.get("form_id")
 
     #basic form
     if form_id == "basic_profile_information":
-        user_fname = request.form.get("fname")
-        user_lname = request.form.get("lname")
+        user_fname = request.form.get("first_name")
+        user_lname = request.form.get("last_name")
         email = request.form.get("email")
         crud.update_user_profile_info(user_id, user_fname, user_lname, email)
 
         return redirect("profile_edit")
 
-    #goals form
-    # user_id = current_user.user_id
-    # user_object = crud.get_user_by_id(user_id)
-    if form_id == "basic_profile_information":
+    if form_id == "hiking_goals":
 
         goal_miles = request.form.get('goal_miles')
         goal_number_hikes = request.form.get('goal_number_hikes')
         goal_hike_difficulty = request.form.get('goal_hike_difficulty')
 
-        crud.update_user_hiking_goals(user_id, goal_miles, goal_number_hikes, goal_hike_difficulty, user_id)
+        crud.update_user_hiking_goals(user_id, goal_miles, goal_number_hikes, goal_hike_difficulty)
 
         return redirect("profile_edit")
-
-        # return render_template('/user_profile.html',
-        #             goal_miles=goal_miles,
-        #             goal_number_hikes=goal_number_hikes,
-                    # goal_hike_difficulty=goal_hike_difficulty,
-                    # user_id=user_id,
-                    # user_object=user_object)
 
     #profile pic
     elif form_id == "profile_picture":
@@ -229,6 +257,7 @@ def edit_user_profile():
         return redirect("/profile_edit")
 
     #password
+    # Known bug: if more than one user has the same password (ie. 'test') then all users passwords will be updated (ie. updated to 'Test!')..
     elif form_id == "password_change":
         old_password = request.form.get("old_password")
         new_password = request.form.get("new_password")
@@ -237,7 +266,7 @@ def edit_user_profile():
             flash("Old password is incorrect")
         else:
             flash("Password Updated")
-        return redirect("/profile/edit")
+        return redirect("/profile_edit")
 
     else:
         flash("Unhandled form submission")
@@ -246,38 +275,6 @@ def edit_user_profile():
     return render_template('profile_edit.html',
                             user_id=user_id,
                             user_object=user_object)
-
-# edit profile route
-# check if user is logged in
-# get form id from html and store in a var to use
-#   if form_id == "basic_info":
-#       update that stuff # use a crud function to to query for user and use .update in the query to update and commit to session
-#   if form_id =="profile picture":
-#       if picture not in request.files, flash "not found" redirect
-# edit photo using from PIL import Image in image_helper.py
-# returns html template with three forms: basic info, profile picutre, profile password each with own submit button
-
-# # USER GOAL ROUTES
-# @app.route('/new_goal', methods=['POST'])
-# def create_new_goal():
-#     """Create a new goal."""
-
-#     user_id = current_user.user_id
-#     user_object = crud.get_user_by_id(user_id)
-
-#     goal_miles = request.form.get('goal_miles')
-#     goal_number_hikes = request.form.get('goal_number_hikes')
-#     goal_hike_difficulty = request.form.get('goal_hike_difficulty')
-
-#     crud.create_goal(goal_miles, goal_number_hikes, goal_hike_difficulty, user_id)
-
-#     flash('Goals succesfully created.')
-#     return render_template('/user_profile.html',
-#                     goal_miles=goal_miles,
-#                     goal_number_hikes=goal_number_hikes,
-#                     goal_hike_difficulty=goal_hike_difficulty,
-#                     user_id=user_id,
-#                     user_object=user_object)
 
 # RATING ROUTES
 @app.route('/new_rating', methods=['POST'])
@@ -313,7 +310,6 @@ def trail_detail(trail_id):
 
     trail_details = crud.get_trail_by_id(trail_id)
     ratings = crud.get_all_ratings()
-    print(ratings)
     # for rating in ratings:
     #     total_score = sum(score)
     #     av_total_score = total_score / num_scores

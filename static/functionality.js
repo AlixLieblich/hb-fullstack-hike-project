@@ -12,6 +12,7 @@ $.ajax({
             'x-rapidapi-host': "community-open-weather-map.p.rapidapi.com"},
     data: {lat:  $('#current-weather').data("lat"), lon:$('#current-weather').data("lon")} 
 }).done((res) =>{
+        
         // let results = res['results'];
         let tempValue = res['main']['temp'];
         let nameValue = res['name']

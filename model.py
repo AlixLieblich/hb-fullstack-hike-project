@@ -51,6 +51,27 @@ class User(db.Model):
         """If user is anonymous, return true."""
         return False          
 
+    def update_email(self, email):
+        """Update user email."""
+
+        self.email = email
+
+    def update_first_name(self, user_fname):
+        """Update user first name."""
+
+        self.user_fname = user_fname
+
+    def update_last_name(self, user_lname):
+        """Update user last night."""
+
+        self.user_lname = user_lname
+
+    def update_password(self, password):
+        """Update user password."""
+        
+        self.password = password
+
+
     def get_id(self):
         """Return ID that uniquely identifies user."""
 
@@ -58,6 +79,51 @@ class User(db.Model):
 
     def __repr__(self):
         return f'<User user_id={self.user_id} email={self.email}>'
+
+##################################################################
+class User_Friend(db.Model):
+    """User's Friends."""
+
+    __tablename__ = 'user_friends'
+
+    user_friend_list_id = db.Column(db.Integer,
+                            autoincrement=True,
+                            primary_key=True)
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+    friend_user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+
+    def __repr__(self):
+        return f'<User ID user_id={self.user_id} Friend user ID friend_user_id={self.friend_user_id}>'
+
+class Wishlist(db.Model):
+    """User's wishlist of trails to hike."""
+
+    __tablename__ = 'user_wishlist'
+
+    wish_trail_id = db.Column(db.Integer,
+                            autoincrement=True,
+                            primary_key=True)
+    trail_id = db.Column(db.Integer, db.ForeignKey('trails.trail_id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+
+    def __repr__(self):
+        return f'<Wish trail wish_trail_id={self.wish_trail_id} User user_id={self.user_id}>'
+
+class Hike_Log(db.Model):
+    """User's list of completed hikes."""
+
+    __tablename__ = 'user_hike_log'
+
+    completed_id = db.Column(db.Integer,
+                            autoincrement=True,
+                            primary_key=True)
+    hike_id = db.Column(db.Integer, db.ForeignKey('hikes.hike_id'))
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+
+    def __repr__(self):
+        return f'<Completed hike completed_id={self.completed_id} User user_id={self.user_id}>'
+
+###########################################################3######
 
 class Trail(db.Model):
     """A Trail."""
@@ -84,7 +150,6 @@ class Trail(db.Model):
     activities = db.Column(db.String)
     units = db.Column(db.String)
         
-
     # hikes = a list of Hike objects
 
     def __repr__(self):
@@ -106,8 +171,6 @@ class Rating(db.Model):
 
     # hikes = a list of Hike objects
 
-    
-
     def __repr__(self):
         return f'<Rating rating_id={self.rating_id} score={self.score}>'
 
@@ -126,6 +189,21 @@ class Goal(db.Model):
     
 
     # hikes = a list of Hike objects
+
+    def update_goal_miles(self, goal_miles):
+        """Update user goal_miles."""
+
+        self.goal_miles = goal_miles
+
+    def update_goal_number_hikes(self, goal_number_hikes):
+        """Update user goal_number_hikes."""
+
+        self.goal_number_hikes = goal_number_hikes
+
+    def update_goal_hike_difficulty(self, goal_hike_difficulty):
+        """Update user last night."""
+        
+        self.goal_hike_difficulty = goal_hike_difficulty
 
     def __repr__(self):
         return f'<Goal goal_id={self.goal_id} user_id={self.user_id}>'
