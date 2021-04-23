@@ -34,7 +34,13 @@ class User(db.Model):
 
     # hikes = a list of Hike objects
 
-    goals = db.relationship('Goal', backref='users')
+    goals = db.relationship('Goal', backref='user')
+    added_friends = db.relationship('User_Friend', backref='current_user_friended_by', foreign_keys='User_Friend.user_id') # one to many # your friendlist
+    friended_by = db.relationship('User_Friend', backref='current_user_added_friend', foreign_keys='User_Friend.friend_user_id') # one to many #users who have added current user to their friend list (may not be mutual friends); name of the person that you added
+    wishes = db.relationship('Wishlist', backref='user')
+    ratings = db.relationship('Rating',
+                                secondary='hikes',
+                                backref='users')
 
         # Flask Login Methods
     def is_authenticated(self):
@@ -88,9 +94,9 @@ class User_Friend(db.Model):
 
     user_friend_list_id = db.Column(db.Integer,
                             autoincrement=True,
-                            primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
-    friend_user_id = db.Column(db.Integer, db.ForeignKey('users.user_id'))
+                            primary_key=True) #the ID of the relationship itself
+    user_id = db.Column(db.Integer, db.ForeignKey('users.user_id')) #the user logged in (ME)
+    friend_user_id = db.Column(db.Integer, db.ForeignKey('users.user_id')) #the user I am friending (not me)
 
     def __repr__(self):
         return f'<User ID user_id={self.user_id} Friend user ID friend_user_id={self.friend_user_id}>'
@@ -109,6 +115,7 @@ class Wishlist(db.Model):
     def __repr__(self):
         return f'<Wish trail wish_trail_id={self.wish_trail_id} User user_id={self.user_id}>'
 
+# hike log iz ded to me now gang gang
 class Hike_Log(db.Model):
     """User's list of completed hikes."""
 
@@ -151,6 +158,7 @@ class Trail(db.Model):
     units = db.Column(db.String)
         
     # hikes = a list of Hike objects
+    wishes = db.relationship('Wishlist', backref='trail')
 
     def __repr__(self):
         return f'<Trail trail_id={self.trail_id} name={self.name}>'
@@ -225,6 +233,7 @@ class Hike(db.Model):
     user = db.relationship('User', backref='hikes')
     ratings = db.relationship('Rating', backref='hikes') 
     trails = db.relationship('Trail', backref='hikes')
+    logs = db.relationship('Hike_Log', backref='hikes')
 
     # hikes = a list of Hike objects
 

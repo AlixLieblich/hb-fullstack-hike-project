@@ -1,10 +1,11 @@
 """CRUD operations."""
 
-from model import db, User, Hike, Rating, Goal, Trail, connect_to_db, User_Friend, Wishlist, Hike_Log
+from model import db, User, Hike, Rating, Goal, Trail, connect_to_db, User_Friend, Wishlist
 from sqlalchemy import and_
+from datetime import datetime, date
 
 # USER FUNCTIONS
-def create_user(username, password, user_fname, user_lname, profile_picture, email): #TODO: add fname and lname
+def create_user(username, password, user_fname, user_lname, profile_picture, email):
     """Create and return a new user."""
 
     user = User(username=username, password=password, user_fname=user_fname, user_lname=user_lname, profile_picture=profile_picture, email=email)
@@ -14,10 +15,11 @@ def create_user(username, password, user_fname, user_lname, profile_picture, ema
 
     return user
 
-def get_all_users():
-    """Display all users."""
+# def get_all_users():
+#     """Display all users."""
 
-    return db.session.query(User).all()
+#     return db.session.query(User).all()
+
 
 def greeting():
     """Display greeting header. Gives visual knowledge of wheter user is logged in or not."""
@@ -145,11 +147,12 @@ def create_wishlist_item(trail_id, user_id):
     db.session.commit()
 
     return wishlist_item
+    # this funciton can be replaced with 'users.wishes.append(Trail.query.get(trail_id))' this needs to be paired with db.session.commit
 
-def get_user_wishes(user_id):
-    """Given a user_id, return an object of that user's wishlist trails."""
+# def get_user_wishes(user_id):
+#     """Given a user_id, return an object of that user's wishlist trails."""
 
-    return db.session.query(Wishlist).filter(Wishlist.user_id==user_id).all()
+#     return db.session.query(Wishlist).filter(Wishlist.user_id==user_id).all()
 
 def get_wish_trail_object(trail_id):
     """Given a tail ID, return the object for that trail."""
@@ -159,27 +162,27 @@ def get_wish_trail_object(trail_id):
     trail = Trail.query.filter(Trail.trail_id == trail_id).first()
     return trail
 
-# Hike Log functions
-def create_hike_log_item(user_id, hike_id):
-    """Create and return a new completed hike item for hike log."""
+# # Hike Log functions
+# def create_hike_log_item(user_id, hike_id):
+#     """Create and return a new completed hike item for hike log."""
 
-    completed_hike_item = Hike_Log(user_id=user_id, hike_id=hike_id)
+#     completed_hike_item = Hike_Log(user_id=user_id, hike_id=hike_id)
 
-    db.session.add(completed_hike_item)
-    db.session.commit()
+#     db.session.add(completed_hike_item)
+#     db.session.commit()
 
-    return completed_hike_item
+#     return completed_hike_item
 
-def get_user_hike_log(user_id):
-    """Given a user_id, return an object of that user's wishlist trails."""
+# def get_user_hike_log(user_id):
+#     """Given a user_id, return an object of that user's wishlist trails."""
 
-    return db.session.query(Hike_Log).filter(Hike_Log.user_id==user_id).all()
+#     return db.session.query(Hike_Log).filter(Hike_Log.user_id==user_id).all()
 
-def get_log_trail_object(hike_id):
-    """Given a hike ID, return the object for that trail."""
+# def get_log_trail_object(hike_id):
+#     """Given a hike ID, return the object for that trail."""
 
-    hike = Hike.query.filter(Hike.hike_id == hike_id).first()
-    return hike
+#     hike = Hike.query.filter(Hike.hike_id == hike_id).first()
+#     return hike
 
 #goalz
 def create_goal(goal_miles, goal_number_hikes, goal_hike_difficulty, user_id):
@@ -221,15 +224,29 @@ def create_trail(name,area_name,city_name,state_name,country_name,_geoloc,popula
 
     return trail
 
-def get_all_trails():
-    """Display all trails."""
+# def get_all_trails():
+#     """Display all trails."""
 
-    return db.session.query(Trail).all()
+#     return db.session.query(Trail).all()
 
 def get_trail_by_id(trail_id):
     """Return a trail object given a trail id."""
 
     return Trail.query.get(trail_id)
+
+# def update_wish_list(user_id, trail_id):
+#     """Update users wishlist."""
+
+#     user_wishlist = Goal.query.filter(Goal.user_id == user_id).first()
+
+#     if goal_miles != None:
+#         user_goals.update_goal_miles(goal_miles)
+#     if goal_number_hikes != None:
+#         user_goals.update_goal_number_hikes(goal_number_hikes)
+#     if goal_hike_difficulty != None:
+#         user_goals.update_goal_hike_difficulty(goal_hike_difficulty)
+
+#     db.session.commit()
 
 # PARK FUNCTIONS
 def get_all_parks():
@@ -247,11 +264,11 @@ def get_park_by_name(area_name):
 # there is an error on this helper function "TypeError: get_parks_trails_by_name() missing 1 required positional argument: 'area_name'"; which
 # makes some sence bc its a twin function the def get_trail_by_id below which means that area_name is not translated but trail_id is, and since
 # parks dont have IDs but trails do... im not sure how to fix this problem.
-def get_parks_trails_by_name(area_name):
-    """Return a list of trails given an area_name."""
+# def get_parks_trails_by_name(area_name):
+#     """Return a list of trails given an area_name."""
 
-    park_trails = db.session.query(Trail).filter(Trail.area_name==area_name).all()
-    return park_trails
+#     park_trails = db.session.query(Trail).filter(Trail.area_name==area_name).all()
+#     return park_trails
 
 # STATE FUNCTIONS
 def get_all_states():
@@ -321,7 +338,7 @@ def get_user_ratings(user_id):
     return ratings
 
 # HIKE FUNCTIONS
-def create_hike(user_id, trail_id, hike_completed_on, hike_total_time, status_completion):
+def create_hike(user_id, trail_id, hike_completed_on=date.today(), hike_total_time=1, status_completion=True):
     """Create and return a new hike."""
 
     hike = Hike(user_id=user_id,
@@ -337,12 +354,15 @@ def create_hike(user_id, trail_id, hike_completed_on, hike_total_time, status_co
 
 # FIND A TRAIL FUNCTION
 def query_trail(route_type, park, state, difficulty):
-    """Take in form responses and query for a resultant hike."""
+    """Take in form responses and query for a resultant trail."""
 
     # trail = Trail.query.filter(and_(Trail.route_type==route_type, Trail.area_name==park, Trail.state_name==state, Trail.difficulty_rating==difficulty)) 
-    trail = db.session.query(Trail.state_name, Trail.route_type, Trail.name, Trail.area_name).filter(and_(Trail.difficulty_rating==difficulty, Trail.route_type==route_type, Trail.state_name==state))
+    trail = db.session.query(Trail).filter(and_(Trail.difficulty_rating==difficulty, Trail.route_type==route_type, Trail.state_name==state))
+    # print("-----------------------------------------")
+    # for trails in trail:
+    #     print(trail)
 
-    return trail
+    return trail.all()
 
 if __name__ == '__main__':
     from server import app

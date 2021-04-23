@@ -17,7 +17,36 @@
 
     </button> -->
     <p>A {{ difficulty }} difficulty rated {{ route_type }} hike with in {{ state }} at {{ park }}.</p>
-    <p>{{ server_trail }} </p>
+    <table>
+        <colgroup span="4"></colgroup>
+        <tr>
+          <th>Trail Name</th>
+          <th>National Park</th>
+          <th>State</th>
+          <th>Trail Length</th>
+          <th>Trail Elevation Gain</th>
+          <th>Difficulty Rating</th>
+          <th>Route Type</th>
+          <th>Trail Features</th>
+          <th>Trail Activities</th>
+        </tr>
+        {% for trail in server_trail %}
+        <tr>
+          <td><a href="/trails/{{ trail.trail_id }}">{{ trail.name }}</a></td>
+          <td><a href="/parks/{{ trail.area_name }}">{{ trail.area_name }}</a></td>
+          <td><a href="/states/{{ trail.state_name }}">{{ trail.state_name }}</a></td>
+          <td>{{ trail.length }}</td>
+          <td>{{ trail.elevation_gain }}</td>
+          <td>{{ trail.difficulty_rating }}</td>
+          <td>{{ trail.route_type }}</td>
+          <td>{{ trail.features }}</td>
+          {% for activity in trail.activities %}
+          <td>{{ activity }}</td>
+          {% endfor %}
+
+        </tr>
+      {% endfor %}
+      </table>
 
 
 </body>

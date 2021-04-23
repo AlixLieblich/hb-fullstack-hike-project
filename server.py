@@ -4,10 +4,11 @@ from flask import (Flask, render_template, request, flash, session, redirect)
 import flask_login
 from flask_login import LoginManager, login_user, logout_user, login_required, current_user
 
-from model import connect_to_db
+from model import db, connect_to_db, User, Trail, Goal, Rating, User_Friend, Hike, Wishlist
 import model
 import os
 import image_helper
+from sqlalchemy import and_
 
 import json 
 
@@ -48,8 +49,8 @@ def show_login():
 @app.route('/login', methods=['POST'])
 def login():
     """Log user into account."""
-
-    user = crud.get_user_by_username(request.form['username'])
+# TODO: bug here
+    user = crud.get_user_by_username(request.form['username']) # this one is a little complicated, wanna keep it
     password = request.form['password']
 
     if user == None:
@@ -97,7 +98,7 @@ def create_new_user():
     user_password = request.form.get('password')
     profile_picture = request.form.get('profile_picture')
 
-    user_existence = crud.get_user_by_email(user_email)
+    user_existence = crud.get_user_by_email(user_email) # somewhat complicated, wanna keep
     
     if user_existence:
         flash('You can\'t create an account with that email. Try again.')
@@ -122,27 +123,35 @@ def view_user_profile():
         return redirect('/login')
 
     user_id = current_user.user_id
-    user_object = crud.get_user_by_id(user_id)
-    user_friends = crud.get_user_friends(user_id) #object returned is a list, so we index into that list using [0] and then the info stored there is useful and accessbile for user_profile.html
-    user_wishlist = crud.get_user_wishes(user_id) #if want return whole list, dont use [0]
-    user_hike_log = crud.get_user_hike_log(user_id)
-    user_ratings = crud.get_user_ratings(user_id)[0]
-    user_goals = crud.get_goals_by_user_id(user_id)
+    # user_object = crud.get_user_by_id(user_id)
+    user_object = User.query.get(user_id)
+    # user_friends = crud.get_user_friends(user_id) #object returned is a list, so we index into that list using [0] and then the info stored there is useful and accessbile for user_profile.html
+    # user_friends = db.session.query(User_Friend).filter(User_Friend.user_id==user_id).all() #maybe
+    user_friends = user_object.added_friends
+    # user_wishlist = crud.get_user_wishes(user_id) #if want return whole list, dont use [0]
+    # user_wishlist = Wishlist.query.get(user_id) #maybe
+    user_wishlist = user_object.wishes
+    # user_hike_log = crud.get_user_hike_log(user_id) 
+    user_hike_log = user_object.hikes
+    user_ratings = user_object.ratings
+    # user_goals = crud.get_goals_by_user_id(user_id)
+    # user_goals = user_object.goals # why doesnt this work but the following line does
+    user_goals = Goal.query.filter(Goal.user_id == user_id).first()
 
-    friends_info =[]
-    for friend in user_friends:
-        friend = crud.get_friend_user_object(user_friends[0].friend_user_id)
-        friends_info.append(friend)
+    # friends_info =[]
+    # for friend in user_friends:
+    #     friend = crud.get_friend_user_object(user_friends[0].friend_user_id)
+    #     friends_info.append(friend)
 
-    wish_list_trail_info = []
-    for trail in user_wishlist:
-        trail = crud.get_wish_trail_object(user_wishlist[0].trail_id)
-        wish_list_trail_info.append(trail)
+    # wish_list_trail_info = []
+    # for trail in user_wishlist:
+    #     trail = crud.get_wish_trail_object(user_wishlist[0].trail_id)
+    #     wish_list_trail_info.append(trail)
 
-    log_hike_info = []
-    for hike in user_hike_log:
-        hike = crud.get_log_trail_object(user_hike_log[0].hike_id)
-        log_hike_info.append(hike)
+    # log_hike_info = []
+    # for hike in user_hike_log:
+    #     hike = crud.get_log_trail_object(user_hike_log[0].hike_id)
+    #     log_hike_info.append(hike)
 
     return render_template('user_profile.html',
                             user_id=user_id,
@@ -152,15 +161,16 @@ def view_user_profile():
                             user_wishlist=user_wishlist,
                             user_hike_log=user_hike_log,
                             user_ratings=user_ratings,
-                            friends_info=friends_info,
-                            wish_list_trail_info=wish_list_trail_info,
-                            log_hike_info=log_hike_info)
+                            # friends_info=friends_info,
+                            # wish_list_trail_info=wish_list_trail_info,
+                            # log_hike_info=log_hike_info
+                            )
 
 @app.route('/users')
 def users_list():
     """View users list."""
     
-    all_users = crud.get_all_users()
+    all_users = db.session.query(User).all()
 
     return render_template('users.html',
                             all_users=all_users)
@@ -169,22 +179,26 @@ def users_list():
 def view_user_profiles(user_id):
     """View other user's profiles."""
 
-    # user_id = current_user.user_id #click on user, get user id
-    user_object = crud.get_user_by_id(user_id)
-    user_goals = crud.get_goals_by_user_id(user_id)
-    user_wishlist = crud.get_user_wishes(user_id)
+    user_id = current_user.user_id #click on user, get user id
+    # user_object = crud.get_user_by_id(user_id)
+    user_object = User.query.filter(User.user_id == user_id).first()
+    # user_goals = crud.get_goals_by_user_id(user_id)
+    user_goals = Goal.query.filter(Goal.user_id == user_id).first()
+    # user_wishlist = crud.get_user_wishes(user_id)
+    user_wishlist = db.session.query(Wishlist).filter(Wishlist.user_id==user_id).all()
 
-    wish_list_trail_info = []
-    for trail in user_wishlist:
-        trail = crud.get_wish_trail_object(user_wishlist[0].trail_id)
-        wish_list_trail_info.append(trail)
+    # wish_list_trail_info = []
+    # for trail in user_wishlist:
+    #     trail = crud.get_wish_trail_object(user_wishlist[0].trail_id)
+    #     wish_list_trail_info.append(trail)
 
     return render_template('view_users.html',
                             user_id=user_id,
                             user_object=user_object,
                             user_goals=user_goals,
-                            wish_list_trail_info=wish_list_trail_info,
-                            user_wishlist=user_wishlist)
+                            # wish_list_trail_info=wish_list_trail_info,
+                            # user_wishlist=user_wishlist
+                            )
 ######################################################################################                           
 
 @app.route("/profile_edit")
@@ -195,8 +209,8 @@ def show_edit_profile_page():
         return redirect('/login')
     
     user_id = current_user.user_id
-    user_object = crud.get_user_by_id(user_id)
-    user_goals = crud.get_goals_by_user_id(user_id)
+    user_object = User.query.get(user_id)
+    user_goals = Goal.query.filter(Goal.user_id == user_id).first()
 
     return render_template('profile_edit.html',
                             user_id=user_id,
@@ -211,7 +225,7 @@ def edit_user_profile():
         return redirect('/')
 
     user_id = current_user.user_id
-    user_object = crud.get_user_by_id(user_id)
+    user_object = User.query.get(user_id)
    
     form_id = request.form.get("form_id")
 
@@ -257,7 +271,6 @@ def edit_user_profile():
         return redirect("/profile_edit")
 
     #password
-    # Known bug: if more than one user has the same password (ie. 'test') then all users passwords will be updated (ie. updated to 'Test!')..
     elif form_id == "password_change":
         old_password = request.form.get("old_password")
         new_password = request.form.get("new_password")
@@ -277,11 +290,18 @@ def edit_user_profile():
                             user_object=user_object)
 
 # RATING ROUTES
-@app.route('/new_rating', methods=['POST'])
-def create_new_rating():
+@app.route('/new_rating/<trail_id>', methods=['POST'])
+def create_new_rating(trail_id):
     """Create a new rating."""
-    #trail id from whichever hike the user selected
-    # hike = crud.create_hike()
+
+    if not current_user.is_authenticated:
+        return redirect('/login')
+    
+    user_id = current_user.user_id
+    hike = crud.create_hike(user_id, trail_id) #TypeError: create_hike() missing 5 required positional arguments: 'user_id', 'trail_id', 'hike_completed_on', 'hike_total_time', and 'status_completion'
+                                # how do i create a hike id so that it is added to the users log, for example Hike Log -Harding Ice Trail; and then have no details, but the user has the option 
+                                # to fill in the details?
+                                # how to create the object with optional fields
 
     score = request.form.get('score')
     challenge_rating = request.form.get('challenge_rating')
@@ -290,16 +310,16 @@ def create_new_rating():
     descent_rating = request.form.get('descent_rating')
     user_comment = request.form.get('comment')
 
-    crud.create_rating(score, hike.hike_id, distance_rating, ascent_rating, descent_rating, user_comment)
-
-    # return redirect('/')
+    crud.create_rating(score, hike.hike_id, challenge_rating, distance_rating, ascent_rating, descent_rating, user_comment)
+    flash('Rating Created')
+    return redirect(f'/trails/{trail_id}')
 
 # TRAIL LIST ROUTES
 @app.route('/trails')
 def trails_list():
     """View trail list."""
     
-    all_trails = crud.get_all_trails()
+    all_trails = db.session.query(Trail).all()
 
     return render_template('trails.html',
                             all_trails=all_trails)
@@ -308,8 +328,10 @@ def trails_list():
 def trail_detail(trail_id):
     """Show individual trail details."""
 
-    trail_details = crud.get_trail_by_id(trail_id)
-    ratings = crud.get_all_ratings()
+    user_id = current_user.user_id
+    user_object = User.query.get(user_id)
+    trail_details = Trail.query.get(trail_id)
+    user_ratings = user_object.ratings
     # for rating in ratings:
     #     total_score = sum(score)
     #     av_total_score = total_score / num_scores
@@ -319,28 +341,73 @@ def trail_detail(trail_id):
 
     # make api call here to get json from Weather Map API
     # give json info to template as variable
-    trail_object = crud.get_trail_by_id(trail_id)
 
-    geo = json.loads(trail_object._geoloc.replace("\'", "\""))
+    geo = json.loads(trail_details._geoloc.replace("\'", "\""))
 
     latitude = geo["lat"]
     longitude = geo["lng"]
 
     return render_template('trail_details.html',
                             trail_details=trail_details,
-                            ratings=ratings,
+                            user_ratings=user_ratings,
                             latitude=latitude,
-                            longitude=longitude
+                            longitude=longitude,
+                            trail_id = trail_id
                             #av_total_score=av_total_score
                             )
+
+@app.route('/hike_edit', methods = ["POST"])
+def edit_user_hike_goals_and_log():
+    """Edit user hike log and trail wishlist."""
+
+    if not current_user.is_authenticated:
+        return redirect('/login')
+
+    user_id = current_user.user_id
+    user_object = User.query.get(user_id)
+   
+    form_id = request.form.get("form_id")
+
+    #wishlist form
+    if form_id == "add_wishlist":
+        trail_id = request.form.get("trail_id") 
+        wish = crud.create_wishlist_item(trail_id, user_id)
+
+        return redirect("/") #how stay on same page when html is /trails/<trail_id> -- got error when tried this
+
+    #hike log form
+    if form_id == "add_hike_log":
+        trail_id = request.form.get("trail_id") 
+        
+        crud.create_hike(user_id, trail_id) #TODO: Update to hike not hikelog #same as ratings, how to create a hike object / id without all the details (to be edited later by user)
+
+        return redirect("/")
+
+@app.route('/add_friend/<user_id>', methods = ["POST"])
+def user_add_friend(user_id):
+    """Edit user friend list with new friend."""
+
+    if not current_user.is_authenticated:
+        return redirect('/login')
+
+    friend_user_id = user_id #UnboundLocalError: local variable 'user_id' referenced before assignment #TODO: fix this bug
+    user_id = current_user.user_id
+    user_object = User.query.get(user_id)
+    print("-------------------------------------------------")
+    print("made it this far")
+   
+    form_id = request.form.get("form_id")
+    crud.create_friend(user_id, friend_user_id)
+
+    return redirect(f"/users/{user_id}")
 
 # PARK LIST ROUTES
 @app.route('/parks')
 def parks_list():
     """View National Park list."""
     
-    all_trails = crud.get_all_trails()
-    all_parks = crud.get_all_parks()
+    all_trails = db.session.query(Trail).all()
+    all_parks = crud.get_all_parks() #two parter, keeping this crud function
 
     return render_template('parks.html',
                             all_parks=all_parks,
@@ -350,7 +417,7 @@ def parks_list():
 def park_detail(area_name):
     """Show individual park details."""
 
-    park_trails = crud.get_parks_trails_by_name(area_name)
+    park_trails = db.session.query(Trail).filter(Trail.area_name==area_name).all()
 
     return render_template('park_details.html',
                             park_trails=park_trails,
@@ -370,7 +437,7 @@ def states_list():
 def state_detail(state_name):
     """Show individual state details."""
 
-    state_parks_details = crud.get_park_states_by_name(state_name)
+    state_parks_details = crud.get_park_states_by_name(state_name) # two parter, keeping this crud function
 
     return render_template('state_details.html',
                             # trail=trail_details,
@@ -393,11 +460,10 @@ def show_form_response():
     state = request.args.get("state")
     difficulty = request.args.get("difficulty")
 
-    server_trail = crud.query_trail(route_type, park, state, difficulty).all()
+    server_trail = crud.query_trail(route_type, park, state, difficulty) # this function is the crown jewel, kinda wanna keep the crud function
 
     if server_trail == []:
         server_trail='Sorry, no hikes matched your specifications, please try again with less parameters.'
-
 
     return render_template("show-form.html",
                            route_type=route_type,

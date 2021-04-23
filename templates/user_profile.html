@@ -20,7 +20,7 @@
   <tr>
     <th>Total Miles   |</th>
     <th>Total Number of Hikes   |</th>
-    <th>Maximun Hike Difficulty   |</th>
+    <th>Maximum Hike Difficulty   |</th>
 
   </tr>
   <tr>
@@ -44,17 +44,19 @@
     <th>Comment   |</th>
 
   </tr>
+  {% for trail in user_ratings %}
   <tr>
     <td>Trail Name</td>
     <td>Trail Park</td>
-    <td>{{ user_ratings.score }}</td>
-    <td>{{ user_ratings.challenge_rating }}</td>
-    <td>{{ user_ratings.distance_rating }}</td>
-    <td>{{ user_ratings.ascent_rating }}</td>
-    <td>{{ user_ratings.descent_rating }}</td>
-    <td>{{ user_ratings.comment }}</td>
+    <td>{{ trail.score }}</td>
+    <td>{{ trail.challenge_rating }}</td>
+    <td>{{ trail.distance_rating }}</td>
+    <td>{{ trail.ascent_rating }}</td>
+    <td>{{ trail.descent_rating }}</td>
+    <td>{{ trail.comment }}</td>
 
   </tr>
+  {% endfor %} 
 </table>
 <!--  -->
 <h4>Your Friends</h4>
@@ -64,12 +66,13 @@
     <th>| Friend Username   </th>
 
   </tr>
-  <tr>
-    {% for friend in friends_info %}
-    <td>{{ friends_info[0].user_fname }} {{friends_info[0].user_lname }}</td>
-    <td><a href="/users/{{ friends_info[0].user_id }}">{{ friends_info[0].username }}</a></td>
+    {% for friend in user_object.added_friends %}
+    <tr>
+    <td>{{ friend.current_user_added_friend.user_fname }} {{ friend.current_user_added_friend.user_lname }}</td>
+    <td><a href="/users/{{ friend.current_user_added_friend.user_id }}">{{ friend.current_user_added_friend.username }}</a></td>
+    </tr>
+    {% endfor %} 
   </table>
-  {% endfor %} 
 
 <!--  -->
     <h4>Your Wishlist</h4>
@@ -83,35 +86,35 @@
     
       </tr>
       <tr>
-        {% for wish in wish_list_trail_info %}
-        <td>{{ wish_list_trail_info[0].name }}</td>
-        <td>{{ wish_list_trail_info[0].area_name }}</td>
-        <td>{{ wish_list_trail_info[0].difficulty_rating }}</td>
-        <td>{{ wish_list_trail_info[0].route_type }}</td>
+        {% for wish in user_object.wishes %}
+        <td>{{ wish.trail.name }}</td>
+        <td>{{ wish.trail.area_name }}</td>
+        <td>{{ wish.trail.difficulty_rating }}</td>
+        <td>{{ wish.trail.route_type }}</td>
 
       </tr>
+      {% endfor %} 
 </table>
-{% endfor %} 
 
 <!--  -->
     <h4>Your Completed Hike Log</h4>
 
      <table>
       <tr>
-        <th>Trail ID |</th>
+        <th>Trail Name |</th>
         <th>Date Hike Completed   |</th>
         <th>Hike Total Time   |</th>
     
       </tr>
       <tr>
-        {% for hike in log_hike_info %}
-        <td>{{ log_hike_info[0].trail_id }}</td>
-        <td>{{ log_hike_info[0].hike_completed_on }}</td>
-        <td>{{ log_hike_info[0].hike_total_time }}</td>
+        {% for hike in user_object.hikes %}
+        <td>{{ hike.trail_id }}</td>
+        <td>{{ hike.hike_completed_on }}</td>
+        <td>{{ hike.hike_total_time }}</td>
 
       </tr>
+      {% endfor %} 
     </table> 
-    {% endfor %} 
  <!--  -->
 
 {% endblock %}

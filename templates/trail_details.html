@@ -4,10 +4,20 @@
 
 {% block body %}
 <h1>{{ trail_details.name }}</h1>
-
+<form action="/hike_edit" method="POST">
+  <input type="hidden" name="form_id" value="add_wishlist"/>
+  <input type="hidden" name="trail_id" value="{{ trail_details.trail_id }}"/>
+  <label><input type="radio" name="wishlist"> Add Trail to Wishlist </label>
+  <p><input type="submit"></p>
+</form>
+<form action="/hike_edit" method="POST">
+  <input type="hidden" name="form_id" value="add_hike_log" />
+  <label><input type="radio" name="hike_log"> Finished this hike? Add it to your hike log. </label>
+  <p><input type="submit"></p>
+</form>
 <p>{{ trail_details.name }} Details</p>
+<p>weather:</p>
 <div id="current-weather" data-lat="{{ latitude }}" data-lon="{{longitude}}" ></div>
-<div id="test"></div>
 <!-- ultimately hide the element until the js get on the weather api comes back; then populate and show infor when comes back -->
 <table>
   <colgroup span="4"></colgroup>
@@ -37,9 +47,9 @@
 
 </table>
 <h5>Have you done completed this hike? Take a moment to rate!</h5>
-<form method="post" action="/new_rating">
+<form method="post" action="/new_rating/{{ trail_id }}">
     <p>(1/6) One a scale from 1-5 (one being easiest, and 5 being hardest), what score would you give this trail?</p>
-        <label for="socre-select">Choose a difficulty:</label>
+        <label for="socre-select">Choose a score:</label>
             <select name="score" id="score-select"> 
               <option value="">--Please choose an option--</option>
               <option value="1">1 </option>
@@ -100,16 +110,15 @@
       <th>User Rating</th>
       <th>User Comment</th>
     </tr>
+    {% for rating in user_ratingss %}
     <tr>
-      <td>Feature coming</td>
-      <td>Feature coming</td>
-      <td>Feature coming</td>
+      <td>{{ rating.score }}</td>
+      <td>{{ rating.comment }}</td>
 
   
     </tr>
-  
+    {% endfor %}
   </table>
-  <p>{{ ratings }}</p>
   <!-- for loop!!! -->
   <script src="/static/functionality.js"></script>
 
