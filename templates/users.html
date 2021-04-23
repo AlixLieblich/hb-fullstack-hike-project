@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}Trails List{% endblock %}
+
+{% block body %}
+  <h1>Welcome to the list of Users!</h1>
+  <h3>Make sure to add some friends!</h3>
+
+  <ul>
+    {% for user in all_users %}
+        <li><a href="/users/{{ user.user_id }}">{{ user.user_fname }}</a></li>
+    {% endfor %}
+  </ul>
+{% endblock %}

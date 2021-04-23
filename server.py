@@ -298,10 +298,7 @@ def create_new_rating(trail_id):
         return redirect('/login')
     
     user_id = current_user.user_id
-    hike = crud.create_hike(user_id, trail_id) #TypeError: create_hike() missing 5 required positional arguments: 'user_id', 'trail_id', 'hike_completed_on', 'hike_total_time', and 'status_completion'
-                                # how do i create a hike id so that it is added to the users log, for example Hike Log -Harding Ice Trail; and then have no details, but the user has the option 
-                                # to fill in the details?
-                                # how to create the object with optional fields
+    hike = crud.create_hike(user_id, trail_id) 
 
     score = request.form.get('score')
     challenge_rating = request.form.get('challenge_rating')
@@ -373,13 +370,13 @@ def edit_user_hike_goals_and_log():
         trail_id = request.form.get("trail_id") 
         wish = crud.create_wishlist_item(trail_id, user_id)
 
-        return redirect("/") #how stay on same page when html is /trails/<trail_id> -- got error when tried this
+        return redirect("/")
 
     #hike log form
     if form_id == "add_hike_log":
         trail_id = request.form.get("trail_id") 
         
-        crud.create_hike(user_id, trail_id) #TODO: Update to hike not hikelog #same as ratings, how to create a hike object / id without all the details (to be edited later by user)
+        crud.create_hike(user_id, trail_id)
 
         return redirect("/")
 
@@ -390,11 +387,9 @@ def user_add_friend(user_id):
     if not current_user.is_authenticated:
         return redirect('/login')
 
-    friend_user_id = user_id #UnboundLocalError: local variable 'user_id' referenced before assignment #TODO: fix this bug
+    friend_user_id = user_id 
     user_id = current_user.user_id
     user_object = User.query.get(user_id)
-    print("-------------------------------------------------")
-    print("made it this far")
    
     form_id = request.form.get("form_id")
     crud.create_friend(user_id, friend_user_id)

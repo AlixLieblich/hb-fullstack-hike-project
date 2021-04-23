@@ -1,0 +1,57 @@
+
+{% extends 'base.html' %}
+{% block title %} {{ user_id }} {% endblock %}
+
+{% block body %}
+<h3>{{ user_object.user_fname }}' Profile!</h3>
+<br />
+{%if user_object.profile_picture%}
+<img src="/static/img/profile_pictures/{{user_object.profile_picture}}" />
+{%else%}
+<img src="/static/img/profile_pictures/default.png" />
+{%endif%}
+<form method="post" action="/add_friend/{{ user_id }}">
+
+  <input type="hidden" name="form_id" value="add_friend" />
+  <label><input type="radio" name="friend"> Friend User? </label>
+  <p><input type="submit"></p>
+</form>
+<h4>{{ user_object.user_fname }}'s Trail Goals:</h4>
+<table>
+  <tr>
+    <th>Total Miles   |</th>
+    <th>Total Number of Hikes   |</th>
+    <th>Maximun Hike Difficulty</th>
+
+  </tr>
+  <tr>
+    <td>{{ user_goals.goal_miles }}</td>
+    <td>{{ user_goals.goal_number_hikes }}</td>
+    <td>{{ user_goals.goal_hike_difficulty }}</td>
+
+  </tr>
+
+</table>
+
+<h4>{{ user_object.user_fname }}'s Wishlist</h4>
+
+<table>
+ <tr>
+   <th>Wish Trail Name |</th>
+   <th>Trail's Park   |</th>
+   <th>Trail Difficulty Rating   |</th>
+   <th>Trail Route Type   |</th>
+
+ </tr>
+ <!-- [<Trail id=1>, <Trail id=2>] -->
+ {% for wish in user_object.wishes %}
+ <tr>
+   <td>{{ wish.trail.name }}</td>
+   <td>{{ wish.trail.area_name }}</td>
+   <td>{{ wish.trail.difficulty_rating }}</td>
+   <td>{{ wish.trail.route_type }}</td>
+
+ </tr>
+ {% endfor %} 
+</table>
+{% endblock %}
