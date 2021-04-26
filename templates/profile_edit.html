@@ -44,7 +44,64 @@
 </form>
 
 <!-- edit friends form -->
-
+<h4>Edit your Friends List</h4>
+<h5>Which friend would you like to remove a friend from your friends list?</h5>
+<form action="/profile_edit" method="POST">
+    <input type="hidden" name="form_id" value="edit_friends" />
+    <select name="friends" id="friend-select">
+        <option value="">--Please choose an option--</option>
+        {% for friend in user_object.added_friends %}
+        <option value="{{ friend.current_user_added_friend.user_id }}">{{ friend.current_user_added_friend.user_fname }} {{ friend.current_user_added_friend.user_lname }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" name="Save" />
+</form>
+<br />
 <!-- Edit Hike log form -->
+<div contenteditable="true">
+<h4>Edit your Hike Log</h4>
 
+<table>
+ <tr>
+   <th>Trail Name |</th>
+   <th>Date Hike Completed   |</th>
+   <th>Hike Total Time   |</th>
+
+ </tr>
+ <tr>
+   {% for hike in user_object.hikes %}
+   <td>{{ hike.trail_id }}</td> 
+   <!-- that needs to be better -->
+   <td>{{ hike.hike_completed_on }}</td>
+   <td>{{ hike.hike_total_time }}</td>
+
+ </tr>
+ {% endfor %} 
+</table> 
+<input type="submit" name="Save" />
+</div>
+<!-- edit wishlist -->
+<h4>Edit your Wishlist</h4>
+<h5>Which wishlist trail would you like to remove?</h5>
+<form action="/profile_edit" method="POST">
+    <input type="hidden" name="form_id" value="edit_wishlist_remove" />
+    <select name="wish_remove" id="wish-select">
+        <option value="">--Please choose an option--</option>
+        {% for wish in user_object.wishes %}
+        <option value="friend">{{ wish.trail.name }} located in {{ wish.trail.area_name }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" name="Save" />
+</form>
+<h5>Which wishlist trail would you like to add?</h5>
+<form action="/profile_edit" method="POST">
+    <input type="hidden" name="form_id" value="edit_wishlist_add" />
+    <select name="wish_add" id="wish-select">
+        <option value="">--Please choose an option--</option>
+        {% for trail in trails %}
+        <option value="friend">{{ trail.name }} located in {{ trail.area_name }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" name="Save" />
+</form>
 {% endblock %}

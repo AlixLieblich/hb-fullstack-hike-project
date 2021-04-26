@@ -108,6 +108,28 @@ def update_password(user_id, old_password, new_password):
     # flash('Successful password change.')
     return True
 
+def update_friend_list(friend_user_id):
+    """Delete a friend."""
+
+    db.session.delete(friend_user_id)
+
+    db.session.commit()
+
+    return True
+
+def update_hike_log():
+
+    pass
+
+def delete_wishlist_trail(trail_id):
+    """Delete a wishlist."""
+
+    db.session.delete(trail_id)
+
+    db.session.commit()
+
+    return True
+
 # Friend functions
 def create_friend(user_id, friend_user_id):
     """Create and return a new friend."""
@@ -252,7 +274,7 @@ def get_trail_by_id(trail_id):
 def get_all_parks():
     """Display all National Parks."""
 
-    all_parks = db.session.query(Trail.area_name).all()
+    all_parks = db.session.query(Trail.area_name).order_by("area_name").all()
     all_parks = set(all_parks)
     return all_parks
 
@@ -290,24 +312,8 @@ def get_park_states_by_name(state_name):
     return state_parks
 
 # RATING FUNCTIONS
-def create_rating(score, hike_id, challenge_rating, distance_rating, ascent_rating, descent_rating, comment):
-    """Create and return a new rating."""
 
-    rating = Rating(score=score,
-                    hike_id=hike_id,
-                    challenge_rating=challenge_rating,
-                    distance_rating=distance_rating,
-                    ascent_rating=ascent_rating,
-                    descent_rating=descent_rating,
-                    comment=comment) 
-
-    db.session.add(rating)
-    db.session.commit()
-
-    return rating
-
-
-def create_rating(hike_id, score, challenge_rating, distance_rating, ascent_rating, descent_rating, comment):
+def create_rating(hike_id, score, challenge_rating, distance_rating, ascent_rating, descent_rating, comment, rating_picture=None):
     """Create and return a new rating (score)."""
 
     rating = Rating(hike_id=hike_id,
@@ -316,17 +322,18 @@ def create_rating(hike_id, score, challenge_rating, distance_rating, ascent_rati
                     distance_rating=distance_rating,
                     ascent_rating=ascent_rating,
                     descent_rating=descent_rating,
-                    comment=comment) 
+                    comment=comment,
+                    rating_picture=rating_picture) 
     
     db.session.add(rating)
     db.session.commit()
 
     return rating
 
-def get_all_ratings():
-    """Display all ratings."""
+# def get_all_ratings():
+#     """Display all ratings."""
 
-    return db.session.query(Rating).all()
+#     return db.session.query(Rating).all()
 
 def get_user_ratings(user_id):
     """Given a user_id, return all ratings made by that user."""
@@ -336,6 +343,61 @@ def get_user_ratings(user_id):
     # ratings = Hike.query.filter(Hike.user_id == user_id).on
 
     return ratings
+
+def get_average_ratings(ratings):
+    """Get averages of the rating parameters for display on trail details page."""
+
+    # num_ratings = 0
+    # for rating in ratings:
+    #     num_ratings += 1
+
+    av_ratings = []
+
+    len_ratings = len(ratings)
+
+    total_score = 0
+    for rating in ratings:
+        total_score += rating.score
+    av_total_score = total_score / len_ratings
+    av_ratings.append(av_total_score)
+
+    total_challenge_rating = 0
+    for rating in ratings:
+        total_challenge_rating += rating.challenge_rating
+    av_total_challenge_rating = total_challenge_rating / len_ratings
+    av_ratings.append(av_total_challenge_rating)
+
+
+    total_distance_rating = 0
+    for rating in ratings:
+        total_distance_rating += rating.distance_rating
+    av_total_distance_rating = total_distance_rating / len_ratings
+    av_ratings.append(av_total_distance_rating)
+
+
+    total_ascent_rating = 0
+    for rating in ratings:
+        total_ascent_rating += rating.ascent_rating
+    av_total_ascent_rating = total_ascent_rating / len_ratings
+    av_ratings.append(av_total_ascent_rating)
+
+
+    total_descent_rating = 0
+    for rating in ratings:
+        total_descent_rating += rating.descent_rating
+    av_total_descent_rating = total_descent_rating / len_ratings
+    av_ratings.append(av_total_descent_rating)
+
+
+        # i += 1
+    # av_score = (sum(ratings.score)/i)
+    # av_challenge_rating = (sum(ratings.challenge_rating)/i)
+    # av_distance_rating = (sum(ratings.distance_rating)/i)
+    # av_ascent_rating = (sum(ratings.ascent_rating)/i)
+    # av_descent_rating = (sum(ratings.descent_rating)/i)
+
+    return av_ratings
+
 
 # HIKE FUNCTIONS
 def create_hike(user_id, trail_id, hike_completed_on=date.today(), hike_total_time=1, status_completion=True):
@@ -353,16 +415,20 @@ def create_hike(user_id, trail_id, hike_completed_on=date.today(), hike_total_ti
     return hike
 
 # FIND A TRAIL FUNCTION
-def query_trail(route_type, park, state, difficulty):
+# def query_trail(route_type, park, state, difficulty):
+def query_trail(trail_query_arguments):
     """Take in form responses and query for a resultant trail."""
 
-    # trail = Trail.query.filter(and_(Trail.route_type==route_type, Trail.area_name==park, Trail.state_name==state, Trail.difficulty_rating==difficulty)) 
-    trail = db.session.query(Trail).filter(and_(Trail.difficulty_rating==difficulty, Trail.route_type==route_type, Trail.state_name==state))
-    # print("-----------------------------------------")
-    # for trails in trail:
-    #     print(trail)
+    # trail = db.session.query(Trail).filter(and_(Trail.difficulty_rating==difficulty, Trail.route_type==route_type, Trail.state_name==state))
 
-    return trail.all()
+    for state in states:
+        if trail_query_arguments.get('state_name') == state:
+            query_results = db.session.query(Trail).filter(Trail.area_name==area_name).all()
+            if trail_query_arguments.get('difficulty_select'):
+                query_results =  db.session.query(Trail).filter(and_(Trail.difficulty_rating==difficulty, Trail.state_name==state)).all()
+
+    # return trail.all()
+    return query_results
 
 if __name__ == '__main__':
     from server import app

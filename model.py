@@ -176,8 +176,12 @@ class Rating(db.Model):
     ascent_rating = db.Column(db.Integer)
     descent_rating = db.Column(db.Integer)
     comment = db.Column(db.String)
+    rating_picture = db.Column(db.String)
 
     # hikes = a list of Hike objects
+    user_ratings = db.relationship('User',
+                                    secondary='hikes',
+                                    backref='user_ratings')
 
     def __repr__(self):
         return f'<Rating rating_id={self.rating_id} score={self.score}>'

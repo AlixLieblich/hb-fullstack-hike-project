@@ -78,7 +78,14 @@ for n in range(10):
                             distance_rating = randint(1,5), 
                             ascent_rating = randint(1,5), 
                             descent_rating = randint(1,5), 
-                            comment = choice(comments))
+                            comment = choice(comments),
+                            rating_picture=choice(files))
 # friends
 for users in user_list:
     friend_object = crud.create_friend(users.user_id, randint(1,10))
+
+#trail ratings
+trails = db.session.query(Trail)
+
+for trail in trails:
+    rating = 

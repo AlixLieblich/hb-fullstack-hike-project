@@ -13,27 +13,35 @@
         </h2>
         <p>Please fill out at as many parameters as possible to narrow down the search, but at least one to return trails.</p>
     <form action="/show-form">
-<h4>(1/4) One a scale from 1-5 (one being easiest, and 5 being hardest), what difficulty are you looking for?</h4>
+<h4> Is there a specific State you are looking to hike in?</h4>
+    <label for="state-select">Choose a state:</label>
+        <select name="state" id="state-select" class="choice"> 
+            <option value="">--Please choose an option--</option>
+            {% for state in states %}
+            <option class="choice" value="{{ state.state_name }}">{{ state.state_name }}</option>
+            {% endfor %}
+    </select> 
+<div id="db-search-results"></div>
+    <h4>Is there a specific National Park you are looking to hike in?</h4>
+    <p><label>State Park (Optional): <input id="park" class="state-specific choice" type="text" name="park"></label></p>
+
+    <p><input type="submit"></p>
+    <div id="db-search-results"></div>
+
+<h4>One a scale from 1-5 (one being easiest, and 5 being hardest), what difficulty are you looking for?</h4>
     <label for="difficulty-select">Choose a difficulty:</label>
-        <select name="difficulty" id="difficulty-select"> 
+        <select name="difficulty" id="difficulty-select" class="choice"> 
           <option value="">--Please choose an option--</option>
-          <option value="1">1 </option>
+          <option value="1">1</option>
           <option value="2">2</option>
           <option value="3">3</option>
           <option value="4">4</option>
           <option value="5">5</option>
         </select> 
-<h4>(2/4) Is there a specific National Park you are looking to hike in?</h4>
-        <p><label>State Park (Optional): <input type="text" name="park"></label></p>
 
-<h4>(3/4) Is there a specific State you are looking to hike in?</h4>
-        <p><label>State (Optional): <input type="text" name="state"></label></p>
-<h4>(4/4) What route type are you looking for? Out and back, or Point to point?</h4>
-        <p><label>Route Type (Optional): <input type="text" name="route_type"></label></p>
-        
-        <p><input type="submit"></p>
+
     </form>
         
     </body>
-
+    <script src="/static/functionality.js"></script>
 {% endblock %}

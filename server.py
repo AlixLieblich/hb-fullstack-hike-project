@@ -211,18 +211,28 @@ def show_edit_profile_page():
     user_id = current_user.user_id
     user_object = User.query.get(user_id)
     user_goals = Goal.query.filter(Goal.user_id == user_id).first()
+    trails = db.session.query(Trail)
+
+    # user_friends = user_object.added_friends
+    # user_hike_log = user_object.hikes
+    # user_wishlist = user_object.wishes
 
     return render_template('profile_edit.html',
                             user_id=user_id,
                             user_object=user_object,
-                            user_goals=user_goals)
+                            user_goals=user_goals,
+                            trails=trails
+                            # user_friends=user_friends,
+                            # user_hike_log=user_hike_log,
+                            # user_wishlist=user_wishlist
+                            )
 
 @app.route('/profile_edit', methods = ["POST"])
 def edit_user_profile():
     """Edit user profile with user form responses."""
 
     if not current_user.is_authenticated:
-        return redirect('/')
+        return redirect('/login')
 
     user_id = current_user.user_id
     user_object = User.query.get(user_id)
@@ -269,7 +279,23 @@ def edit_user_profile():
             crud.set_user_profile_picture(user_id, file_name) 
         
         return redirect("/profile_edit")
+    #edit friends
+    elif form_id == "edit_friends":
+        unfriend_id = request.form.get("friends")
+        friend = User.query.get(unfriend_id)
+        crud.update_friend_list(friend)
+        flash("Password Updated")
 
+        return redirect("/profile_edit")
+
+    #edit wishlist
+    elif form_id == "edit_wishlist_remove":
+        trail_delete_id = request.form.get("wish_remove")
+
+        crud.delete_wishlist_trail(trail_delete_id)
+        flash("Trail Deleted")
+
+        return redirect("/profile_edit")
     #password
     elif form_id == "password_change":
         old_password = request.form.get("old_password")
@@ -288,6 +314,10 @@ def edit_user_profile():
     return render_template('profile_edit.html',
                             user_id=user_id,
                             user_object=user_object)
+
+    #edit hike log
+    
+
 
 # RATING ROUTES
 @app.route('/new_rating/<trail_id>', methods=['POST'])
@@ -316,7 +346,8 @@ def create_new_rating(trail_id):
 def trails_list():
     """View trail list."""
     
-    all_trails = db.session.query(Trail).all()
+    # all_trails = db.session.query(Trail).all()
+    all_trails = db.session.query(Trail).order_by('name').all()
 
     return render_template('trails.html',
                             all_trails=all_trails)
@@ -328,16 +359,9 @@ def trail_detail(trail_id):
     user_id = current_user.user_id
     user_object = User.query.get(user_id)
     trail_details = Trail.query.get(trail_id)
-    user_ratings = user_object.ratings
-    # for rating in ratings:
-    #     total_score = sum(score)
-    #     av_total_score = total_score / num_scores
-    # for rating in ratings:
-        #total_score = score + score ...
-        #av_total_score = total_score / num_scores
-
-    # make api call here to get json from Weather Map API
-    # give json info to template as variable
+    ratings = db.session.query(Rating).all()
+ 
+    av_ratings = crud.get_average_ratings(ratings)
 
     geo = json.loads(trail_details._geoloc.replace("\'", "\""))
 
@@ -346,11 +370,12 @@ def trail_detail(trail_id):
 
     return render_template('trail_details.html',
                             trail_details=trail_details,
-                            user_ratings=user_ratings,
+                            ratings=ratings,
                             latitude=latitude,
                             longitude=longitude,
-                            trail_id = trail_id
-                            #av_total_score=av_total_score
+                            trail_id = trail_id,
+                            av_ratings=av_ratings,
+                            geo=geo
                             )
 
 @app.route('/hike_edit', methods = ["POST"])
@@ -361,7 +386,7 @@ def edit_user_hike_goals_and_log():
         return redirect('/login')
 
     user_id = current_user.user_id
-    user_object = User.query.get(user_id)
+    user_object = User.query.get(user_id)   
    
     form_id = request.form.get("form_id")
 
@@ -400,9 +425,13 @@ def user_add_friend(user_id):
 @app.route('/parks')
 def parks_list():
     """View National Park list."""
-    
+
     all_trails = db.session.query(Trail).all()
-    all_parks = crud.get_all_parks() #two parter, keeping this crud function
+    # all_parks = crud.get_all_parks() #two parter, keeping this crud function
+
+    all_parks = db.session.query(Trail.area_name).all()
+    all_parks = set(all_parks)
+    all_parks = sorted(all_parks)
 
     return render_template('parks.html',
                             all_parks=all_parks,
@@ -412,7 +441,8 @@ def parks_list():
 def park_detail(area_name):
     """Show individual park details."""
 
-    park_trails = db.session.query(Trail).filter(Trail.area_name==area_name).all()
+    park_trails = db.session.query(Trail).filter(Trail.area_name==area_name).order_by('name').all()
+    # park_trails = sorted(park_trails)
 
     return render_template('park_details.html',
                             park_trails=park_trails,
@@ -424,6 +454,7 @@ def states_list():
     """View states list."""
     
     all_states = crud.get_all_states()
+    all_states = sorted(all_states)
 
     return render_template('states.html',
                             all_states=all_states)
@@ -443,8 +474,46 @@ def state_detail(state_name):
 @app.route('/find-a-hike-form')
 def display_hike_form():
     """View hike form."""
+
+    all_states = crud.get_all_states()
+    states = sorted(all_states)
+    print(states)
+
+    return render_template('find-a-hike-form.html',
+                            states=states)
+
+@app.route('/process_search')
+def process_search():
+    """Search database for user specifications to find trail."""
+
+    all_states = crud.get_all_states()
+    states = sorted(all_states)
+
+    session['trail_query'] = {'state_name': request.args.get('state_name'),
+                              'difficulty': request.args.get('difficulty_select'),
+                              'park': request.args.get('park')}
+
+    # for state in states:
+    #     if state_name = state:
+    #         session['trail_query']['state_national_parks'] = 
+
+    trail_query_arguments = {}
+    for argument in session['trail_query']:
+        if session['trail_query'][argument]:
+            trail_query_arguments[argument] = session['trail_query'][argument]
     
-    return render_template('find-a-hike-form.html')
+    db_results = crud.query_trail(trail_query_arguments=trail_query_arguments)
+    db_results_dict = {}
+    for item in db_results:
+        db_results_dict[trail_id] = {'park': trail.area_name }
+
+        print(db_results_dict)
+
+
+    return db_results_dict
+    
+
+
 
 @app.route('/show-form')
 def show_form_response():

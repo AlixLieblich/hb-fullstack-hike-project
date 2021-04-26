@@ -1,11 +1,7 @@
 'use strict';
 
 // Display current weather data on trail detail pages
-console.log("howdy");
-$('#test').html("from js, hello love");
 
-// const lat = $('#current-weather').data("lat");
-// const lon = $('#current-weather').data("lon");
 $.ajax({
     url: "https://community-open-weather-map.p.rapidapi.com/weather",
     headers: { 'x-rapidapi-key': "8e3f6010abmshc09fe5de80fba0ep138729jsn950d9f17b9e7", 
@@ -17,35 +13,52 @@ $.ajax({
         let tempValue = res['main']['temp'];
         let nameValue = res['name']
 
-        console.log(res);
-        console.log(res.visibility);
-        console.log(tempValue)
-        console.log(nameValue)
+        // console.log(res);
+        // console.log(res.visibility);
+        // console.log(tempValue)
+        // console.log(nameValue)
 
-        $('#current-weather').html(tempValue);
+        $('#current-weather').html(tempValue, nameValue);
     
     });
 
-// let url = ;
+    // form
 
+$({
+    url: "/parks-by-state",
+    data: {states: $("#state_name")}
+})
 
-// const key = "8e3f6010abmshc09fe5de80fba0ep138729jsn950d9f17b9e7"
-// console.log(lat);
-// console.log(lon);
+function displayResults(results) {
+    console.log(results)
+    $('#db-search-results').html('')
+    for (let i in resutls) {
+        $('#db-search-results')
+        .append(
+            `<div>
+                <input type="radio" name="chosen-item" value="${i}" required>
+                ${results[i]}
+            </div>`
+        );
+    }
+}
+// // Update search form based on selected state
+// $('#state-select').on('change', (evt) => {
+//     evt.preventDefault();
+//     let selectedOption = $(evt.target);
+//     $('.state-specific').val('');
+//     if ($('#state-select').val() === '') {
 
+//     }
+// })
 
-// const querystring= {lat:`${lat}`, lon:`${lon}`};
-// console.log(querystring);
-// // let latLonData = {
-// //                   "lat": , 
-// //                   "lon": 
-// //                   };
-// //                   Uncaught TypeError: $(...).attr(...).value is not a function
-// //                   at functionality.js:7
+$('.choice').on('change', (evt) => {
+    console.log("sun apr 25")
+    evt.preventDefault();
+    let formData = {'state_name': $('#state-select option:selected').val, 
+                    'difficulty_select': $('#difficulty_select').val,
+                    'park': $('#park').val};
+    console.log(formData['state_name'])
+    $.get('/process_search', formData, displayResults);
+} )
 
-// $.get(url, querystring, (res) =>{
-//     let results = res['results']
-//     console.log("HIIIIIIIIIIIIIIIIIIIIIIIIIIIIII");
-//     $('#current-weather').html(results);
-
-// });
