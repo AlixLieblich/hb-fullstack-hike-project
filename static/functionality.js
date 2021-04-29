@@ -30,14 +30,14 @@ $({
 })
 
 function displayResults(results) {
+    console.log('results:')
     console.log(results)
     $('#db-search-results').html('')
-    for (let i in resutls) {
-        $('#db-search-results')
-        .append(
+    for (let i in results) {
+        $('#db-search-results').append(
             `<div>
                 <input type="radio" name="chosen-item" value="${i}" required>
-                ${results[i]}
+                ${results[i]['park']}
             </div>`
         );
     }
@@ -55,10 +55,13 @@ function displayResults(results) {
 $('.choice').on('change', (evt) => {
     console.log("sun apr 25")
     evt.preventDefault();
-    let formData = {'state_name': $('#state-select option:selected').val, 
-                    'difficulty_select': $('#difficulty_select').val,
-                    'park': $('#park').val};
-    console.log(formData['state_name'])
+    let formData = {'state_name': $('#state-select option:selected').val(), 
+                    'difficulty_select': $('#difficulty_select').val(),
+                    'park': $('#park').val()};
+    console.log(formData['difficulty_select'])
     $.get('/process_search', formData, displayResults);
+    console.log("15:57")
 } )
+
+
 

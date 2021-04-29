@@ -1,15 +1,95 @@
 {% extends 'base.html' %}
 {% block title %}Create Account{% endblock %}
-
+{% block css %}
+{% endblock %}
 {% block body %}
+<link rel="stylesheet" href="style.css">
+<style>
+  body{
+      background-image: url("/static/img/images!/stephanie-bergeron-AjFVsvjuSPU-unsplash.jpg");
+      background-size: cover;
+      background-position: center; /* Center the image */
+      height: 700px
+  }
+</style>
+<div class="form-wrap">
+  <div class="tabs">
+    <h3 class="signup-tab"><a class="active" href="#signup-tab-content">Sign Up</a></h3>
+    <h3 class="login-tab"><a href="#login-tab-content">Login</a></h3>
+  </div><!--.tabs-->
+
+  <div class="tabs-content">
+    <div id="signup-tab-content" class="active">
+      <form  action="/new_user" class="signup-form" method="POST">
+        <input type="text" class="input" name="user_fname" id="user_name" autocomplete="off" placeholder="First Name">
+        <input type="text" class="input" name="user_lname" id="user_name" autocomplete="off" placeholder="Last Name">
+        <input type="text" class="input" name="email" id="user_name" autocomplete="off" placeholder="Email">
+        <input type="text" class="input" id="user_name" name="username" autocomplete="off" placeholder="Username">
+        <input type="password" class="input" id="user_pass" name="password" autocomplete="off" placeholder="Password">
+        <input type="submit" class="button" value="Sign Up">
+      </form><!--.login-form-->
+      <div class="help-text">
+        <p>By signing up, you agree to our</p>
+        <p><a href="#">Terms of service</a></p>
+      </div><!--.help-text-->
+    </div><!--.signup-tab-content-->
+
+    <div id="login-tab-content">
+      <form class="login-form" action="/login"  method="POST">
+        <input type="text" class="input" name="username" id="user_login" autocomplete="off" placeholder="Username">
+        <input type="password" class="input" name="password" id="user_pass" autocomplete="off" placeholder="Password">
+        <input type="checkbox" class="checkbox" id="remember_me">
+        <label for="remember_me">Remember me</label>
+
+        <input type="submit" class="button" value="Login">
+      </form><!--.login-form-->
+      <div class="help-text">
+        <p><a href="#">Forget your password?</a></p>
+      </div><!--.help-text-->
+    </div><!--.login-tab-content-->
+  </div><!--.tabs-content-->
+</div><!--.form-wrap-->
+<script>
+  jQuery(document).ready(function($) {
+	tab = $('.tabs h3 a');
+
+	tab.on('click', function(event) {
+		event.preventDefault();
+		tab.removeClass('active');
+		$(this).addClass('active');
+
+		tab_content = $(this).attr('href');
+		$('div[id$="tab-content"]').removeClass('active');
+		$(tab_content).addClass('active');
+	});
+});
+</script>
+
+
+
+
+
+
+
+
+
+
+
   <h4>Please fill out the following fields to create your account.</h4>
 
   <form action="/new_user" method="POST">
     <p>First Name: <input type="text" name="user_fname"></p>
     <p>Last Name: <input type="text" name="user_lname"></p>
-    <p>Email: <input type="text" name="email"></p>
+    <div class="mb-3">
+      <label for="exampleInputEmail1" class="form-label">Email address</label>
+      <input name="email" type="email" class="form-control" id="exampleInputEmail1" aria-describedby="emailHelp">
+      <div id="emailHelp" class="form-text">We'll never share your email with anyone else.</div>
+    </div>
     <p>Username: <input type="text" name="username"></p>
-    <p>Password: <input type="password" name="password"></p>
+    <div class="mb-3">
+      <label for="exampleInputPassword1" class="form-label">Password</label>
+      <input name="password" type="password" class="form-control" id="exampleInputPassword1">
+    </div>
     <p>Profile Picture: </p><input type='file' name="file1"></p>
     <p><input type="submit"></p>
 </form>

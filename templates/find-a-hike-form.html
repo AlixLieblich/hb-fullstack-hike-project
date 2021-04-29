@@ -1,5 +1,5 @@
 {% extends 'base.html' %}
-{% block title %}Home{% endblock %}
+{% block title %}Find a Trail{% endblock %}
 
 {% block body %}
     <head>
@@ -12,7 +12,7 @@
             Find a hike form.
         </h2>
         <p>Please fill out at as many parameters as possible to narrow down the search, but at least one to return trails.</p>
-    <form action="/show-form">
+    <form action=/show_form>
 <h4> Is there a specific State you are looking to hike in?</h4>
     <label for="state-select">Choose a state:</label>
         <select name="state" id="state-select" class="choice"> 
@@ -21,11 +21,7 @@
             <option class="choice" value="{{ state.state_name }}">{{ state.state_name }}</option>
             {% endfor %}
     </select> 
-<div id="db-search-results"></div>
-    <h4>Is there a specific National Park you are looking to hike in?</h4>
-    <p><label>State Park (Optional): <input id="park" class="state-specific choice" type="text" name="park"></label></p>
 
-    <p><input type="submit"></p>
     <div id="db-search-results"></div>
 
 <h4>One a scale from 1-5 (one being easiest, and 5 being hardest), what difficulty are you looking for?</h4>
@@ -38,10 +34,67 @@
           <option value="4">4</option>
           <option value="5">5</option>
         </select> 
-
+        <p><input type="submit"></p>
 
     </form>
         
     </body>
+    <link rel="stylesheet" href="style.css">
+    <style>
+      body{
+          background-image: url("/static/img/images!/stephanie-bergeron-AjFVsvjuSPU-unsplash.jpg");
+          background-size: cover;
+          background-position: center; /* Center the image */
+          height: 700px
+      }
+    </style>
+    <div class="form-wrap">
+      <div class="tabs">
+        <h3 class="signup-tab"><a class="active" href="#signup-tab-content">Find a Trail</a></h3>
+      </div><!--.tabs-->
+    
+      <div class="tabs-content">
+        <div id="signup-tab-content" class="active">
+          <form  action="/new_user" class="signup-form" method="POST">
+            <h4> Is there a specific State you are looking to hike in?</h4>
+    <label for="state-select">Choose a state:</label>
+        <select name="state" id="state-select" class="choice"> 
+            <option value="">--Please choose an option--</option>
+            {% for state in states %}
+            <option class="choice" value="{{ state.state_name }}">{{ state.state_name }}</option>
+            {% endfor %}
+    </select> 
+
+    <div id="db-search-results"></div>
+            <input type="text" class="input" name="user_lname" id="user_name" autocomplete="off" placeholder="Last Name">
+            <input type="text" class="input" name="email" id="user_name" autocomplete="off" placeholder="Email">
+            <input type="text" class="input" id="user_name" name="username" autocomplete="off" placeholder="Username">
+            <input type="password" class="input" id="user_pass" name="password" autocomplete="off" placeholder="Password">
+            <input type="submit" class="button" value="Sign Up">
+          </form>
+          <div class="help-text">
+            <p>By signing up, you agree to our</p>
+            <p><a href="#">Terms of service</a></p>
+          </div><!--.help-text-->
+        </div>
+    
+    <script>
+      jQuery(document).ready(function($) {
+        tab = $('.tabs h3 a');
+    
+        tab.on('click', function(event) {
+            event.preventDefault();
+            tab.removeClass('active');
+            $(this).addClass('active');
+    
+            tab_content = $(this).attr('href');
+            $('div[id$="tab-content"]').removeClass('active');
+            $(tab_content).addClass('active');
+        });
+    });
+    </script>
+
+
+
     <script src="/static/functionality.js"></script>
 {% endblock %}

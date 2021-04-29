@@ -96,17 +96,16 @@ def create_new_user():
     user_email = request.form.get('email')
     user_name = request.form.get('username')
     user_password = request.form.get('password')
-    profile_picture = request.form.get('profile_picture')
 
     user_existence = crud.get_user_by_email(user_email) # somewhat complicated, wanna keep
     
     if user_existence:
         flash('You can\'t create an account with that email. Try again.')
     else:
-        crud.create_user(user_name, user_email, user_password)
+        crud.create_user(user_name, user_password, user_fname, user_lname, user_email)
         flash('Your account was successfully created. WelCoMe tO thE ComMunItYYY, you can now log in!')
 
-    return redirect('/')
+    return render_template('create-account.html')
 
 @app.route('/create-account')
 def display_create_account_form():
@@ -179,7 +178,7 @@ def users_list():
 def view_user_profiles(user_id):
     """View other user's profiles."""
 
-    user_id = current_user.user_id #click on user, get user id
+    # user_id = current_user.user_id #click on user, get user id
     # user_object = crud.get_user_by_id(user_id)
     user_object = User.query.filter(User.user_id == user_id).first()
     # user_goals = crud.get_goals_by_user_id(user_id)
@@ -283,8 +282,10 @@ def edit_user_profile():
     elif form_id == "edit_friends":
         unfriend_id = request.form.get("friends")
         friend = User.query.get(unfriend_id)
-        crud.update_friend_list(friend)
-        flash("Password Updated")
+        print("----------------------------------------------")
+        print(unfriend_id)
+        crud.update_friend_list(unfriend_id)
+        flash("Friend Removed")
 
         return redirect("/profile_edit")
 
@@ -340,7 +341,12 @@ def create_new_rating(trail_id):
     crud.create_rating(score, hike.hike_id, challenge_rating, distance_rating, ascent_rating, descent_rating, user_comment)
     flash('Rating Created')
     return redirect(f'/trails/{trail_id}')
+# TRAIL LIST ROUTES
+@app.route('/home-alt')
+def home_alt():
+    """View trail list."""
 
+    return render_template('home-alt.html')
 # TRAIL LIST ROUTES
 @app.route('/trails')
 def trails_list():
@@ -356,8 +362,8 @@ def trails_list():
 def trail_detail(trail_id):
     """Show individual trail details."""
 
-    user_id = current_user.user_id
-    user_object = User.query.get(user_id)
+    # user_id = current_user.user_id
+    # user_object = User.query.get(user_id)
     trail_details = Trail.query.get(trail_id)
     ratings = db.session.query(Rating).all()
  
@@ -486,6 +492,7 @@ def display_hike_form():
 def process_search():
     """Search database for user specifications to find trail."""
 
+    print("15:55")
     all_states = crud.get_all_states()
     states = sorted(all_states)
 
@@ -504,11 +511,9 @@ def process_search():
     
     db_results = crud.query_trail(trail_query_arguments=trail_query_arguments)
     db_results_dict = {}
-    for item in db_results:
-        db_results_dict[trail_id] = {'park': trail.area_name }
-
-        print(db_results_dict)
-
+    print("--------------------------------")
+    for trail in db_results:
+        db_results_dict[trail.area_name] = {'park': trail.area_name }
 
     return db_results_dict
     

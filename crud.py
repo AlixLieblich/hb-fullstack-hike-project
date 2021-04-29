@@ -5,7 +5,7 @@ from sqlalchemy import and_
 from datetime import datetime, date
 
 # USER FUNCTIONS
-def create_user(username, password, user_fname, user_lname, profile_picture, email):
+def create_user(username, password, user_fname, user_lname, email, profile_picture="/static/img/profile_pictures/default.png"):
     """Create and return a new user."""
 
     user = User(username=username, password=password, user_fname=user_fname, user_lname=user_lname, profile_picture=profile_picture, email=email)
@@ -111,15 +111,15 @@ def update_password(user_id, old_password, new_password):
 def update_friend_list(friend_user_id):
     """Delete a friend."""
 
-    db.session.delete(friend_user_id)
+    User_friend.query.filter_by(user_)
 
     db.session.commit()
 
     return True
 
-def update_hike_log():
+# def update_hike_log():
 
-    pass
+#     pass
 
 def delete_wishlist_trail(trail_id):
     """Delete a wishlist."""
@@ -419,14 +419,22 @@ def create_hike(user_id, trail_id, hike_completed_on=date.today(), hike_total_ti
 def query_trail(trail_query_arguments):
     """Take in form responses and query for a resultant trail."""
 
+    # print('1')
+    # all_states = db.session.query(Trail.state_name).all()
+    # all_states = set(all_states)
+    # print(all_states)
     # trail = db.session.query(Trail).filter(and_(Trail.difficulty_rating==difficulty, Trail.route_type==route_type, Trail.state_name==state))
-
-    for state in states:
-        if trail_query_arguments.get('state_name') == state:
-            query_results = db.session.query(Trail).filter(Trail.area_name==area_name).all()
-            if trail_query_arguments.get('difficulty_select'):
-                query_results =  db.session.query(Trail).filter(and_(Trail.difficulty_rating==difficulty, Trail.state_name==state)).all()
-
+    # for state in all_states:
+        # print(trail_query_arguments.get('state_name'))
+    state_query = trail_query_arguments.get('state_name')
+    # print("----------------------------------------------------------------")
+    # print(state_query)
+    query_results = db.session.query(Trail.area_name).filter(Trail.state_name==state_query).all()
+    query_results = set(query_results)
+    print("query_results:")
+    print(query_results)
+    if trail_query_arguments.get('difficulty_select'):
+        query_results =  db.session.query(Trail).filter(and_(Trail.difficulty_rating==difficulty, Trail.state_name==state)).all()
     # return trail.all()
     return query_results
 
