@@ -9,7 +9,7 @@ import model
 import os
 import image_helper
 from sqlalchemy import and_
-
+from secrets import GOOGLE_API_KEY
 import json 
 
 import crud
@@ -136,6 +136,8 @@ def view_user_profile():
     # user_goals = crud.get_goals_by_user_id(user_id)
     # user_goals = user_object.goals # why doesnt this work but the following line does
     user_goals = Goal.query.filter(Goal.user_id == user_id).first()
+    trails = db.session.query(Trail)
+
 
     # friends_info =[]
     # for friend in user_friends:
@@ -160,6 +162,7 @@ def view_user_profile():
                             user_wishlist=user_wishlist,
                             user_hike_log=user_hike_log,
                             user_ratings=user_ratings,
+                            trails=trails
                             # friends_info=friends_info,
                             # wish_list_trail_info=wish_list_trail_info,
                             # log_hike_info=log_hike_info
@@ -245,7 +248,7 @@ def edit_user_profile():
         email = request.form.get("email")
         crud.update_user_profile_info(user_id, user_fname, user_lname, email)
 
-        return redirect("profile_edit")
+        return redirect("user_profile")
 
     if form_id == "hiking_goals":
 
@@ -255,7 +258,7 @@ def edit_user_profile():
 
         crud.update_user_hiking_goals(user_id, goal_miles, goal_number_hikes, goal_hike_difficulty)
 
-        return redirect("profile_edit")
+        return redirect("user_profile")
 
     #profile pic
     elif form_id == "profile_picture":
@@ -269,7 +272,7 @@ def edit_user_profile():
         (success, msg, resized_image) = result
         if success is False:
             flash(msg)
-            return redirect("/profile_edit")
+            return redirect("user_profile")
         else:
             file_name = str(user_id) + ".jpg"
             path = os.path.join(UPLOAD_FOLDER_PROFILE_PICTURE, file_name)
@@ -277,7 +280,7 @@ def edit_user_profile():
 
             crud.set_user_profile_picture(user_id, file_name) 
         
-        return redirect("/profile_edit")
+        return redirect("user_profile")
     #edit friends
     elif form_id == "edit_friends":
         unfriend_id = request.form.get("friends")
@@ -287,7 +290,7 @@ def edit_user_profile():
         crud.update_friend_list(unfriend_id)
         flash("Friend Removed")
 
-        return redirect("/profile_edit")
+        return redirect("user_profile")
 
     #edit wishlist
     elif form_id == "edit_wishlist_remove":
@@ -296,7 +299,7 @@ def edit_user_profile():
         crud.delete_wishlist_trail(trail_delete_id)
         flash("Trail Deleted")
 
-        return redirect("/profile_edit")
+        return redirect("user_profile")
     #password
     elif form_id == "password_change":
         old_password = request.form.get("old_password")
@@ -306,11 +309,11 @@ def edit_user_profile():
             flash("Old password is incorrect")
         else:
             flash("Password Updated")
-        return redirect("/profile_edit")
+        return redirect("user_profile")
 
     else:
         flash("Unhandled form submission")
-        return redirect("/profile_edit")
+        return redirect("user_profile")
 
     return render_template('profile_edit.html',
                             user_id=user_id,
@@ -381,15 +384,18 @@ def trail_detail(trail_id):
                             longitude=longitude,
                             trail_id = trail_id,
                             av_ratings=av_ratings,
-                            geo=geo
+                            geo=geo,
+                            GOOGLE_API_KEY=GOOGLE_API_KEY
                             )
 
-@app.route('/hike_edit', methods = ["POST"])
-def edit_user_hike_goals_and_log():
+@app.route('/hike_edit/<trail_id>', methods = ["POST"])
+def edit_user_hike_goals_and_log(trail_id):
     """Edit user hike log and trail wishlist."""
 
     if not current_user.is_authenticated:
+        flash('Please Login First!')
         return redirect('/login')
+
 
     user_id = current_user.user_id
     user_object = User.query.get(user_id)   
@@ -398,18 +404,17 @@ def edit_user_hike_goals_and_log():
 
     #wishlist form
     if form_id == "add_wishlist":
-        trail_id = request.form.get("trail_id") 
+        # trail_id = request.form.get("trail_id") 
         wish = crud.create_wishlist_item(trail_id, user_id)
 
-        return redirect("/")
+        return redirect(f'/trails/{trail_id}')
 
     #hike log form
     if form_id == "add_hike_log":
         trail_id = request.form.get("trail_id") 
-        
         crud.create_hike(user_id, trail_id)
 
-        return redirect("/")
+        return redirect(f'/trails/{trail_id}')
 
 @app.route('/add_friend/<user_id>', methods = ["POST"])
 def user_add_friend(user_id):

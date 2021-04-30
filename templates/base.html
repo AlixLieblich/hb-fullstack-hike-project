@@ -15,7 +15,7 @@
       <!-- NAVBAR -->
    <nav class="navbar navbar-expand-md navbar-dark bg-dark">
     <div class="container-fluid">
-      <a class="navbar-brand" href="/home-alt">National Treasures</a>
+      <a class="navbar-brand" href="/#">National Treasures</a>
       <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -40,6 +40,7 @@
           <li class="nav-item">
             <a class="nav-item nav-link" href="/users">View list of Users</a>
           </li>
+          
       <ul class="nav navbar-nav navbar-right"> 
         <!-- the right align not working and the login graphic also not working -->
               {% if current_user.is_authenticated %} 
@@ -55,7 +56,7 @@
 
           {% if not current_user.is_authenticated %} 
           <li class="nav-item active">
-              <a class="nav-item nav-link" class="glyphicon glyphicon-user" class="nav-link" href="/login">Log In</a>
+              <a class="nav-item nav-link" class="glyphicon glyphicon-user" class="nav-link" href="/create-account#login-tab-content">Log In</a>
           </li>
           <li class="nav-item active">
               <a class="nav-item nav-link" class="nav-link" href="/create-account">Sign Up</a>
@@ -66,6 +67,26 @@
         </form>
       </div>
     </div>
+    <script>
+      // Initialize and add the map
+      function initMap() {
+ 
+        console.log(location)
+
+        const uluru = { lat: ($("#map").data("lat")), lng: ($("#map").data("lon")) };
+
+        // The map, centered at Uluru
+        const map = new google.maps.Map(document.getElementById("map"), {
+          zoom: 4,
+          center: uluru,
+        });
+        // The marker, positioned at Uluru
+        const marker = new google.maps.Marker({
+          position: uluru,
+          map: map,
+        });
+      }
+    </script>
   </nav>
 
 
@@ -141,7 +162,7 @@
       <div class="container">
         <div class="row">
           <div class="col-md-8 col-sm-6 col-xs-12">
-            <p class="copyright-text">Copyright &copy; 2017 All Rights Reserved by 
+            <p class="copyright-text">Copyright &copy; 2021 All Rights Reserved by 
          <a href="#">Because I said So</a>.
             </p>
           </div>

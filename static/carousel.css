@@ -28,8 +28,8 @@ body {
     position: absolute;
     top: 0;
     left: 0;
-    min-width: 100%;
-    height: 32rem;
+    width: 4000px !important;
+    height: 800 px;
   }
   
   
