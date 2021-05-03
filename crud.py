@@ -419,24 +419,24 @@ def create_hike(user_id, trail_id, hike_completed_on=date.today(), hike_total_ti
 def query_trail(trail_query_arguments):
     """Take in form responses and query for a resultant trail."""
 
-    # print('1')
-    # all_states = db.session.query(Trail.state_name).all()
-    # all_states = set(all_states)
-    # print(all_states)
-    # trail = db.session.query(Trail).filter(and_(Trail.difficulty_rating==difficulty, Trail.route_type==route_type, Trail.state_name==state))
-    # for state in all_states:
-        # print(trail_query_arguments.get('state_name'))
     state_query = trail_query_arguments.get('state_name')
-    # print("----------------------------------------------------------------")
-    # print(state_query)
     query_results = db.session.query(Trail.area_name).filter(Trail.state_name==state_query).all()
     query_results = set(query_results)
-    print("query_results:")
-    print(query_results)
-    if trail_query_arguments.get('difficulty_select'):
-        query_results =  db.session.query(Trail).filter(and_(Trail.difficulty_rating==difficulty, Trail.state_name==state)).all()
-    # return trail.all()
+
     return query_results
+
+def query_trail_two(park, difficulty):
+    """ """
+
+    # trail_query_area_name = trail_query_arguments.get('area_name')
+    # trail_query_difficulty = trail_query_arguments.get('difficulty')
+    print("~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~")
+    print(f"park: {park}")
+    print(f"difficulty: {difficulty}")
+
+    query_results =  db.session.query(Trail).filter(and_(Trail.difficulty_rating==difficulty, Trail.area_name==park)).all()
+    return(query_results)
+    print(f"query_results: {query_results}")
 
 if __name__ == '__main__':
     from server import app

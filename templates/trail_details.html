@@ -137,7 +137,7 @@
   </head>
 <div class="form-wrap">
   <div class="tabs-content">
-    <img class="styles-module" src="/static/img/images!/joshua-balsamo-kZyWQj4JKq8-unsplash.jpg">
+    <img class="styles-module" src="/static/img/images!/photo-1591622901735-afca559d8669.webp">
 <h1>{{ trail_details.name }}</h1>
 
 <div class="row">
@@ -146,7 +146,7 @@
 <form method="post" action="/hike_edit/{{ trail_id }}">
   <input type="hidden" name="form_id" value="add_wishlist"/>
   <input type="hidden" name="trail_id" value="{{ trail_details.trail_id }}"/>
-  <label><input type="radio" name="hike_log"> Finished this hike? Add it to your hike log. </label>
+  <label><input type="radio" name="hike_log"> Add to wishlist. </label>
   <p><input type="submit"></p>
 </form>
 </div>
@@ -163,7 +163,8 @@
 
 <div class="row">
   <div class="col-6">
-<p>weather:</p>
+<p>Current Weather:</p>
+<p>Temperature:</p>
 <div id="current-weather" data-lat="{{ latitude }}" data-lon="{{ longitude }}" ></div>
 </div>
 
@@ -178,8 +179,8 @@ async
 ></script>
 </div>
 
-
-<table class="table table-bordered">
+<h5>Trail Details</h5>
+<table class="table">
   <thead>
   <colgroup span="4"></colgroup>
   <tr>
@@ -211,10 +212,13 @@ async
 
 <!-- Button trigger modal -->
 <button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
-  Have you done completed this hike? Take a moment to rate!
+  Have you completed this hike? Take a moment to rate!
 </button>
 
 <!-- Modal -->
+<div class=row>
+  <div class="col-md-3"></div>
+  <div class="col-md-3">
 <div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
   <div class="modal-dialog">
     <div class="modal-content">
@@ -223,7 +227,7 @@ async
         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
       </div>
       <div class="modal-body">
-        <h5>Have you done completed this hike? Take a moment to rate!</h5>
+        <h5>Have you completed this hike? Take a moment to rate!</h5>
 <form method="post" action="/new_rating/{{ trail_id }}">
     <p>(1/6) One a scale from 1-5 (one being easiest, and 5 being hardest), what score would you give this trail?</p>
         <label for="socre-select">Choose a score:</label>
@@ -289,92 +293,36 @@ async
     </div>
   </div>
 </div>
-
-
-
-
-
-<h5>Have you done completed this hike? Take a moment to rate!</h5>
-<form method="post" action="/new_rating/{{ trail_id }}">
-    <p>(1/6) One a scale from 1-5 (one being easiest, and 5 being hardest), what score would you give this trail?</p>
-        <label for="socre-select">Choose a score:</label>
-            <select name="score" id="score-select"> 
-              <option value="">--Please choose an option--</option>
-              <option value="1">1 </option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-            </select> 
-    <p>(2/6) One a scale from 1-5 (one being easiest, and 5 being hardest), what challenge rating would you give this trail?</p>
-            <label for="challenge_rating-select">Choose a challenge rating:</label>
-            <select name="challenge_rating" id="challenge_rating-select"> 
-              <option value="">--Please choose an option--</option>
-              <option value="1">1 </option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-            </select> 
-    <p>(3/6) One a scale from 1-5 (one being easiest, and 5 being hardest), what distance rating would you give this trail?</p>
-            <label for="distance_rating-select">Choose a distance rating:</label>
-            <select name="distance_rating" id="distance_rating-select"> 
-              <option value="">--Please choose an option--</option>
-              <option value="1">1 </option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-            </select> 
-    <p>(4/6) One a scale from 1-5 (one being easiest, and 5 being hardest), what ascent rating would you give this trail?</p>
-            <label for="ascent_rating-select">Choose a ascent rating:</label>
-            <select name="ascent_rating" id="ascent_rating-select"> 
-              <option value="">--Please choose an option--</option>
-              <option value="1">1 </option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-            </select> 
-    <p>(5/6) One a scale from 1-5 (one being easiest, and 5 being hardest), what descent rating would you give this trail?</p>
-            <label for="descent_rating-select">Choose a descent rating:</label>
-            <select name="descent_rating" id="descent_rating-select"> 
-              <option value="">--Please choose an option--</option>
-              <option value="1">1 </option>
-              <option value="2">2</option>
-              <option value="3">3</option>
-              <option value="4">4</option>
-              <option value="5">5</option>
-            </select> 
-    <p>(6/6) Comments?</p>
-        <p><label>Comments: <input type="text" name="comment"></label></p>
-        <p><input type="submit"></p>
-    <p>Bonus! Did you take any good pictures?</p>
-    <input type='file' name="file1">
-    <p><input type="submit"></p>
-
+</div>
+</div>
 </form>
-<h5>User Ratings</h5>
-<table>
+<h5>Average Ratings</h5>
+<table class="table">
   <colgroup span="4"></colgroup>
+  <thead>
   <tr>
     <th>Average Score</th>
     <th>Average Challenge Rating</th>
     <th>Average Distance Rating</th>
     <th>Average Ascent Rating</th>
     <th>Average Descent Rating</th>
+  </thead>
   </tr>
   <tr>
+    <tbody>
     <td>{{ av_ratings[0] }}</td>
     <td>{{ av_ratings[1] }}</td>
     <td>{{ av_ratings[2] }}</td>
     <td>{{ av_ratings[3] }}</td>
     <td>{{ av_ratings[4] }}</td>
+  </tbody>
   </tr>
 </table>
 
-        <table>
+<h5>Ratings</h5>
+        <table class="table">
     <colgroup span="4"></colgroup>
+    <thead>
     <tr>
       <th>User</th>
       <th> Score</th>
@@ -383,9 +331,11 @@ async
       <th> Ascent Rating</th>
       <th> Descent Rating</th>
       <th> Comment</th>
+    </thead>
     </tr>
     {% for rating in ratings %}
     <tr>
+      <tbody>
       <td>User</td>
       <td>{{ rating.score }}</td>
       <td>{{ rating.challenge_rating }}</td>
@@ -393,6 +343,7 @@ async
       <td>{{ rating.ascent_rating }}</td>
       <td>{{ rating.descent_rating }}</td>
       <td>{{ rating.comment }}</td>
+    </tbody>
     </tr>
     {% endfor %}
   </table>

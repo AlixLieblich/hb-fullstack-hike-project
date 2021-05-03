@@ -3,6 +3,10 @@
 {% block title %} {{ user_id }} {% endblock %}
 
 {% block body %}
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <title>User Profile</title>
+</head>
 <style>
   @import url("https://fonts.googleapis.com/css?family=Poppins&display=swap");
   @import url("https://fonts.googleapis.com/css?family=Bree+Serif&display=swap");
@@ -14,7 +18,7 @@
 }
 
 body-user {
-  background: #e9e9e9;
+  background: #f4efe9;
   overflow-x: hidden;
   padding-top: 90px;
   font-family: "Poppins", sans-serif;
@@ -22,7 +26,7 @@ body-user {
 }
 
 .profile-header {
-  background: #fff;
+  background: #c8af93;
   width: 100%;
   display: flex;
   height: 190px;
@@ -58,9 +62,8 @@ body-user {
 }
 
 .profile-navigation-info h3 {
-  font-variant: small-caps;
   font-size: 2rem;
-  font-family: sans-serif;
+  font-family: Raleway, sans-serif;
   font-weight: bold;
 }
 
@@ -88,19 +91,19 @@ body-user {
   cursor: pointer;
   transition: all 0.5s ease-in-out;
   outline: none;
-  background: #e40046;
+  background: #000000;
 }
 
 .profile-option:hover {
   background: #fff;
-  border: 1px solid #e40046;
+  border: 1px solid #000000;
 }
 .profile-option:hover .notification i {
-  color: #e40046;
+  color: #000000;
 }
 
 .profile-option:hover span {
-  background: #e40046;
+  background: #000000;
 }
 
 .profile-option .notification i {
@@ -113,9 +116,9 @@ body-user {
   position: absolute;
   top: -5px;
   right: -5px;
-  background: #fff;
-  color: #e40046;
-  border: 1px solid #e40046;
+  background: #f4efe9;
+  color: #000000;
+  border: 1px solid #000000;
   padding: 5px;
   border-radius: 50%;
   height: 20px;
@@ -135,7 +138,7 @@ body-user {
 
 .profile-side {
   width: 300px;
-  background: #fff;
+  background: #f4efe9;
   box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.2);
   padding: 90px 30px 20px;
   font-family: "Bree Serif", serif;
@@ -150,13 +153,13 @@ body-user {
 }
 
 .profile-side p i {
-  color: #e40046;
+  color: #000000;
   margin-right: 10px;
 }
 
 .mobile-no i {
   transform: rotateY(180deg);
-  color: #e40046;
+  color: #000000;
 }
 
 .profile-btn {
@@ -169,7 +172,7 @@ button.createbtn {
   padding: 10px;
   width: 100%;
   border-radius: 3px;
-  background: #e40046;
+  background: #000000;
   color: #fff;
   font-family: "Bree Serif";
   font-size: 1rem;
@@ -183,7 +186,7 @@ button.createbtn {
 
 button.chatbtn:hover,
 button.createbtn:hover {
-  background: rgba(288, 0, 70, 0.9);
+  background: #000000;
 }
 
 button.chatbtn i,
@@ -213,7 +216,7 @@ button.createbtn i {
 
 .rate i {
   font-size: 0.9rem;
-  color: rgba(228, 0, 70, 1);
+  color: #000000;
 }
 
 .navigation {
@@ -226,7 +229,7 @@ button.createbtn i {
   justify-content: space-around;
   list-style-type: none;
   height: 40px;
-  background: #fff;
+  background: #f4efe9;
   box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.3);
 }
 
@@ -240,7 +243,7 @@ button.createbtn i {
 
 .navigation ul li:hover,
 .navigation ul li.active {
-  box-shadow: 0px -3px 0px rgba(288, 0, 70, 0.9) inset;
+  box-shadow: 0px -3px 0px #000000 inset;
 }
 
 .profile-body-user {
@@ -365,12 +368,12 @@ button.createbtn i {
 }
 #see-more-bio,
 #see-less-bio {
-  color: blue;
+  color: #000000;
   cursor: pointer;
   text-transform: lowercase;
 }
 .tab h1 {
-  font-family: "Bree Serif", sans-serif;
+  font-family: 'Raleway', sans-serif !important;
   display: flex;
   justify-content: center;
   margin: 20px auto;
@@ -411,20 +414,46 @@ button.createbtn i {
 
       <div class="navigation">
         <ul>
-          <li onclick="tabs(0)" class="user-post active">Goals</li>
-          <li onclick="tabs(1)" class="user-review">Friends</li>
-          <li onclick="tabs(2)" class="user-setting">Ratings</li>
-          <li onclick="tabs(3)" class="user-wishlist">Wishlist</li>
+          <li onclick="tabs(0)" class="user-post active">Wishlist</li>
+          <li onclick="tabs(1)" class="user-review">Goals</li>
+          <li onclick="tabs(2)" class="user-setting">Friends</li>
+          <li onclick="tabs(3)" class="user-wishlist">Ratings</li>
           <li onclick="tabs(4)" class="user-hikes">Hikelog</li>
-          <li onclick="tabs(5)" class="user-hikes">Edit Profile</li>
+          <li onclick="tabs(5)" class="user-hikes">Settings</li>
 
 
 
         </ul>
       </div>
+      <div class="profile-settings tab">
+        <div class="account-setting">
+          <h4>Wishlist</h4>
+          <table class="table">
+            <thead>
+            <tr>
+              <th>Wish Trail Name</th>
+              <th>National Park</th>
+              <th>Trail Difficulty Rating</th>
+              <th>Trail Route Type</th>
+            </thead>
+            </tr>
+            <tr>
+              <tbody>
+              {% for wish in user_object.wishes %}
+              <td>{{ wish.trail.name }}</td>
+              <td>{{ wish.trail.area_name }}</td>
+              <td>{{ wish.trail.difficulty_rating }}</td>
+              <td>{{ wish.trail.route_type }}</td>
+            </tbody>
+            </tr>
+            {% endfor %} 
+      </table>
+        </div>
+      </div>
+
       <div class="profile-body-user">
         <div class="profile-posts tab">
-          <h1>Your Hike Goals</h1>
+          <h4>Your Hike Goals</h4>
           <table class="table">
             <thead>
             <tr>
@@ -443,12 +472,13 @@ button.createbtn i {
           </table>
         </div>
         <div class="profile-reviews tab">
-          <h1>Your Friends</h1>
-          <table>
+
+          <h4>Your Friends</h4>
+          <table class="table">
             <thead>
             <tr>
               <th>Friend</th>
-              <th>| Friend Username   </th>
+              <th>Friend Username   </th>
             </thead>
             </tr>
               {% for friend in user_object.added_friends %}
@@ -460,6 +490,7 @@ button.createbtn i {
             </tr>
               {% endfor %} 
             </table>
+
         </div>
         <div class="profile-settings tab">
           <div class="account-setting">
@@ -497,32 +528,6 @@ button.createbtn i {
 
         <div class="profile-settings tab">
           <div class="account-setting">
-            <h4>Wishlist</h4>
-            <table class="table">
-              <thead>
-              <tr>
-                <th>Wish Trail Name</th>
-                <th>National Park</th>
-                <th>Trail Difficulty Rating</th>
-                <th>Trail Route Type</th>
-              </thead>
-              </tr>
-              <tr>
-                <tbody>
-                {% for wish in user_object.wishes %}
-                <td>{{ wish.trail.name }}</td>
-                <td>{{ wish.trail.area_name }}</td>
-                <td>{{ wish.trail.difficulty_rating }}</td>
-                <td>{{ wish.trail.route_type }}</td>
-              </tbody>
-              </tr>
-              {% endfor %} 
-        </table>
-          </div>
-        </div>
-
-        <div class="profile-settings tab">
-          <div class="account-setting">
             <h4>Your Completed Hikes</h4>
             <table class="table">
               <thead>
@@ -548,7 +553,11 @@ button.createbtn i {
 
         <div class="profile-settings tab">
           <div class="account-setting">
+<div class="row">
+  <div class="col-8">
 <!-- basic form -->
+<h4>Edit your Profile</h4>
+
 <form action="/profile_edit" method="POST">
   <input type="hidden" name="form_id" value="basic_profile_information" />
   <p> First name: <input type="text" name="first_name" value="{{user_object.user_fname}}"></p>
@@ -636,20 +645,11 @@ button.createbtn i {
   </select>
   <input type="submit" name="Save" />
 </form>
-<h5>Which wishlist trail would you like to add?</h5>
-<form action="/profile_edit" method="POST">
-  <input type="hidden" name="form_id" value="edit_wishlist_add" />
-  <select name="wish_add" id="wish-select">
-      <option value="">--Please choose an option--</option>
-      {% for trail in trails %}
-      <option value="friend">{{ trail.name }} located in {{ trail.area_name }}</option>
-      {% endfor %}
-  </select>
-  <input type="submit" name="Save" />
-</form>
+
           </div>
         </div>
-
+</div>
+</div>
       </div>
     </div>
   </div>
@@ -694,6 +694,7 @@ function bioText() {
 
 
 
- <!--  -->
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
 
 {% endblock %}

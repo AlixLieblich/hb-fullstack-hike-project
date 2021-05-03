@@ -3,8 +3,7 @@
 
 {% block body %}
 <head>
-    <link rel="stylesheet"
-    href="http://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
     <title>Your Form Results</title>
 </head>
 <body>
@@ -16,8 +15,8 @@
     Find the perfect hike here
 
     </button> -->
-    <p>A {{ difficulty }} difficulty rated {{ route_type }} hike with in {{ state }} at {{ park }}.</p>
-    <table>
+    <table class="table">
+      <thead>
         <colgroup span="4"></colgroup>
         <tr>
           <th>Trail Name</th>
@@ -29,9 +28,12 @@
           <th>Route Type</th>
           <th>Trail Features</th>
           <th>Trail Activities</th>
+          <!-- <th>Add to Wishlist</th> -->
+        </thead>
         </tr>
         {% for trail in server_trail %}
         <tr>
+          <tbody>
           <td><a href="/trails/{{ trail.trail_id }}">{{ trail.name }}</a></td>
           <td><a href="/parks/{{ trail.area_name }}">{{ trail.area_name }}</a></td>
           <td><a href="/states/{{ trail.state_name }}">{{ trail.state_name }}</a></td>
@@ -40,9 +42,16 @@
           <td>{{ trail.difficulty_rating }}</td>
           <td>{{ trail.route_type }}</td>
           <td>{{ trail.features }}</td>
-          {% for activity in trail.activities %}
-          <td>{{ activity }}</td>
-          {% endfor %}
+          <td>{{ trail.activities }}</td>
+          <!-- <td> 
+            <form method="post" action="/add_wishlist">
+              <input type="hidden" name="form_id" value="add_wishlist"/>
+              <input type="hidden" name="trail_id" value="{{ trail.trail_id }}"/>
+              <label><input type="radio" name="hike_log"> Add to wishlist. </label>
+              <p><input type="submit"></p>
+            </form>
+          </td> -->
+        </tbody>
 
         </tr>
       {% endfor %}
@@ -51,5 +60,7 @@
 
 </body>
 
+<script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
 
 {% endblock %}

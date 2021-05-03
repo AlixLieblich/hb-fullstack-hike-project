@@ -1,9 +1,12 @@
 'use strict';
 
 // Display current weather data on trail detail pages
-
+let num=5;
+let numm=10
+let nummm=10/5
+console.log(nummm)
 $.ajax({
-    url: "https://community-open-weather-map.p.rapidapi.com/weather",
+    url: "https://community-open-weather-map.p.rapidapi.com/weather/",
     headers: { 'x-rapidapi-key': "8e3f6010abmshc09fe5de80fba0ep138729jsn950d9f17b9e7", 
             'x-rapidapi-host': "community-open-weather-map.p.rapidapi.com"},
     data: {lat:  $('#current-weather').data("lat"), lon:$('#current-weather').data("lon")} 
@@ -11,14 +14,18 @@ $.ajax({
         
         // let results = res['results'];
         let tempValue = res['main']['temp'];
-        let nameValue = res['name']
+        let tempValueFar = ((9/5)*(tempValue-273)+32);
+        let temp = Math.round(tempValueFar)
+        console.log("Far:")
+        console.log(temp)
+        let nameValue = res['name'];
 
         // console.log(res);
         // console.log(res.visibility);
         // console.log(tempValue)
         // console.log(nameValue)
 
-        $('#current-weather').html(tempValue, nameValue);
+        $('#current-weather').html(temp, nameValue);
     
     });
 
@@ -61,6 +68,7 @@ $('.choice').on('change', (evt) => {
     console.log(formData['difficulty_select'])
     $.get('/process_search', formData, displayResults);
     console.log("15:57")
+    console.log(difficulty_select)
 } )
 
 

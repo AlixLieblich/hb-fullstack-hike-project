@@ -1,4 +1,13 @@
 
+body {
+  font-family: Railway sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: Railway sans-serif;
+  color: #620000 !important;
+  text-align: center;
+}
 
 .form-body {
   background-image: url("/img/images!/stephen-meyers-U43H95kjhog-unsplash.jpg")
@@ -13,18 +22,38 @@ a {
   color: #666;
   text-decoration: none; }
   a:hover {
-    color: #4FDA8C; }
+    color: #6f8957; }
 
 input {
   font: 16px/26px "Raleway", sans-serif; }
 
 body {
   color: #666;
-  background-color: #f1f2f2;
+  background-color: #f4efe9;
   font: 16px/26px "Raleway", sans-serif; }
 
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: .75rem 1.25rem;
+    background-color: #f4efe9 !important;
+    border: 1px solid rgba(0,0,0,.125);
+}
+a {
+  color: #6f8957 !important;
+  text-decoration: none;
+  background-color: transparent;
+}
+.form-wrap .tabs h3 a {
+  padding: 0.5em 0;
+  text-align: center;
+  font-weight: 400;
+  background-color: #f4efe9;
+  display: block;
+  color: #620000 !important;
+}
 .form-wrap {
-  background-color: #fff;
+  background-color: #f4efe9;
   width: 320px;
   margin: 3em auto;
   box-shadow: 0px 1px 8px #BEBEBE;
@@ -39,11 +68,11 @@ body {
         padding: 0.5em 0;
         text-align: center;
         font-weight: 400;
-        background-color: #e6e7e8;
+        background-color: #f4efe9;
         display: block;
         color: #666; }
         .form-wrap .tabs h3 a.active {
-          background-color: #fff; }
+          background-color: #f4efe9; }
   .form-wrap .tabs-content {
     padding: 1.5em; }
     .form-wrap .tabs-content div[id$="tab-content"] {
@@ -56,7 +85,7 @@ body {
     color: inherit;
     font-family: inherit;
     padding: .8em 0 10px .8em;
-    border: 1px solid #CFCFCF;
+    border: 1px solid #f4efe9;
     outline: 0;
     display: inline-block;
     margin: 0 0 .8em 0;
@@ -67,7 +96,7 @@ body {
     padding: .8em 0 10px .8em;
     background-color: #28A55F;
     border: none;
-    color: #fff;
+    color: #f4efe9;
     cursor: pointer;
     text-transform: uppercase; }
     .form-wrap form .button:hover {
@@ -87,7 +116,7 @@ body {
     .form-wrap form label[for]:before {
       content: '';
       position: absolute;
-      border: 1px solid #CFCFCF;
+      border: 1px solid #f4efe9;
       width: 17px;
       height: 17px;
       top: 0px;
@@ -122,12 +151,14 @@ body {
 /* SITE FOOTER */
 .site-footer
 {
-  background-color:#26272b;
+  background-color:#c8af93;
   padding:45px 0 20px;
   font-size:15px;
   line-height:24px;
-  color:#737373;
-}
+  color:#000000;
+
+  }
+
 .site-footer hr
 {
   border-top-color:#bbb;
@@ -139,7 +170,7 @@ body {
 }
 .site-footer h6
 {
-  color:#fff;
+  color:#000000;
   font-size:16px;
   text-transform:uppercase;
   margin-top:5px;

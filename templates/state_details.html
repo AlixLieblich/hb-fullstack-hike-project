@@ -3,7 +3,11 @@
 {% block title %}{{ state_name }} - Details{% endblock %}
 
 {% block body %}
-<h1>{{ state_name }} Available National Parks</h1>
+<head>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+    <title>State Details</title>
+</head>
+<h1>Available National Parks in {{ state_name }}</h1>
 
 <!-- <table>
   <colgroup span="4"></colgroup>
@@ -25,9 +29,11 @@
 
 </table> -->
 <ul>
-    <p>NOTE TO SELF could make this a table instead of a list</p>
       {% for area_name in state_parks_details %}
           <li><a href="/parks/{{ area_name.area_name }}">{{ area_name[0] }}</a></li>   
 
       {% endfor %}
+      <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
+
     </ul>{% endblock %}

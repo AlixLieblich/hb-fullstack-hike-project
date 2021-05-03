@@ -122,37 +122,13 @@ def view_user_profile():
         return redirect('/login')
 
     user_id = current_user.user_id
-    # user_object = crud.get_user_by_id(user_id)
     user_object = User.query.get(user_id)
-    # user_friends = crud.get_user_friends(user_id) #object returned is a list, so we index into that list using [0] and then the info stored there is useful and accessbile for user_profile.html
-    # user_friends = db.session.query(User_Friend).filter(User_Friend.user_id==user_id).all() #maybe
     user_friends = user_object.added_friends
-    # user_wishlist = crud.get_user_wishes(user_id) #if want return whole list, dont use [0]
-    # user_wishlist = Wishlist.query.get(user_id) #maybe
     user_wishlist = user_object.wishes
-    # user_hike_log = crud.get_user_hike_log(user_id) 
     user_hike_log = user_object.hikes
     user_ratings = user_object.ratings
-    # user_goals = crud.get_goals_by_user_id(user_id)
-    # user_goals = user_object.goals # why doesnt this work but the following line does
     user_goals = Goal.query.filter(Goal.user_id == user_id).first()
     trails = db.session.query(Trail)
-
-
-    # friends_info =[]
-    # for friend in user_friends:
-    #     friend = crud.get_friend_user_object(user_friends[0].friend_user_id)
-    #     friends_info.append(friend)
-
-    # wish_list_trail_info = []
-    # for trail in user_wishlist:
-    #     trail = crud.get_wish_trail_object(user_wishlist[0].trail_id)
-    #     wish_list_trail_info.append(trail)
-
-    # log_hike_info = []
-    # for hike in user_hike_log:
-    #     hike = crud.get_log_trail_object(user_hike_log[0].hike_id)
-    #     log_hike_info.append(hike)
 
     return render_template('user_profile.html',
                             user_id=user_id,
@@ -162,11 +138,7 @@ def view_user_profile():
                             user_wishlist=user_wishlist,
                             user_hike_log=user_hike_log,
                             user_ratings=user_ratings,
-                            trails=trails
-                            # friends_info=friends_info,
-                            # wish_list_trail_info=wish_list_trail_info,
-                            # log_hike_info=log_hike_info
-                            )
+                            trails=trails)
 
 @app.route('/users')
 def users_list():
@@ -181,27 +153,14 @@ def users_list():
 def view_user_profiles(user_id):
     """View other user's profiles."""
 
-    # user_id = current_user.user_id #click on user, get user id
-    # user_object = crud.get_user_by_id(user_id)
     user_object = User.query.filter(User.user_id == user_id).first()
-    # user_goals = crud.get_goals_by_user_id(user_id)
     user_goals = Goal.query.filter(Goal.user_id == user_id).first()
-    # user_wishlist = crud.get_user_wishes(user_id)
     user_wishlist = db.session.query(Wishlist).filter(Wishlist.user_id==user_id).all()
-
-    # wish_list_trail_info = []
-    # for trail in user_wishlist:
-    #     trail = crud.get_wish_trail_object(user_wishlist[0].trail_id)
-    #     wish_list_trail_info.append(trail)
 
     return render_template('view_users.html',
                             user_id=user_id,
                             user_object=user_object,
-                            user_goals=user_goals,
-                            # wish_list_trail_info=wish_list_trail_info,
-                            # user_wishlist=user_wishlist
-                            )
-######################################################################################                           
+                            user_goals=user_goals)
 
 @app.route("/profile_edit")
 def show_edit_profile_page():
@@ -215,19 +174,11 @@ def show_edit_profile_page():
     user_goals = Goal.query.filter(Goal.user_id == user_id).first()
     trails = db.session.query(Trail)
 
-    # user_friends = user_object.added_friends
-    # user_hike_log = user_object.hikes
-    # user_wishlist = user_object.wishes
-
     return render_template('profile_edit.html',
                             user_id=user_id,
                             user_object=user_object,
                             user_goals=user_goals,
-                            trails=trails
-                            # user_friends=user_friends,
-                            # user_hike_log=user_hike_log,
-                            # user_wishlist=user_wishlist
-                            )
+                            trails=trails)
 
 @app.route('/profile_edit', methods = ["POST"])
 def edit_user_profile():
@@ -285,8 +236,6 @@ def edit_user_profile():
     elif form_id == "edit_friends":
         unfriend_id = request.form.get("friends")
         friend = User.query.get(unfriend_id)
-        print("----------------------------------------------")
-        print(unfriend_id)
         crud.update_friend_list(unfriend_id)
         flash("Friend Removed")
 
@@ -319,10 +268,19 @@ def edit_user_profile():
                             user_id=user_id,
                             user_object=user_object)
 
-    #edit hike log
+# TWILIO ROUTE
+@app.route('/send_sms', methods=['POST'])
+def send_text():
+    """Use Twilio API to send location of a trail when a user has added it to their wishlist."""
+
+    location = trail._geoloc
+
+    client.messages.create(
+        body="Hello {{% current_user.user_fname %}}, you have added a trail at location {{% location %}} to your wishlist at National Treasures.",
+        from_= '192',
+        to='19258081646'
+    )
     
-
-
 # RATING ROUTES
 @app.route('/new_rating/<trail_id>', methods=['POST'])
 def create_new_rating(trail_id):
@@ -355,7 +313,6 @@ def home_alt():
 def trails_list():
     """View trail list."""
     
-    # all_trails = db.session.query(Trail).all()
     all_trails = db.session.query(Trail).order_by('name').all()
 
     return render_template('trails.html',
@@ -365,8 +322,6 @@ def trails_list():
 def trail_detail(trail_id):
     """Show individual trail details."""
 
-    # user_id = current_user.user_id
-    # user_object = User.query.get(user_id)
     trail_details = Trail.query.get(trail_id)
     ratings = db.session.query(Rating).all()
  
@@ -385,8 +340,7 @@ def trail_detail(trail_id):
                             trail_id = trail_id,
                             av_ratings=av_ratings,
                             geo=geo,
-                            GOOGLE_API_KEY=GOOGLE_API_KEY
-                            )
+                            GOOGLE_API_KEY=GOOGLE_API_KEY)
 
 @app.route('/hike_edit/<trail_id>', methods = ["POST"])
 def edit_user_hike_goals_and_log(trail_id):
@@ -404,7 +358,6 @@ def edit_user_hike_goals_and_log(trail_id):
 
     #wishlist form
     if form_id == "add_wishlist":
-        # trail_id = request.form.get("trail_id") 
         wish = crud.create_wishlist_item(trail_id, user_id)
 
         return redirect(f'/trails/{trail_id}')
@@ -415,6 +368,28 @@ def edit_user_hike_goals_and_log(trail_id):
         crud.create_hike(user_id, trail_id)
 
         return redirect(f'/trails/{trail_id}')
+
+@app.route('/add_wishlist', methods = ["POST"])
+def edit_user_wishlist(trail_id):
+    """Edit user hike log and trail wishlist."""
+
+    if not current_user.is_authenticated:
+        flash('Please Login First!')
+        return redirect('/login')
+
+
+    user_id = current_user.user_id
+    user_object = User.query.get(user_id)   
+   
+    form_id = request.form.get("form_id")
+
+    #wishlist form
+    if form_id == "add_wishlist":
+        wish = crud.create_wishlist_item(trail_id, user_id)
+
+        return redirect(f'/trails/{trail_id}')
+
+        return redirect('/#')
 
 @app.route('/add_friend/<user_id>', methods = ["POST"])
 def user_add_friend(user_id):
@@ -443,9 +418,17 @@ def parks_list():
     all_parks = db.session.query(Trail.area_name).all()
     all_parks = set(all_parks)
     all_parks = sorted(all_parks)
+    # halfway_point = int(len(all_parks)/2)
+    # print("len")
+    # print(len(all_parks))
+    all_parks1 = all_parks[:20]
+    all_parks2 = all_parks[21:40]
+    all_parks3 = all_parks[41:60]
 
     return render_template('parks.html',
-                            all_parks=all_parks,
+                            all_parks1=all_parks1,
+                            all_parks2=all_parks2,
+                            all_parks3=all_parks3,
                             all_trails=all_trails)
 
 @app.route('/parks/<area_name>')
@@ -453,7 +436,6 @@ def park_detail(area_name):
     """Show individual park details."""
 
     park_trails = db.session.query(Trail).filter(Trail.area_name==area_name).order_by('name').all()
-    # park_trails = sorted(park_trails)
 
     return render_template('park_details.html',
                             park_trails=park_trails,
@@ -488,7 +470,6 @@ def display_hike_form():
 
     all_states = crud.get_all_states()
     states = sorted(all_states)
-    print(states)
 
     return render_template('find-a-hike-form.html',
                             states=states)
@@ -505,21 +486,19 @@ def process_search():
                               'difficulty': request.args.get('difficulty_select'),
                               'park': request.args.get('park')}
 
-    # for state in states:
-    #     if state_name = state:
-    #         session['trail_query']['state_national_parks'] = 
-
     trail_query_arguments = {}
     for argument in session['trail_query']:
         if session['trail_query'][argument]:
             trail_query_arguments[argument] = session['trail_query'][argument]
+    print("--------------------------------------")
+    print(trail_query_arguments)
     
     db_results = crud.query_trail(trail_query_arguments=trail_query_arguments)
     db_results_dict = {}
-    print("--------------------------------")
     for trail in db_results:
         db_results_dict[trail.area_name] = {'park': trail.area_name }
-
+    print("----------------------------------")
+    print(db_results_dict)
     return db_results_dict
     
 
@@ -529,20 +508,16 @@ def process_search():
 def show_form_response():
     """Show user their form filled out."""
 
-    route_type = request.args.get("route_type")   
-    park = request.args.get("park")   
-    state = request.args.get("state")
+    park = request.args.get("chosen-item")   
     difficulty = request.args.get("difficulty")
 
-    server_trail = crud.query_trail(route_type, park, state, difficulty) # this function is the crown jewel, kinda wanna keep the crud function
-
+    server_trail = crud.query_trail_two(park, difficulty) # this function is the crown jewel, kinda wanna keep the crud function
+    print(server_trail)
     if server_trail == []:
         server_trail='Sorry, no hikes matched your specifications, please try again with less parameters.'
 
     return render_template("show-form.html",
-                           route_type=route_type,
                            park=park,
-                           state=state,
                            difficulty=difficulty,
                            server_trail=server_trail)
 
