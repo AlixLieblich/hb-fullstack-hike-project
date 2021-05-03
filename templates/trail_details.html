@@ -149,8 +149,9 @@
   <label><input type="radio" name="hike_log"> Add to wishlist. </label>
   <p><input type="submit"></p>
 </form>
-</div>
+<button id="send-txt-button" type="submit">Send Txt of Location</butotn>
 
+</div>
   <div class="col-6">
 <form method="post" action="/hike_edit/{{ trail_id }}">
   <input type="hidden" name="form_id" value="add_hike_log" />
@@ -355,6 +356,14 @@ async
 
 myModal.addEventListener('shown.bs.modal', function () {
   myInput.focus()
+})
+</script>
+<script>
+document.querySelector('#send-txt-button').addEventListener('click', (evt) =>{
+  evt.preventDefault();
+
+  let url = "/send-sms";
+  let 
 })
 </script>
   <!-- for loop!!! -->
