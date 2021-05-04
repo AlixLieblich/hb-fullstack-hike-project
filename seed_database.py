@@ -33,16 +33,18 @@ with open('nationalpark.csv', newline='') as csvfile:
 comments = ['wow!', 'too  muddy', 'perfect hike!']
 
 files=os.listdir("static/img/profile_pictures")
+fnames = ['Melissa', 'Alena', 'Tina', 'Jenny', 'Steph', 'Kristen', 'Emily', 'Deborah', 'Muna', 'Kelsi', 'Samatha', 'Madiha', 'Seale']
+lnames = ['Davies', 'Haiser', 'Davis', 'Han', 'Seo', 'Ogamba', 'Sutherland', 'Ong', 'Ainawaer', 'Flatland', 'Gerrity', 'Latif', 'Wong']
 
 user_list = []
 #create fake 10 fake users
 for n in range(10):
     username = f'Test{n}'
     password = 'test'
-    user_fname = f'Balloonicorn{n}' 
-    user_lname = f'Hackbright{n}'
+    user_fname = choice(fnames)
+    user_lname = choice(lnames)
     profile_picture = choice(files)
-    email = f'user{n}@test.com'
+    email = f'hiker{n}@gmail.com'
 
 #create user
     user_object = crud.create_user(username, password, user_fname, user_lname, profile_picture, email)

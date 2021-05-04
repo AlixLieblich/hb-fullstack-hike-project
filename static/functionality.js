@@ -6,10 +6,10 @@ let numm=10
 let nummm=10/5
 console.log(nummm)
 $.ajax({
-    url: "https://community-open-weather-map.p.rapidapi.com/weather/",
-    headers: { 'x-rapidapi-key': "8e3f6010abmshc09fe5de80fba0ep138729jsn950d9f17b9e7", 
-            'x-rapidapi-host': "community-open-weather-map.p.rapidapi.com"},
-    data: {lat:  $('#current-weather').data("lat"), lon:$('#current-weather').data("lon")} 
+    url: "http://api.openweathermap.org/data/2.5/weather",
+    data: {'appid': "", 
+        lat:  $('#current-weather').data("lat"), 
+        lon:$('#current-weather').data("lon")} 
 }).done((res) =>{
         
         // let results = res['results'];
