@@ -1,25 +1,40 @@
+
 {% extends 'base.html' %}
-{% block title %}Find a Trail{% endblock %}
+{% block title %} All Images {% endblock %}
 
 {% block body %}
-    <head>
-      <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
-        <title>Form</title>
-    </head>
+<!-- <link href="album.css" rel="stylesheet"> -->
+<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous"> -->
 
+
+
+<head>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/css/bootstrap.min.css" integrity="sha384-B0vP5xmATw1+K9KRQjQERJvTumQW0nPEzvF6L/Z6nronJ3oUOFUFpCjEUQouq2+l" crossorigin="anonymous">
+      <title>Users</title>
+  </head>
     <style>
-
-.btn-secondary {
-    color: #FFFFFF;
-    background-color: #620000;
-    border-color: #620000
-}
-body{
+      body{
           background-image: url("/static/img/images!/stephanie-bergeron-AjFVsvjuSPU-unsplash.jpg");
           background-size: cover;
-          background-position: center; /* Center the image */
+          background-position: center; 
           height: 700px
       }
+    </style>
+    <style>
+
+body {
+  font-family: Railway sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: Railway sans-serif;
+  color: #620000 !important;
+  text-align: center;
+}
+
+.form-body {
+  background-image: url("/img/images!/stephen-meyers-U43H95kjhog-unsplash.jpg")
+}
 
 @import url(https://fonts.googleapis.com/css?family=Raleway:400,100,200,300);
 * {
@@ -30,7 +45,7 @@ a {
   color: #666;
   text-decoration: none; }
   a:hover {
-    color: #4FDA8C; }
+    color: #6f8957; }
 
 input {
   font: 16px/26px "Raleway", sans-serif; }
@@ -40,9 +55,29 @@ body {
   background-color: #f4efe9;
   font: 16px/26px "Raleway", sans-serif; }
 
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: .75rem 1.25rem;
+    background-color: #f4efe9 !important;
+    border: 1px solid rgba(0,0,0,.125);
+}
+a {
+  color: #6f8957 !important;
+  text-decoration: none;
+  background-color: transparent;
+}
+.form-wrap .tabs h3 a {
+  padding: 0.5em 0;
+  text-align: center;
+  font-weight: 400;
+  background-color: #f4efe9;
+  display: block;
+  color: #620000 !important;
+}
 .form-wrap {
   background-color: #f4efe9;
-  width: 620px;
+  width: 800px;
   margin: 3em auto;
   box-shadow: 0px 1px 8px #BEBEBE;
   -webkit-box-shadow: 0px 1px 8px #BEBEBE;
@@ -73,7 +108,7 @@ body {
     color: inherit;
     font-family: inherit;
     padding: .8em 0 10px .8em;
-    border: 1px solid #CFCFCF;
+    border: 1px solid #f4efe9;
     outline: 0;
     display: inline-block;
     margin: 0 0 .8em 0;
@@ -84,13 +119,19 @@ body {
     padding: .8em 0 10px .8em;
     background-color: #28A55F;
     border: none;
-    color: #fff;
+    color: #f4efe9;
     cursor: pointer;
     text-transform: uppercase; }
     .form-wrap form .button:hover {
       background-color: #4FDA8C; }
-  
-
+  .form-wrap form .checkbox {
+    visibility: hidden;
+    padding: 20px;
+    margin: .5em 0 1.5em; }
+    .form-wrap form .checkbox:checked + label:after {
+      -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+      filter: alpha(opacity=100);
+      opacity: 1; }
   .form-wrap form label[for] {
     position: relative;
     padding-left: 20px;
@@ -98,7 +139,7 @@ body {
     .form-wrap form label[for]:before {
       content: '';
       position: absolute;
-      border: 0px solid #f4efe9;
+      border: 1px solid #f4efe9;
       width: 17px;
       height: 17px;
       top: 0px;
@@ -137,8 +178,10 @@ body {
   padding:45px 0 20px;
   font-size:15px;
   line-height:24px;
-  color:#737373;
-}
+  color:#000000;
+
+  }
+
 .site-footer hr
 {
   border-top-color:#bbb;
@@ -150,7 +193,7 @@ body {
 }
 .site-footer h6
 {
-  color:#fff;
+  color:#000000;
   font-size:16px;
   text-transform:uppercase;
   margin-top:5px;
@@ -294,55 +337,97 @@ body {
     font-weight:600
   }
 }
-    </style>
 
+
+
+    </style>
     <div class="form-wrap">
       <div class="tabs">
-        <h3 class="signup-tab"><a class="active" href="#signup-tab-content">Find a Trail</a></h3>
-      </div><!--.tabs-->
+        <h3 class="signup-tab"><a class="active">All Images!</a></h3>
+      </div>
     
       <div class="tabs-content">
         <div id="signup-tab-content" class="active">
-          <form action="/show-form">
+  
+          <ul class="list-group list-group-flush">
+            {% for image in images %}
+            
+                <img src="/static/img/images!/{{ image.image_name }}"  width="700" height="500">
+                <p class="card-text">#{{ image.tag1 }} #{{ image.tag2 }} #{{ image.tag3 }}</p>
 
-            <h4>One a scale from 1-5 (one being easiest, and 5 being hardest), what difficulty are you looking for?</h4>
-            <label for="difficulty-select">Choose a difficulty:</label>
-                <select name="difficulty" id="difficulty-select"> 
-                  <option value="">--Please choose an option--</option>
-                  <option value="1">1</option>
-                  <option value="2">2</option>
-                  <option value="3">3</option>
-                  <option value="4">4</option>
-                  <option value="5">5</option>
-                </select> 
-            <h4> Is there a specific State you are looking to hike in?</h4>
-                <label for="state-select">Choose a state:</label>
-                    <select name="state" id="state-select" class="choice"> 
-                        <option value="">--Please choose an option--</option>
-                        {% for state in states %}
-                        <option class="choice" value="{{ state.state_name }}">{{ state.state_name }}</option>
-                        {% endfor %}
-                </select> 
+            {% endfor %}
+          </ul>
+  
+         
+          </div>
+        </div>
+      </div>
+    </div>
+    <script>
+      jQuery(document).ready(function($) {
+      tab = $('.tabs h3 a');
+    
+      tab.on('click', function(event) {
+        event.preventDefault();
+        tab.removeClass('active');
+        $(this).addClass('active');
+    
+        tab_content = $(this).attr('href');
+        $('div[id$="tab-content"]').removeClass('active');
+        $(tab_content).addClass('active');
+      });
+    });
+    </script>
 
-            <div class="row">
-              <div class="col-1">
+
+
+
+
+
+<!-- </head>
+<body>
+  
+
+
+<main role="main">
+
+<section class="jumbotron text-center">
+  <div class="container">
+    <h1>Album example</h1>
+    <p class="lead text-muted">Something short and leading about the collection below—its contents, the creator, etc. Make it short and sweet, but not too short so folks don’t simply skip over it entirely.</p>
+    <p>
+      <a href="#" class="btn btn-primary my-2">Main call to action</a>
+      <a href="#" class="btn btn-secondary my-2">Secondary action</a>
+    </p>
+  </div>
+</section>
+
+
+{% for image in images %}
+    <div class="album py-5 bg-light">
+        <div class="container">
+
+        <div class="row">
+            <div class="col-8">
+            <div class="card mb-4 shadow-sm">
+                <!-- <svg class="bd-placeholder-img card-img-top" width="100%" height="225" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Placeholder: Thumbnail" preserveAspectRatio="xMidYMid slice" focusable="false"><title>Placeholder</title><rect width="100%" height="100%" fill="#55595c"/><text x="50%" y="50%" fill="#eceeef" dy=".3em">Thumbnail</text></svg> -->
+                <!-- <img src="/static/img/images!/{{ image.image_name }}"  width="225" height="225">
+                <div class="card-body">
+                <p class="card-text">#{{ image.tag1 }} #{{ image.tag2 }} #{{ image.tag3 }}</p>
+                <div class="d-flex justify-content-between align-items-center">
+                    <div class="btn-group">
+                    <button type="button" class="btn btn-sm btn-outline-secondary">View</button>
+                    <button type="button" class="btn btn-sm btn-outline-secondary">Edit</button>
+                    </div>
+                    <small class="text-muted">9 mins</small>
                 </div>
-                <div class="col-8">
-                <div id="db-search-results"></div>
                 </div>
             </div>
-
-            <p><input type="submit"></p>
-
-            
-                </form>
-
-        </div>
-    </div>
-    </div>
+            </div>
+      {% endfor %}
+</main> --> -->
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
- 
-    <script src="/static/form.js"></script>
+
 {% endblock %}

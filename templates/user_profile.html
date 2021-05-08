@@ -8,6 +8,327 @@
     <title>User Profile</title>
 </head>
 <style>
+
+body {
+  font-family: Railway sans-serif;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: Railway sans-serif;
+  color: #620000 !important;
+  text-align: center;
+}
+
+.form-body {
+  background-image: url("/img/images!/stephen-meyers-U43H95kjhog-unsplash.jpg")
+}
+
+@import url(https://fonts.googleapis.com/css?family=Raleway:400,100,200,300);
+* {
+  margin: 0;
+  padding: 0; }
+
+a {
+  color: #666;
+  text-decoration: none; }
+  a:hover {
+    color: #6f8957; }
+
+input {
+  font: 16px/26px "Raleway", sans-serif; }
+
+body {
+  color: #666;
+  background-color: #f4efe9;
+  font: 16px/26px "Raleway", sans-serif; }
+
+.list-group-item {
+    position: relative;
+    display: block;
+    padding: .75rem 1.25rem;
+    background-color: #f4efe9 !important;
+    border: 1px solid rgba(0,0,0,.125);
+}
+a {
+  color: #6f8957 !important;
+  text-decoration: none;
+  background-color: transparent;
+}
+.form-wrap .tabs h3 a {
+  padding: 0.5em 0;
+  text-align: center;
+  font-weight: 400;
+  background-color: #f4efe9;
+  display: block;
+  color: #620000 !important;
+}
+.form-wrap {
+  background-color: #f4efe9;
+  width: 800px;
+  margin: 3em auto;
+  box-shadow: 0px 1px 8px #BEBEBE;
+  -webkit-box-shadow: 0px 1px 8px #BEBEBE;
+  -moz-box-shadow: 0px 1px 8px #BEBEBE; }
+  .form-wrap .tabs {
+    overflow: hidden; }
+    .form-wrap .tabs h3 {
+      float: left;
+      width: 50%; }
+      .form-wrap .tabs h3 a {
+        padding: 0.5em 0;
+        text-align: center;
+        font-weight: 400;
+        background-color: #f4efe9;
+        display: block;
+        color: #666; }
+        .form-wrap .tabs h3 a.active {
+          background-color: #f4efe9; }
+  .form-wrap .tabs-content {
+    padding: 1.5em; }
+    .form-wrap .tabs-content div[id$="tab-content"] {
+      display: none; }
+    .form-wrap .tabs-content .active {
+      display: block !important; }
+  .form-wrap form .input {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    color: inherit;
+    font-family: inherit;
+    padding: .8em 0 10px .8em;
+    border: 1px solid #f4efe9;
+    outline: 0;
+    display: inline-block;
+    margin: 0 0 .8em 0;
+    padding-right: 2em;
+    width: 100%; }
+  .form-wrap form .button {
+    width: 100%;
+    padding: .8em 0 10px .8em;
+    background-color: #28A55F;
+    border: none;
+    color: #f4efe9;
+    cursor: pointer;
+    text-transform: uppercase; }
+    .form-wrap form .button:hover {
+      background-color: #4FDA8C; }
+  .form-wrap form .checkbox {
+    visibility: hidden;
+    padding: 20px;
+    margin: .5em 0 1.5em; }
+    .form-wrap form .checkbox:checked + label:after {
+      -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+      filter: alpha(opacity=100);
+      opacity: 1; }
+  .form-wrap form label[for] {
+    position: relative;
+    padding-left: 20px;
+    cursor: pointer; }
+    .form-wrap form label[for]:before {
+      content: '';
+      position: absolute;
+      border: 1px solid #f4efe9;
+      width: 17px;
+      height: 17px;
+      top: 0px;
+      left: -14px; }
+    .form-wrap form label[for]:after {
+      -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+      filter: alpha(opacity=0);
+      opacity: 0;
+      content: '';
+      position: absolute;
+      width: 9px;
+      height: 5px;
+      background-color: transparent;
+      top: 4px;
+      left: -10px;
+      border: 3px solid #28A55F;
+      border-top: none;
+      border-right: none;
+      -webkit-transform: rotate(-45deg);
+      -moz-transform: rotate(-45deg);
+      -o-transform: rotate(-45deg);
+      -ms-transform: rotate(-45deg);
+      transform: rotate(-45deg); }
+  .form-wrap .help-text {
+    margin-top: .6em; }
+    .form-wrap .help-text p {
+      text-align: center;
+      font-size: 14px; }
+
+
+
+/* SITE FOOTER */
+.site-footer
+{
+  background-color:#c8af93;
+  padding:45px 0 20px;
+  font-size:15px;
+  line-height:24px;
+  color:#000000;
+
+  }
+
+.site-footer hr
+{
+  border-top-color:#bbb;
+  opacity:0.5
+}
+.site-footer hr.small
+{
+  margin:20px 0
+}
+.site-footer h6
+{
+  color:#000000;
+  font-size:16px;
+  text-transform:uppercase;
+  margin-top:5px;
+  letter-spacing:2px
+}
+.site-footer a
+{
+  color:#737373;
+}
+.site-footer a:hover
+{
+  color:#3366cc;
+  text-decoration:none;
+}
+.footer-links
+{
+  padding-left:0;
+  list-style:none
+}
+.footer-links li
+{
+  display:block
+}
+.footer-links a
+{
+  color:#737373
+}
+.footer-links a:active,.footer-links a:focus,.footer-links a:hover
+{
+  color:#3366cc;
+  text-decoration:none;
+}
+.footer-links.inline li
+{
+  display:inline-block
+}
+.site-footer .social-icons
+{
+  text-align:right
+}
+.site-footer .social-icons a
+{
+  width:40px;
+  height:40px;
+  line-height:40px;
+  margin-left:6px;
+  margin-right:0;
+  border-radius:100%;
+  background-color:#33353d
+}
+.copyright-text
+{
+  margin:0
+}
+@media (max-width:991px)
+{
+  .site-footer [class^=col-]
+  {
+    margin-bottom:30px
+  }
+}
+@media (max-width:767px)
+{
+  .site-footer
+  {
+    padding-bottom:0
+  }
+  .site-footer .copyright-text,.site-footer .social-icons
+  {
+    text-align:center
+  }
+}
+.social-icons
+{
+  padding-left:0;
+  margin-bottom:0;
+  list-style:none
+}
+.social-icons li
+{
+  display:inline-block;
+  margin-bottom:4px
+}
+.social-icons li.title
+{
+  margin-right:15px;
+  text-transform:uppercase;
+  color:#96a2b2;
+  font-weight:700;
+  font-size:13px
+}
+.social-icons a{
+  background-color:#eceeef;
+  color:#818a91;
+  font-size:16px;
+  display:inline-block;
+  line-height:44px;
+  width:44px;
+  height:44px;
+  text-align:center;
+  margin-right:8px;
+  border-radius:100%;
+  -webkit-transition:all .2s linear;
+  -o-transition:all .2s linear;
+  transition:all .2s linear
+}
+.social-icons a:active,.social-icons a:focus,.social-icons a:hover
+{
+  color:#fff;
+  background-color:#29aafe
+}
+.social-icons.size-sm a
+{
+  line-height:34px;
+  height:34px;
+  width:34px;
+  font-size:14px
+}
+.social-icons a.facebook:hover
+{
+  background-color:#3b5998
+}
+.social-icons a.twitter:hover
+{
+  background-color:#00aced
+}
+.social-icons a.linkedin:hover
+{
+  background-color:#007bb6
+}
+.social-icons a.dribbble:hover
+{
+  background-color:#ea4c89
+}
+@media (max-width:767px)
+{
+  .social-icons li.title
+  {
+    display:block;
+    margin-right:0;
+    font-weight:600
+  }
+}
+
+
+
+</style>
+<style>
   @import url("https://fonts.googleapis.com/css?family=Poppins&display=swap");
   @import url("https://fonts.googleapis.com/css?family=Bree+Serif&display=swap");
 
@@ -414,12 +735,9 @@ button.createbtn i {
 
       <div class="navigation">
         <ul>
-          <li onclick="tabs(0)" class="user-post active">Wishlist</li>
-          <li onclick="tabs(1)" class="user-review">Goals</li>
-          <li onclick="tabs(2)" class="user-setting">Friends</li>
-          <li onclick="tabs(3)" class="user-wishlist">Ratings</li>
-          <li onclick="tabs(4)" class="user-hikes">Hikelog</li>
-          <li onclick="tabs(5)" class="user-hikes">Settings</li>
+          <li onclick="tabs(0)" class="user-setting">Images</li>
+          <li onclick="tabs(1)" class="user-setting">Friends</li>
+          <li onclick="tabs(2)" class="user-hikes">Settings</li>
 
 
 
@@ -427,50 +745,44 @@ button.createbtn i {
       </div>
       <div class="profile-settings tab">
         <div class="account-setting">
-          <h4>Wishlist</h4>
-          <table class="table">
-            <thead>
-            <tr>
-              <th>Wish Trail Name</th>
-              <th>National Park</th>
-              <th>Trail Difficulty Rating</th>
-              <th>Trail Route Type</th>
-            </thead>
-            </tr>
-            <tr>
-              <tbody>
-              {% for wish in user_object.wishes %}
-              <td>{{ wish.trail.name }}</td>
-              <td>{{ wish.trail.area_name }}</td>
-              <td>{{ wish.trail.difficulty_rating }}</td>
-              <td>{{ wish.trail.route_type }}</td>
-            </tbody>
-            </tr>
-            {% endfor %} 
-      </table>
+          <h4>Upload an Image</h4>
+        <form action="/profile_edit" method="POST" enctype="multipart/form-data">
+          <label for="name">Tag One: </label>
+          <input type="text" name="tag1" id="name" required>
+          <label for="name">Tag Two: </label>
+          <input type="text" name="tag2" id="name" required>
+          <label for="name">Tag 3: </label>
+          <input type="text" name="tag3" id="name" required>
+          <input type="hidden" name="form_id" value="add_image" />
+          <input type='file' name="file1">
+          <input type="submit" name="Save" />
+        </form>
+          <div class="form-wrap">
+            <div class="tabs">
+            </div>
+            <h4>Your Images</h4>
+
+            <div class="tabs-content">
+              <div id="signup-tab-content" class="active">
+        
+                <ul class="list-group list-group-flush">
+                  {% for image in user_images %}
+                  
+                      <img src="/static/img/images!/{{ image.image_name }}"  width="700" height="500">
+                      <p class="card-text">#{{ image.tag1 }} #{{ image.tag2 }} #{{ image.tag3 }}</p>
+      
+                  {% endfor %}
+                </ul>
+        
+               
+                </div>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="profile-body-user">
-        <div class="profile-posts tab">
-          <h4>Your Hike Goals</h4>
-          <table class="table">
-            <thead>
-            <tr>
-              <th>Total Miles</th>
-              <th>Total Number of Hikes</th>
-              <th>Maximum Hike Difficulty</th>
-              </thead>
-            </tr>
-            <tr>
-              <tbody>
-              <td>{{ user_goals.goal_miles }}</td>
-              <td>{{ user_goals.goal_number_hikes }}</td>
-              <td>{{ user_goals.goal_hike_difficulty }}</td>
-              </tbody>
-            </tr>
-          </table>
-        </div>
+
         <div class="profile-reviews tab">
 
           <h4>Your Friends</h4>
@@ -492,64 +804,6 @@ button.createbtn i {
             </table>
 
         </div>
-        <div class="profile-settings tab">
-          <div class="account-setting">
-            <h4>Your Trail Ratings</h4>
-                <table class="table">
-                  <thead>
-                  <tr>
-                    <th>Trail Name</th>
-                    <th>National Park</th>
-                    <th>Score</th>
-                    <th>Challenge Rating</th>
-                    <th>Distance Rating</th>
-                    <th>Ascent Rating</th>
-                    <th>Descent Rating</th>
-                    <th>Comment</th>
-                  </thead>
-                  </tr>
-                  {% for trail in user_ratings %}
-                  <tr>
-                    <tbody>
-                    <td>Trail Name</td>
-                    <td>Trail Park</td>
-                    <td>{{ trail.score }}</td>
-                    <td>{{ trail.challenge_rating }}</td>
-                    <td>{{ trail.distance_rating }}</td>
-                    <td>{{ trail.ascent_rating }}</td>
-                    <td>{{ trail.descent_rating }}</td>
-                    <td>{{ trail.comment }}</td>
-                  </tbody>
-                  </tr>
-                  {% endfor %} 
-                </table>
-          </div>
-        </div>
-
-        <div class="profile-settings tab">
-          <div class="account-setting">
-            <h4>Your Completed Hikes</h4>
-            <table class="table">
-              <thead>
-              <tr>
-                <th>Trail Name</th>
-                <th>Date Hike Completed</th>
-                <th>Hike Total Time</th>
-              </thead>
-              </tr>
-              <tr>
-                <tbody>
-                  {% for hike in user_object.hikes %}
-                  <td>{{ hike.trail_id }}</td> 
-                  <!-- that needs to be better -->
-                  <td>{{ hike.hike_completed_on }}</td>
-                  <td>{{ hike.hike_total_time }}</td>
-              </tbody>
-              </tr>
-              {% endfor %} 
-        </table>
-          </div>
-        </div>
 
         <div class="profile-settings tab">
           <div class="account-setting">
@@ -566,16 +820,7 @@ button.createbtn i {
   <input type="submit" name="Save" />
 </form>
 
-<!-- goals form -->
-<h4>Edit your Hiking Goals</h4>
-<p>Please note that the current items filled into the form are your current goals.</p>
-<form action="/profile_edit" method="POST">
-  <input type="hidden" name="form_id" value="hiking_goals" />
-  <p> What is your total mileage hiking goal? (Please enter a numeral). <input type="text" name="goal_miles" value="{{user_goals.goal_miles}}"></p>
-  <p> What is your total number of hikes to complete goal? (Please enter a numeral). <input type="goal_number_hikes" name="last_name" value="{{user_goals.goal_number_hikes}}"></p>
-  <p> What is your maxium hike difficulty goal? (Please enter a numeral). <input type="text" name="goal_hike_difficulty" value="{{user_goals.goal_hike_difficulty}}"></p>
-  <input type="submit" name="Save" />
-</form>
+
 
 <!-- profile pic form -->
 <h4>Edit your Profile Picture</h4>
@@ -609,40 +854,7 @@ button.createbtn i {
   <input type="submit" name="Save" />
 </form>
 <br />
-<!-- Edit Hike log form -->
-<div contenteditable="true">
-<h4>Edit your Hike Log</h4>
-
-<table>
-<tr>
- <th>Trail Name |</th>
- <th>Date Hike Completed   |</th>
- <th>Hike Total Time   |</th>
-
-</tr>
-<tr>
- {% for hike in user_object.hikes %}
- <td>{{ hike.trail_id }}</td> 
- <!-- that needs to be better -->
- <td>{{ hike.hike_completed_on }}</td>
- <td>{{ hike.hike_total_time }}</td>
-
-</tr>
-{% endfor %} 
-</table> 
-<input type="submit" name="Save" />
-</div>
-<!-- edit wishlist -->
-<h4>Edit your Wishlist</h4>
-<h5>Which wishlist trail would you like to remove?</h5>
-<form action="/profile_edit" method="POST">
-  <input type="hidden" name="form_id" value="edit_wishlist_remove" />
-  <select name="wish_remove" id="wish-select">
-      <option value="">--Please choose an option--</option>
-      {% for wish in user_object.wishes %}
-      <option value="friend">{{ wish.trail.name }} located in {{ wish.trail.area_name }}</option>
-      {% endfor %}
-  </select>
+</select>
   <input type="submit" name="Save" />
 </form>
 
