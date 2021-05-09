@@ -746,6 +746,7 @@ button.createbtn i {
       <div class="profile-settings tab">
         <div class="account-setting">
           <h4>Upload an Image</h4>
+<!-- uploading an image -->
         <form action="/profile_edit" method="POST" enctype="multipart/form-data">
           <label for="name">Tag One: </label>
           <input type="text" name="tag1" id="name" required>
@@ -757,6 +758,7 @@ button.createbtn i {
           <input type='file' name="file1">
           <input type="submit" name="Save" />
         </form>
+
           <div class="form-wrap">
             <div class="tabs">
             </div>
@@ -897,14 +899,8 @@ function bioText() {
   bio.innerText = bio.innerText.substring(0, 100) + "...";
   bio.innerHTML += `<span onclick='addLength()' id='see-more-bio'>See More</span>`;
 }
-//        console.log(bio.innerText)
-
-
-
 
 </script>
-
-
 
 <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>

@@ -13,9 +13,7 @@ headers = {
 response = requests.request("GET", url, headers=headers, params=querystring)
 response2 = requests.request("GET", url, headers=headers, params=querystring2)
 
-# print(response.text)
 print(response2.text)
 
 
 
-#can put in server or crud
