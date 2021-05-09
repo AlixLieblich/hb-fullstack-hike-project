@@ -8,12 +8,54 @@
 </head>
 <body>
 
-    <h1>Search Results</h1>
+    <h1>Here is what you requested:</h1>
+    <!-- <img src="/static/img/home2.jpg"> -->
 
-        {% for image in search_query %}
-        <img src="/static/img/images!/{{ image.image_name }}"  width="700" height="500">
-        <p class="card-text">#{{ image.tag1 }} #{{ image.tag2 }} #{{ image.tag3 }}</p>
+    <!-- <button action="/find-a-hike-form">
+    Find the perfect hike here
+
+    </button> -->
+    <table class="table">
+      <thead>
+        <colgroup span="4"></colgroup>
+        <tr>
+          <th>Trail Name</th>
+          <th>National Park</th>
+          <th>State</th>
+          <th>Trail Length</th>
+          <th>Trail Elevation Gain</th>
+          <th>Difficulty Rating</th>
+          <th>Route Type</th>
+          <th>Trail Features</th>
+          <th>Trail Activities</th>
+          <!-- <th>Add to Wishlist</th> -->
+        </thead>
+        </tr>
+        {% for trail in server_trail %}
+        <tr>
+          <tbody>
+          <td><a href="/trails/{{ trail.trail_id }}">{{ trail.name }}</a></td>
+          <td><a href="/parks/{{ trail.area_name }}">{{ trail.area_name }}</a></td>
+          <td><a href="/states/{{ trail.state_name }}">{{ trail.state_name }}</a></td>
+          <td>{{ trail.length }}</td>
+          <td>{{ trail.elevation_gain }}</td>
+          <td>{{ trail.difficulty_rating }}</td>
+          <td>{{ trail.route_type }}</td>
+          <td>{{ trail.features }}</td>
+          <td>{{ trail.activities }}</td>
+          <!-- <td> 
+            <form method="post" action="/add_wishlist">
+              <input type="hidden" name="form_id" value="add_wishlist"/>
+              <input type="hidden" name="trail_id" value="{{ trail.trail_id }}"/>
+              <label><input type="radio" name="hike_log"> Add to wishlist. </label>
+              <p><input type="submit"></p>
+            </form>
+          </td> -->
+        </tbody>
+
+        </tr>
       {% endfor %}
+      </table>
 
 
 </body>

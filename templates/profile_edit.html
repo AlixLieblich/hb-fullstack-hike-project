@@ -1,0 +1,107 @@
+
+{% extends 'base.html' %}
+{% block title %} {{ user_id }} {% endblock %}
+
+{% block body %}
+<h3>{{ user_object.user_fname }}'s Edit Profile Page</h3>
+
+<!-- basic form -->
+<form action="/profile_edit" method="POST">
+    <input type="hidden" name="form_id" value="basic_profile_information" />
+    <p> First name: <input type="text" name="first_name" value="{{user_object.user_fname}}"></p>
+    <p> Last name: <input type="text" name="last_name" value="{{user_object.user_lname}}"></p>
+    <p> Email: <input type="text" name="email" value="{{user_object.email}}"></p>
+    <input type="submit" name="Save" />
+</form>
+
+<!-- goals form -->
+<h4>Edit your Hiking Goals</h4>
+<p>Please note that the current items filled into the form are your current goals.</p>
+<form action="/profile_edit" method="POST">
+    <input type="hidden" name="form_id" value="hiking_goals" />
+    <p> What is your total mileage hiking goal? (Please enter a numeral). <input type="text" name="goal_miles" value="{{user_goals.goal_miles}}"></p>
+    <p> What is your total number of hikes to complete goal? (Please enter a numeral). <input type="goal_number_hikes" name="last_name" value="{{user_goals.goal_number_hikes}}"></p>
+    <p> What is your maxium hike difficulty goal? (Please enter a numeral). <input type="text" name="goal_hike_difficulty" value="{{user_goals.goal_hike_difficulty}}"></p>
+    <input type="submit" name="Save" />
+</form>
+
+<!-- profile pic form -->
+<h4>Edit your Profile Picture</h4>
+<form action="/profile_edit" method="POST" enctype="multipart/form-data">
+    <input type="hidden" name="form_id" value="profile_picture" />
+    <input type='file' name="file1">
+    <input type="submit" name="Save" />
+</form>
+<br />
+
+<!-- change password form -->
+<h4>Edit your Password</h4>
+<form action="/profile_edit" method="POST">
+    <input type="hidden" name="form_id" value="password_change" />
+    <p> Old Password: <input type="text" name="old_password"></p>
+    <p> New Password: <input type="text" name="new_password"></p>
+    <input type="submit" name="Save" />
+</form>
+
+<!-- edit friends form -->
+<h4>Edit your Friends List</h4>
+<h5>Which friend would you like to remove a friend from your friends list?</h5>
+<form action="/profile_edit" method="POST">
+    <input type="hidden" name="form_id" value="edit_friends" />
+    <select name="friends" id="friend-select">
+        <option value="">--Please choose an option--</option>
+        {% for friend in user_object.added_friends %}
+        <option value="{{ friend.current_user_added_friend.user_id }}">{{ friend.current_user_added_friend.user_fname }} {{ friend.current_user_added_friend.user_lname }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" name="Save" />
+</form>
+<br />
+<!-- Edit Hike log form -->
+<div contenteditable="true">
+<h4>Edit your Hike Log</h4>
+
+<table>
+ <tr>
+   <th>Trail Name |</th>
+   <th>Date Hike Completed   |</th>
+   <th>Hike Total Time   |</th>
+
+ </tr>
+ <tr>
+   {% for hike in user_object.hikes %}
+   <td>{{ hike.trail_id }}</td> 
+   <!-- that needs to be better -->
+   <td>{{ hike.hike_completed_on }}</td>
+   <td>{{ hike.hike_total_time }}</td>
+
+ </tr>
+ {% endfor %} 
+</table> 
+<input type="submit" name="Save" />
+</div>
+<!-- edit wishlist -->
+<h4>Edit your Wishlist</h4>
+<h5>Which wishlist trail would you like to remove?</h5>
+<form action="/profile_edit" method="POST">
+    <input type="hidden" name="form_id" value="edit_wishlist_remove" />
+    <select name="wish_remove" id="wish-select">
+        <option value="">--Please choose an option--</option>
+        {% for wish in user_object.wishes %}
+        <option value="friend">{{ wish.trail.name }} located in {{ wish.trail.area_name }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" name="Save" />
+</form>
+<h5>Which wishlist trail would you like to add?</h5>
+<form action="/profile_edit" method="POST">
+    <input type="hidden" name="form_id" value="edit_wishlist_add" />
+    <select name="wish_add" id="wish-select">
+        <option value="">--Please choose an option--</option>
+        {% for trail in trails %}
+        <option value="friend">{{ trail.name }} located in {{ trail.area_name }}</option>
+        {% endfor %}
+    </select>
+    <input type="submit" name="Save" />
+</form>
+{% endblock %}

@@ -1,3 +1,38 @@
+# from PIL import Image
+
+# def crop_and_resize(img, msg, (100, 100)):
+
+#     img =Image.open(img)
+#     if img != "JPEG":
+#         return (False, "FIle is not a JPEG", None)
+#     orig_size = img.size
+#     #tuple
+# #height
+#     orig_size = img.orig_sizeif orig_size[0] > 5000 or orig_size[0] < 5:
+#         return (Flase, "too small", None)
+# #width
+#     orig_size = img.orig_sizeif orig_size[1] > 5000 or orig_size[1] < 5:
+#         return (Flase, "too small", None)
+
+#     smallest_side = min(orig_size[0], orig_size[1])
+
+#     #width greatere than height
+
+#     if orig_size[0] > orig_size[1]:
+#         y = (orig_size[1] - smallest_side) / 2
+
+#         new_size = (0, 0, x + smallest_side, smallest_side)
+
+#     #height greater than width
+
+#     if orig_size[0] < orig_size[1]:
+#         x = (orig_size[1] - smallest_side) / 2
+
+#         new_size = (0, 0, x + smallest_side, smallest_side)
+
+#     # width same as heihgt
+#         new_size = (x, 0, x + smallest_side, original_size[1])
+     
 from PIL import Image
 
 

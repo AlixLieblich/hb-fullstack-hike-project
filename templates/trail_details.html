@@ -1,0 +1,375 @@
+{% extends 'base.html' %}
+{% block title %}Home{% endblock %}
+{% block body %}
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width">
+    <script src="https://code.jquery.com/jquery-3.6.0.js"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-eOJMYsd53ii+scO/bJGFsiCZc+5NDVN2yr8+0RDqr0Ql0h+rP48ckxlpbzKgwra6" crossorigin="anonymous">
+    <style type="text/css">
+      /* Set the size of the div element that contains the map */
+      #map {
+        height: 400px;
+        /* The height is 400 pixels */
+        width: 400px;
+        /* The width is the width of the web page */
+      }
+    </style>
+  <style>
+    .styles-module {
+    position: relative;
+    height: 312px;
+    width: 100%;
+    cursor: pointer;
+    color: #fff;
+    font-family: Proxima Nova,Arial,sans-serif;
+    font-size: 14px;
+    font-weight: 400;
+    font-stretch: normal;
+    font-style: normal;
+    line-height: 1.57;
+    letter-spacing: normal;
+}
+    .image-header {
+    background-color: rgba(146,146,108,1);
+    background-image: linear-gradient(rgba(0, 0, 0, 0.0), rgba(0, 0, 0, 0.7)), url(https://cdn-assets.alltrails.com/uploads/photo/image/21026185/extra_large_b3c9103….jpg);
+    background-repeat: no-repeat;
+    background-position: center center;
+    background-size: cover;
+}
+.form-wrap {
+  background-color: #fff;
+  width: 1000px;
+  margin: 3em auto;
+  box-shadow: 0px 1px 8px #BEBEBE;
+  -webkit-box-shadow: 0px 1px 8px #BEBEBE;
+  -moz-box-shadow: 0px 1px 8px #BEBEBE; }
+  .form-wrap .tabs {
+    overflow: hidden; }
+    .form-wrap .tabs h3 {
+      float: left;
+      width: 50%; }
+      .form-wrap .tabs h3 a {
+        padding: 0.5em 0;
+        text-align: center;
+        font-weight: 400;
+        background-color: #e6e7e8;
+        display: block;
+        color: #666; }
+        .form-wrap .tabs h3 a.active {
+          background-color: #fff; }
+  .form-wrap .tabs-content {
+    padding: 1.5em; }
+    .form-wrap .tabs-content div[id$="tab-content"] {
+      display: none; }
+    .form-wrap .tabs-content .active {
+      display: block !important; }
+  .form-wrap form .input {
+    box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    color: inherit;
+    font-family: inherit;
+    padding: .8em 0 10px .8em;
+    border: 1px solid #CFCFCF;
+    outline: 0;
+    display: inline-block;
+    margin: 0 0 .8em 0;
+    padding-right: 2em;
+    width: 100%; }
+  .form-wrap form .button {
+    width: 100%;
+    padding: .8em 0 10px .8em;
+    background-color: #28A55F;
+    border: none;
+    color: #fff;
+    cursor: pointer;
+    text-transform: uppercase; }
+    .form-wrap form .button:hover {
+      background-color: #4FDA8C; }
+  .form-wrap form .checkbox {
+    visibility: hidden;
+    padding: 20px;
+    margin: .5em 0 1.5em; }
+    .form-wrap form .checkbox:checked + label:after {
+      -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=100)";
+      filter: alpha(opacity=100);
+      opacity: 1; }
+  .form-wrap form label[for] {
+    position: relative;
+    padding-left: 20px;
+    cursor: pointer; }
+    .form-wrap form label[for]:before {
+      content: '';
+      position: absolute;
+      border: 1px solid #CFCFCF;
+      width: 17px;
+      height: 17px;
+      top: 0px;
+      left: -14px; }
+    .form-wrap form label[for]:after {
+      -ms-filter: "progid:DXImageTransform.Microsoft.Alpha(Opacity=0)";
+      filter: alpha(opacity=0);
+      opacity: 0;
+      content: '';
+      position: absolute;
+      width: 9px;
+      height: 5px;
+      background-color: transparent;
+      top: 4px;
+      left: -10px;
+      border: 3px solid #28A55F;
+      border-top: none;
+      border-right: none;
+      -webkit-transform: rotate(-45deg);
+      -moz-transform: rotate(-45deg);
+      -o-transform: rotate(-45deg);
+      -ms-transform: rotate(-45deg);
+      transform: rotate(-45deg); }
+  .form-wrap .help-text {
+    margin-top: .6em; }
+    .form-wrap .help-text p {
+      text-align: center;
+      font-size: 14px; }
+  </style>
+
+    {% block head %}{% endblock %}
+  </head>
+<div class="form-wrap">
+  <div class="tabs-content">
+    <img class="styles-module" src="/static/img/images!/photo-1591622901735-afca559d8669.webp">
+<h1>{{ trail_details.name }}</h1>
+
+<div class="row">
+
+  <div class="col-6">
+<form method="post" action="/hike_edit/{{ trail_id }}">
+  <input type="hidden" name="form_id" value="add_wishlist"/>
+  <input type="hidden" name="trail_id" value="{{ trail_details.trail_id }}"/>
+  <label><input type="radio" name="hike_log"> Add to wishlist. </label>
+  <p><input type="submit"></p>
+</form>
+<button id="send-txt-button" type="submit">Send Txt of Location</butotn>
+
+</div>
+  <div class="col-6">
+<form method="post" action="/hike_edit/{{ trail_id }}">
+  <input type="hidden" name="form_id" value="add_hike_log" />
+  <label><input type="radio" name="hike_log"> Finished this hike? Add it to your hike log. </label>
+  <p><input type="submit"></p>
+</div>
+</form>
+</div>
+
+
+<div class="row">
+  <div class="col-6">
+<p>Current Weather:</p>
+<p>Temperature:</p>
+<div id="current-weather" data-lat="{{ latitude }}" data-lon="{{ longitude }}" ></div>
+</div>
+
+
+  <div class="col-6">
+<p>Location:</p>
+<div id="map" data-lat="{{ latitude }}" data-lon="{{ longitude }}" ></div>
+</div>
+
+<script
+src="https://maps.googleapis.com/maps/api/js?key={{ GOOGLE_API_KEY }}&callback=initMap&libraries=&v=weekly"
+async
+></script>
+</div>
+
+<h5>Trail Details</h5>
+<table class="table">
+  <thead>
+  <colgroup span="4"></colgroup>
+  <tr>
+    <th>Trail Name</th>
+    <th>National Park</th>
+    <th>State</th>
+    <th>Trail Length</th>
+    <th>Trail Elevation Gain</th>
+    <th>Difficulty Rating</th>
+    <th>Route Type</th>
+    <th>Trail Features</th>
+    <th>Trail Activities</th>
+  </thead>
+  </tr>
+  <tr>
+    <tbody>
+    <td>{{ trail_details.name }}</td>
+    <td>{{ trail_details.area_name }}</td>
+    <td>{{ trail_details.state_name }}</td>
+    <td>{{ trail_details.length }}</td>
+    <td>{{ trail_details.elevation_gain }}</td>
+    <td>{{ trail_details.difficulty_rating }}</td>
+    <td>{{ trail_details.route_type }}</td>
+    <td>{{ trail_details.features }}</td>
+    <td>{{ trail_details.activities }}</td>
+</tbody>
+  </tr>
+  </table>
+
+<!-- Button trigger modal -->
+<button type="button" class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#exampleModal">
+  Have you completed this hike? Take a moment to rate!
+</button>
+
+<!-- Modal -->
+<div class=row>
+  <div class="col-md-3"></div>
+  <div class="col-md-3">
+<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+  <div class="modal-dialog">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title" id="exampleModalLabel">{{ trail_details.name }} Review</h5>
+        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+      </div>
+      <div class="modal-body">
+        <h5>Have you completed this hike? Take a moment to rate!</h5>
+<form method="post" action="/new_rating/{{ trail_id }}">
+    <p>(1/6) One a scale from 1-5 (one being easiest, and 5 being hardest), what score would you give this trail?</p>
+        <label for="socre-select">Choose a score:</label>
+            <select name="score" id="score-select"> 
+              <option value="">--Please choose an option--</option>
+              <option value="1">1 </option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select> 
+    <p>(2/6) One a scale from 1-5 (one being easiest, and 5 being hardest), what challenge rating would you give this trail?</p>
+            <label for="challenge_rating-select">Choose a challenge rating:</label>
+            <select name="challenge_rating" id="challenge_rating-select"> 
+              <option value="">--Please choose an option--</option>
+              <option value="1">1 </option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select> 
+    <p>(3/6) One a scale from 1-5 (one being easiest, and 5 being hardest), what distance rating would you give this trail?</p>
+            <label for="distance_rating-select">Choose a distance rating:</label>
+            <select name="distance_rating" id="distance_rating-select"> 
+              <option value="">--Please choose an option--</option>
+              <option value="1">1 </option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select> 
+    <p>(4/6) One a scale from 1-5 (one being easiest, and 5 being hardest), what ascent rating would you give this trail?</p>
+            <label for="ascent_rating-select">Choose a ascent rating:</label>
+            <select name="ascent_rating" id="ascent_rating-select"> 
+              <option value="">--Please choose an option--</option>
+              <option value="1">1 </option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select> 
+    <p>(5/6) One a scale from 1-5 (one being easiest, and 5 being hardest), what descent rating would you give this trail?</p>
+            <label for="descent_rating-select">Choose a descent rating:</label>
+            <select name="descent_rating" id="descent_rating-select"> 
+              <option value="">--Please choose an option--</option>
+              <option value="1">1 </option>
+              <option value="2">2</option>
+              <option value="3">3</option>
+              <option value="4">4</option>
+              <option value="5">5</option>
+            </select> 
+    <p>(6/6) Comments?</p>
+        <p><label>Comments: <input type="text" name="comment"></label></p>
+    <p>Bonus! Did you take any good pictures?</p>
+    <input type='file' name="file1">
+
+</form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
+        <button type="button" type="submit" class="btn btn-primary">Submit</button>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</div>
+</form>
+<h5>Average Ratings</h5>
+<table class="table">
+  <colgroup span="4"></colgroup>
+  <thead>
+  <tr>
+    <th>Average Score</th>
+    <th>Average Challenge Rating</th>
+    <th>Average Distance Rating</th>
+    <th>Average Ascent Rating</th>
+    <th>Average Descent Rating</th>
+  </thead>
+  </tr>
+  <tr>
+    <tbody>
+    <td>{{ av_ratings[0] }}</td>
+    <td>{{ av_ratings[1] }}</td>
+    <td>{{ av_ratings[2] }}</td>
+    <td>{{ av_ratings[3] }}</td>
+    <td>{{ av_ratings[4] }}</td>
+  </tbody>
+  </tr>
+</table>
+
+<h5>Ratings</h5>
+        <table class="table">
+    <colgroup span="4"></colgroup>
+    <thead>
+    <tr>
+      <th>User</th>
+      <th> Score</th>
+      <th> Challenge Rating</th>
+      <th> Distance Rating</th>
+      <th> Ascent Rating</th>
+      <th> Descent Rating</th>
+      <th> Comment</th>
+    </thead>
+    </tr>
+    {% for rating in ratings %}
+    <tr>
+      <tbody>
+      <td>User</td>
+      <td>{{ rating.score }}</td>
+      <td>{{ rating.challenge_rating }}</td>
+      <td>{{ rating.distance_rating }}</td>
+      <td>{{ rating.ascent_rating }}</td>
+      <td>{{ rating.descent_rating }}</td>
+      <td>{{ rating.comment }}</td>
+    </tbody>
+    </tr>
+    {% endfor %}
+  </table>
+</div>
+</div>
+<script>
+  var myModal = document.getElementById('myModal')
+  var myInput = document.getElementById('myInput')
+
+myModal.addEventListener('shown.bs.modal', function () {
+  myInput.focus()
+})
+</script>
+<script>
+document.querySelector('#send-txt-button').addEventListener('click', (evt) =>{
+  evt.preventDefault();
+
+  let url = "/send-sms";
+  let 
+})
+</script>
+  <!-- for loop!!! -->
+  <script src="/static/functionality.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/@popperjs/core@2.9.1/dist/umd/popper.min.js" integrity="sha384-SR1sx49pcuLnqZUnnPwx6FCym0wLsk5JZuNx2bPPENzswTNFaQU1RDvt3wT4gWFG" crossorigin="anonymous"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.0-beta3/dist/js/bootstrap.min.js" integrity="sha384-j0CNLUeiqtyaRmlzUHCPZ+Gy5fQu0dQ6eZ/xAww941Ai1SxSY+0EQqNXNE6DZiVc" crossorigin="anonymous"></script>
+   
+  {% endblock %}

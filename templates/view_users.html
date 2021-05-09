@@ -413,11 +413,58 @@ button.createbtn i {
 
     <div class="navigation">
       <ul>
-        <li onclick="tabs(0)" class="user-setting">Friends</li>
+        <li onclick="tabs(0)" class="user-post active">Wishlist</li>
+        <li onclick="tabs(1)" class="user-review">Goals</li>
+        <li onclick="tabs(2)" class="user-setting">Friends</li>
 
       </ul>
     </div>
-   
+    <div class="profile-settings tab">
+      <div class="account-setting">
+        <h4>Wishlist</h4>
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Wish Trail Name</th>
+            <th>National Park</th>
+            <th>Trail Difficulty Rating</th>
+            <th>Trail Route Type</th>
+          </thead>
+          </tr>
+          <tr>
+            <tbody>
+            {% for wish in user_object.wishes %}
+            <td>{{ wish.trail.name }}</td>
+            <td>{{ wish.trail.area_name }}</td>
+            <td>{{ wish.trail.difficulty_rating }}</td>
+            <td>{{ wish.trail.route_type }}</td>
+          </tbody>
+          </tr>
+          {% endfor %} 
+    </table>
+      </div>
+    </div>
+
+    <div class="profile-body-user">
+      <div class="profile-posts tab">
+        <h4>Your Hike Goals</h4>
+        <table class="table">
+          <thead>
+          <tr>
+            <th>Total Miles</th>
+            <th>Total Number of Hikes</th>
+            <th>Maximum Hike Difficulty</th>
+            </thead>
+          </tr>
+          <tr>
+            <tbody>
+            <td>{{ user_goals.goal_miles }}</td>
+            <td>{{ user_goals.goal_number_hikes }}</td>
+            <td>{{ user_goals.goal_hike_difficulty }}</td>
+            </tbody>
+          </tr>
+        </table>
+      </div>
       <div class="profile-reviews tab">
 
         <h4>Your Friends</h4>

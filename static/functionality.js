@@ -7,7 +7,7 @@ let nummm=10/5
 console.log(nummm)
 $.ajax({
     url: "http://api.openweathermap.org/data/2.5/weather",
-    data: {'appid': "c0208d8eb38b5987f5bbe2f08d461553", 
+    data: {'appid': "", 
         lat:  $('#current-weather').data("lat"), 
         lon:$('#current-weather').data("lon")} 
 }).done((res) =>{
